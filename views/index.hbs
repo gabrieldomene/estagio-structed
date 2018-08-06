@@ -1,3 +1,17 @@
+
+<div class="wrapper">
+    <div class="content">
+        <p>Ensalamento UFSC</p>
+    </div>
+
+    <div class="bg">
+
+    </div>
+    <div class="bgblur">
+
+    </div>
+</div>
+
 <h1>LOGIN PAGE</h1>
     <form action="/login" method="post">
         <input type="text" name="username" id="idlogin">
@@ -7,10 +21,13 @@
     </form>
     <form action="/cadastrar" method="post">
 
-        <input type="text" name="username" id="cadastroLogin" required>
-        <input type="password" name="password"id="cadastroPass" required>
-        <select name="centroID" id="centro-id" required>
-            <option value="" selected disabled hidden>SELECIONE O CENTRO</option>
+        <input type="text" name="username" id="cadastroLogin" required oninvalid="this.setCustomValidity('Campo obrigatório')"
+    oninput="this.setCustomValidity('')">
+        <input type="password" name="password"id="cadastroPass" required oninvalid="this.setCustomValidity('Campo obrigatório')"
+    oninput="this.setCustomValidity('')">
+        <select name="centroID" id="centro-id" required oninvalid="this.setCustomValidity('Campo Obrigatório')"
+    oninput="this.setCustomValidity('')">
+            <option value="" selected disabled hidden>CENTRO</option>
             <option value="1">Centro Araranguá</option>
             <option value="2">Centro Blumenau</option>
             <option value="3">Centro Curitibanos</option>
