@@ -1,13 +1,33 @@
-<h1>{{ title }}</h1>
+<h1>LOGIN PAGE</h1>
+    <form action="/login" method="post">
+        <input type="text" name="username" id="idlogin">
+        <input type="password" name="password"id="idpass">
 
-<p>Welcome to {{ title }}</p>
+        <input type="submit" value="LOGIN">
+    </form>
+    <form action="/cadastrar" method="post">
 
-{{# if condition }}
-    Condition is met
-{{ else }}
-    Condition not met
-{{/if}}
+        <input type="text" name="username" id="cadastroLogin" required>
+        <input type="password" name="password"id="cadastroPass" required>
+        <select name="centroID" id="centro-id" required>
+            <option value="" selected disabled hidden>SELECIONE O CENTRO</option>
+            <option value="1">Centro Araranguá</option>
+            <option value="2">Centro Blumenau</option>
+            <option value="3">Centro Curitibanos</option>
+            <option value="4">Centro de Ciência da Educação</option>
+            <option value="5">Centro de Ciência da Saúde</option>
+            <option value="6">Centro de Ciências Agrárias</option>
+            <option value="7">Centro de Ciências Biológicas</option>
+            <option value="8">Centro de Ciências Físicas e Matemáticas</option>
+            <option value="9">Centro de Ciências Jurídicas</option>
+            <option value="10">Centro de Comunicação e Expressão</option>
+            <option value="11">Centro de Desportos</option>
+            <option value="12">Centro de Filosofia e Ciências Humanas</option>
+            <option value="13">Centro de Joinville</option>
+            <option value="14">Centro Socioeconômico</option>
+            <option value="15">Centro Tecnológico</option>
+        </select>
+        <input type="submit" value="Cadastrar">
+    </form>
 
-{{# each anyArray}}
-    {{ this }}
-{{/each}}
+    
