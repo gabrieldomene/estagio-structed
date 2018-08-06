@@ -3,7 +3,7 @@ var router = express.Router();
 var mongodb = require('mongodb');
 var MongoClient = require('mongodb').MongoClient;
 var urldb = "mongodb://localhost:27017";
-var Users     = require('../models/users');
+var Users     = require('../models/users.server.model');
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/LCC');
@@ -15,13 +15,17 @@ db.on('error', console.error.bind(console, 'connection error: '));
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+/* router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
 router.get('/teste', function(req, res){
   res.render('dashboard',{title: 'APLICACAO'});
-})
+}) */
+
+var User = new Users();
+User.username = 'gabrieldomene';
+User.password = 'teste1234';
 
 
 router.post('/login', function(req, res){
@@ -43,6 +47,11 @@ router.post('/login', function(req, res){
   });
 });
 
+router.post('/cadastrar', function(req, res){
+  res.write(User);
+  res.end();
+});
+
 
 router.post('/cadastro-sala', function(req, res){
   let desc = req.body.descSala;
@@ -53,8 +62,7 @@ router.post('/cadastro-sala', function(req, res){
   let fator2 = req.body.fator2;
   let fator3 = req.body.fator3;
   
-  res.write('TESTE');
-  res.end();
+  
 
 })
 
