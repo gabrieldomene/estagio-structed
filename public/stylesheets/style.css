@@ -1,9 +1,105 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: #c1c1c1;
+  margin: 5px auto;
+  padding: 5px;
+	background: rgb(90, 90, 90);
+	font-family: 'Roboto', sans-serif;
+	color: #fff;
 }
 
 h1 {
   color: #00B7FF;
+  text-align: center;
+}
+
+p{
+	text-align: center;
+	font-size: 1.2em;
+}
+
+.result{
+	width: 500px;
+	margin-top: 20px;
+	display: block;
+}
+
+.wrapper-turmas{
+	margin-top: 50px;
+	width: 100%;
+	margin-right: 20%;
+	text-align: center;
+}
+.wrapper-salas{
+	margin-top: 50px;
+	width: 100%;
+	margin-right: 20%;
+	text-align: center;
+}
+
+form{
+	padding: 15px 5px;
+	margin: 15px 15px 0 15px;
+  border: 3px solid #fff;
+  background: rgb(49, 49, 49);
+}
+
+
+
+.grade-turma{
+	width: 100%;
+	background: rgb(49, 49, 49);
+}
+
+.turma-header{
+	font-size: 2em;
+}
+#timerTurma{
+	width: 500px;
+}
+
+.time-container{
+	background: red;
+}
+
+.btn-salvar{
+	width: 200px;
+}
+
+.advanced-options{
+	display: none;
+}
+
+input[type=button], input[type=submit]{
+	border: 2px solid #f7f7f7;
+	background: #17a7D8;
+	color: #fff;
+	width: 100px;
+	height: 35px;
+	outline: none;
+	transition: .3s;
+}
+input[type=button]:hover, input[type=submit]:hover{
+	box-shadow: inset 0px 0px 0px 3px solid #fff;
+	cursor: pointer;
+}
+input[type=button]:after, input[type=submit]:after{
+	width: 0%;
+}
+input[type=text], input[type=number], input[type=password]{
+	background: none;
+	border: none;
+	border-bottom: 1px solid #fff;
+	color: #fff;
+	font-weight: 700;
+}
+#centro-id{
+	background: #1797D8;
+	color: #fff;
+	font-weight: 600;
+	outline: none;
+	border: 1px solid #fff;
+	align-content: center;
+}
+
+input[type=text], input[type=number]{
+	outline:  none;
 }
