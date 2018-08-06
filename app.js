@@ -11,7 +11,13 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-mongoose.connect('mongodb://localhost:27017/LCC');
+
+//Connect to localhost
+/* mongoose.connect('mongodb://localhost:27017/LCC'); */
+
+//Connect to MongoLab sandbox...
+
+mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc');
 
 // view engine setup
 app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
@@ -30,7 +36,8 @@ app.use('/users', usersRouter);
 // post cases
 app.post('/login', usersRouter);
 app.post('/cadastro-sala', usersRouter);
-app.get('/teste', usersRouter);
+app.post('/cadastrar', usersRouter);
 app.get('/getbear', usersRouter);
+app.get('/', indexRouter);
 
 module.exports = app;
