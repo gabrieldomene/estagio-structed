@@ -1,13 +1,14 @@
 body {
-  margin: 5px auto;
-  padding: 5px;
-	background: rgb(90, 90, 90);
+	margin: 0 auto;
+	background: #AF9C8D;
+	/* background: rgb(90, 90, 90); */
 	font-family: 'Roboto', sans-serif;
 	color: #fff;
+	height: 100%;
 }
 
 h1 {
-  color: #00B7FF;
+  color: #2E5B75;
   text-align: center;
 }
 
@@ -57,12 +58,10 @@ form{
 }
 
 .time-container{
-	background: red;
+	/* background: red; */
+	margin-bottom: 10px;
 }
 
-.btn-salvar{
-	width: 200px;
-}
 
 .advanced-options{
 	display: none;
@@ -72,10 +71,14 @@ input[type=button], input[type=submit]{
 	border: 2px solid #f7f7f7;
 	background: #17a7D8;
 	color: #fff;
-	width: 100px;
+	width: 170px;
 	height: 35px;
 	outline: none;
 	transition: .3s;
+}
+
+.btn-salvar{
+	width: 300px;
 }
 input[type=button]:hover, input[type=submit]:hover{
 	box-shadow: inset 0px 0px 0px 3px solid #fff;
@@ -90,16 +93,79 @@ input[type=text], input[type=number], input[type=password]{
 	border-bottom: 1px solid #fff;
 	color: #fff;
 	font-weight: 700;
+	vertical-align: bottom;
 }
 #centro-id{
 	background: #1797D8;
 	color: #fff;
 	font-weight: 600;
 	outline: none;
-	border: 1px solid #fff;
+	border: 2px solid #fff;
 	align-content: center;
+	width: auto;
+	height: 35px;
 }
 
 input[type=text], input[type=number]{
 	outline:  none;
+}
+
+.banner{
+	width: 100%;
+	height: 400px;
+	background-image: url(../image/bg.jpg) center no-repeat; 
+  	-webkit-background-size: auto;
+  	-moz-background-size: auto;
+  	-o-background-size: auto;
+	background-size: auto;
+	top: 0;
+	left: 0;
+
+}
+
+#wrapper{
+    position: relative;
+	width: 100%;
+}
+
+.content{
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: bold;
+    position: relative;
+	z-index: 100;
+	margin: 10%;
+	font-size: 2.5em;
+}
+
+.bg{
+	width: 100%;
+	height: 400px;
+	background: url(../image/bg.jpg) center no-repeat; 
+  	-webkit-background-size: auto;
+  	-moz-background-size: auto;
+  	-o-background-size: auto;
+	background-size: auto;
+	top: 0;
+	left: 0;
+    position: absolute;
+	z-index: -100;
+	
+}
+
+.bgblur{
+	width: 100%;
+	height: 400px;
+	background: url(../image/bg.jpg) center no-repeat; 
+  	-webkit-background-size: auto;
+  	-moz-background-size: auto;
+  	-o-background-size: auto;
+	background-size: auto;
+	top: 0;
+	left: 0;
+    position: absolute;
+	z-index: -99;
+	-webkit-filter: blur(4px); /* Safari 6.0 - 9.0 */
+    filter: blur(4px);
+	
 }
