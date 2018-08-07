@@ -13,11 +13,11 @@ var usersRouter = require('./routes/users');
 var app = express();
 
 //Connect to localhost
-/* mongoose.connect('mongodb://localhost:27017/LCC'); */
+mongoose.connect('mongodb://localhost:27017/LCC');
 
 //Connect to MongoLab sandbox...
 
-mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc');
+/* mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc'); */
 
 // view engine setup
 app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
