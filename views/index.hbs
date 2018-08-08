@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Digite senha" name="password">
+                    <input type="password" class="form-control" id="loginpassword" aria-describedby="username" placeholder="Digite senha" name="password">
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-outline-primary btn-block" form="form-login">LOGIN</button>
@@ -28,11 +28,11 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Digite uma senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                    <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Digite uma senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
                 </div>
                 <div class="form-group">
                     <label for="password2">Re-Enter Password</label>
-                    <input type="password" class="form-control" id="password" aria-describedby="password" placeholder="Confirme sua senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                    <input type="password" class="form-control" id="confirm_password" aria-describedby="password" placeholder="Confirme sua senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <button type="button" class="btn btn-outline-primary btn-block">CADASTRAR</button>
+                    <button type="button" class="btn btn-outline-primary btn-block" id="btnCadastro" disable>CADASTRAR</button>
                 </div>
             </form>
         </div>
