@@ -40,8 +40,7 @@ User.password = 'teste1234'; */
 
 router.post('/login', function (req, res) {
 
-
-  /* let username = req.body.username;
+  let username = req.body.username;
   let password = req.body.password;
   MongoClient.connect(urldb, function (err, db) {
     var dbo = db.db('LCC');
@@ -62,7 +61,7 @@ router.post('/login', function (req, res) {
       }
     });
 
-  }); */
+  });
 });
 
 router.post('/cadastrar', function (req, res) {
