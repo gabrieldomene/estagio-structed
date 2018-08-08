@@ -7,20 +7,20 @@ var userProfile = new Schema({
 });
 
 var roomProfile = new Schema({
-    descricao:  String,
+    descricao: String,
     capacidade: String,
-    tipoSala:   String,
-    fator1:     String, 
-    fator2:     String,
-    fator3:     String
+    tipoSala: String,
+    fator1: String,
+    fator2: String,
+    fator3: String
 });
 
 var classProfile = new Schema({
-    descricao:      String,
-    fase:           String,
-    oferta:         String,
-    dia:            String,
-    start:          String,
-    tipoSalaTurma:  String,
-    creditos:       String
+    descricao: String,
+    fase: String,
+    oferta: String,
+    dia: String,
+    start: String,
+    tipoSalaTurma: String,
+    creditos: String
 });
