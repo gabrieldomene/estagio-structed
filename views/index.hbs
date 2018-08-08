@@ -1,55 +1,58 @@
-<div class="container">
+
+<div class="container-fluid">
     
-    <form action="">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Username">
+    <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-3">
+            <h1>LOGIN</h1>
+            <form action="/login" method="post" id="form-login">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Username" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Digite senha" name="password">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-primary btn-block" form="form-login">LOGIN</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Enter password">
+        <div class="col-lg-3">
+            <h1>CADASTRO</h1>
+            <form action="/cadastrar" method="POST">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Username" required oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" aria-describedby="username" placeholder="Digite uma senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                </div>
+                <div class="form-group">
+                    <label for="password2">Re-Enter Password</label>
+                    <input type="password" class="form-control" id="password" aria-describedby="password" placeholder="Confirme sua senha" oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Centros</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01">
+                            <option value="" selected disabled hidden> Listar centros...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-outline-primary btn-block">CADASTRAR</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="password2">Re-Enter Password</label>
-            <input type="password" class="form-control" id="password" aria-describedby="password" placeholder="Password Match">
-        </div>
-    </form>
+        <div class="col-lg-3"></div>
+    </div>
 
 </div>
-
-<h1>LOGIN PAGE</h1>
-    <form action="/login" method="post">
-        <input type="text" name="username" id="idlogin">
-        <input type="password" name="password"id="idpass">
-
-        <input type="submit" value="LOGIN">
-    </form>
-    <form action="/cadastrar" method="post">
-
-        <input type="text" name="username" id="cadastroLogin" required oninvalid="this.setCustomValidity('Campo obrigatório')"
-    oninput="this.setCustomValidity('')">
-        <input type="password" name="password"id="cadastroPass" required oninvalid="this.setCustomValidity('Campo obrigatório')"
-    oninput="this.setCustomValidity('')">
-        <select name="centroID" id="centro-id" required oninvalid="this.setCustomValidity('Campo Obrigatório')"
-    oninput="this.setCustomValidity('')">
-            <option value="" selected disabled hidden>CENTRO</option>
-            <option value="1">Centro Araranguá</option>
-            <option value="2">Centro Blumenau</option>
-            <option value="3">Centro Curitibanos</option>
-            <option value="4">Centro de Ciência da Educação</option>
-            <option value="5">Centro de Ciência da Saúde</option>
-            <option value="6">Centro de Ciências Agrárias</option>
-            <option value="7">Centro de Ciências Biológicas</option>
-            <option value="8">Centro de Ciências Físicas e Matemáticas</option>
-            <option value="9">Centro de Ciências Jurídicas</option>
-            <option value="10">Centro de Comunicação e Expressão</option>
-            <option value="11">Centro de Desportos</option>
-            <option value="12">Centro de Filosofia e Ciências Humanas</option>
-            <option value="13">Centro de Joinville</option>
-            <option value="14">Centro Socioeconômico</option>
-            <option value="15">Centro Tecnológico</option>
-        </select>
-        <input type="submit" value="Cadastrar">
-    </form>
-
-    
