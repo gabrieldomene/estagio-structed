@@ -3,7 +3,6 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var urldb = "mongodb://localhost:27017";
 var passport = require('passport');
-var Users = require('../models/users.server.model');
 
 var mongoose = require('mongoose');
 
@@ -14,6 +13,7 @@ mongoose.connect('mongodb://localhost:27017/LCC');
 /* 
 mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc'); */
 
+//Check db connection
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error: '));
 db.once('open', function () {
@@ -21,26 +21,34 @@ db.once('open', function () {
 
 })
 
-
-
-
-/* GET users listing. */
-/* router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
-
-router.get('/teste', function(req, res){
-  res.render('dashboard',{title: 'APLICACAO'});
-}) */
-
-/* var User = new Users();
-User.username = 'gabrieldomene';
-User.password = 'teste1234'; */
+//Bring models
+let userModel = require('../models/user-model');
+let roomModel = require('../models/room-model');
+let classModel = require('../models/class-model');
 
 
 router.post('/login', function (req, res) {
-
-  let username = req.body.username;
+  let userinput = req.body.username;
+  let passinput = req.body.password;
+  
+  userModel.findOne({username: userinput}, function(err, user){
+    if (err) throw err;
+    else{
+      if(!user){ //nao achou usuario AVISAR
+        /* newUser.save(function(err){
+          if (err) throw err;
+        }); */
+        res.write('NAO ACHOU USER');
+        res.end();
+      }else{ //achou usuario PRECISA VALIDAR NO PASSPORT
+        res.render('dashboard', {
+          title: 'BEM VINDO'
+        });
+      }
+    }
+  });
+  
+  /* let username = req.body.username;
   let password = req.body.password;
   MongoClient.connect(urldb, function (err, db) {
     var dbo = db.db('LCC');
@@ -61,14 +69,41 @@ router.post('/login', function (req, res) {
       }
     });
 
-  });
+  }); */
 });
 
 router.post('/cadastrar', function (req, res) {
-  let username = req.body.username;
-  let password = req.body.password;
-  let idcentro = req.body.centroID;
-  console.log(username, password, idcentro);
+  let userInput = req.body.username;
+  let passInput = req.body.password;
+  let centroInput = req.body.centroID;
+  console.log(userInput, passInput, centroInput);
+
+  let newUser = new userModel({
+    username: userInput,
+    password: passInput,
+    idcentro: centroInput
+
+  });
+
+  userModel.findOne({username: userInput}, function(err, userdb){
+    if (err) throw err;
+    else{
+      if(!userdb){
+        newUser.save(function(err){
+          if (err) throw err;
+        });
+        console.log('Usuário cadastrado fazer message');
+        res.render('index', {
+          title: 'BEM VINDO'
+        });
+      }else{
+        console.log('Usuário ja cadastrado, login abaixo:\n');
+        console.log(userdb);
+      }
+    }
+  })
+
+  /* 
   MongoClient.connect(urldb, function (err, db) {
     var dbo = db.db('LCC');
     var query = {
@@ -86,14 +121,14 @@ router.post('/cadastrar', function (req, res) {
           if (err) throw err;
         });
         res.render('index', {
-          title: 'LOGIN PAGE'
+          title: 'WELCOME'
         });
       } else {
         res.write('Usuario ja cadastrado, fazer view');
         res.end();
       }
     });
-  });
+  }); */
 });
 
 
@@ -109,6 +144,19 @@ router.post('/cadastro-sala', function (req, res) {
   let fator3 = req.body.fator3;
   if (fator3 == '') fator3 = 0;
 
+  let newRoom = new roomModel({
+    descricao: desc,
+    capacidade: capac,
+    tiposala: tipoSala,
+    fator1: fator1,
+    fator2: fator2,
+    fator3: fator3
+  });
+
+  newRoom.save(function(err){
+    if (err) throw err;
+  });
+/* 
   MongoClient.connect(urldb, function (err, db) {
     var dbo = db.db('LCC');
     var query = {
@@ -136,7 +184,11 @@ router.post('/cadastro-sala', function (req, res) {
         res.end();
       }
     });
-  });
+  }); */
+});
+
+router.post('/cadastro-turma', function(req, res){
+  
 });
 
 module.exports = router;
