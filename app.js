@@ -1,5 +1,4 @@
 var express = require('express');
-var mongodb = require('mongodb');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -34,9 +33,7 @@ app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({
-    extended: false
-}));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -47,7 +44,5 @@ app.use('/users', usersRouter);
 app.post('/login', usersRouter);
 app.post('/cadastro-sala', usersRouter);
 app.post('/cadastrar', usersRouter);
-app.get('/getbear', usersRouter);
-app.get('/', indexRouter);
 
 module.exports = app;
