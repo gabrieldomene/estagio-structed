@@ -121,11 +121,3 @@ function hideOptions(){
         btnO.value = "Mais opções";
     }
 }
-
-function checkPass(){
-    if(document.getElementById('password').value == document.getElementById('confirm_password')){
-        document.getElementById('btnCadastro').disabled = false;
-    }else{
-        document.getElementById('btnCadastro').disabled = true;
-    }
-}
