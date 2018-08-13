@@ -6,10 +6,11 @@ var classProfile = new Schema({
     descricao: String,
     fase: String,
     oferta: String,
-    dia: String,
-    start: String,
-    tipoSalaTurma: String,
-    creditos: String
+    dia: Array,
+    start: Array,
+    tipoSalaTurma: Array,
+    creditos: Array,
+    idcentro: String
 });
 
-let Class = module.exports = mongoose.model('Classes', classProfile);
+module.exports = mongoose.model('Classes', classProfile);

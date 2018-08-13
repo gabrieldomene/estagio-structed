@@ -8,7 +8,8 @@ var roomProfile = new Schema({
     tipoSala: String,
     fator1: String,
     fator2: String,
-    fator3: String
+    fator3: String,
+    idcentro: String
 });
 
-let Room = module.exports = mongoose.model('Rooms', roomProfile);
+module.exports = mongoose.model('Rooms', roomProfile);
