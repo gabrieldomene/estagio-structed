@@ -43,6 +43,7 @@ app.use('/users', usersRouter);
 // post cases
 app.post('/login', usersRouter);
 app.post('/cadastro-sala', usersRouter);
+app.post('/cadastro-turma', usersRouter);
 app.post('/cadastrar', usersRouter);
 
 module.exports = app;
