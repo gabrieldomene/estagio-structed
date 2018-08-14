@@ -1,162 +1,139 @@
 <div class="container">
-        <div class="card border-primary mb-12">
-            <div class="card-body text-primary">
-                <h5 class="card-title">Como usar?</h5>
-                <p class="card-text">Portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web você poderá fazer o cadastramento das salas ou das turmas e posteriormente solicitar a solução do problema de alocação. O programa lhe retornará um arquivo em forma de download, com a melhor solução que encontrar para o problema.</p>
-            </div>
+    <div class="card border-primary mb-12">
+        <div class="card-body text-primary">
+            <h5 class="card-title">Como usar?</h5>
+            <p class="card-text">Portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web
+                você poderá fazer o cadastramento das salas ou das turmas e posteriormente solicitar a solução do problema
+                de alocação. O programa lhe retornará um arquivo em forma de download, com a melhor solução que encontrar
+                para o problema.</p>
         </div>
+    </div>
 
-        <form action="/cadastro-sala" method="post">
+    <form action="/cadastro-sala" method="post">
         <h1>Cadastro de Salas</h1>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="input-sala-id">Descrição</label>
-                    <input type="text" class="form-control" id="sala-desc" name="descSala"placeholder="CTS-SL104A" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="input-sala-capac">Capacidade</label>
-                    <input type="number" class="form-control" min="0" max="1000" id="sala-capac" name="capcSala" oninput="this.value = Math.abs(this.value)" required>
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="tipo-sala">Tipo de sala</label>
-                    <select id="tipo-sala" class="form-control" name="tipoSala" required>
-                        <option value="" selected disabled hidden>Escolha um tipo</option>
-                        <option value="1">Mesas e Cadeiras</option>
-                        <option value="2">Bancadas</option>
-                        <option value="3">Laboratório</option>
-                    </select>    
-                </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="input-sala-id">Descrição</label>
+                <input type="text" class="form-control" id="sala-desc" name="descSala" placeholder="CTS-SL104A" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="input-sala-capac">Capacidade</label>
+                <input type="number" class="form-control" min="0" max="1000" placeholder="Ex: 50" id="sala-capac" name="capcSala" oninput="this.value = Math.abs(this.value)"
+                    required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="tipo-sala">Tipo de sala</label>
+                <select id="tipo-sala" class="form-control" name="tipoSala" required>
+                    <option value="" selected disabled hidden>Escolha um tipo</option>
+                    <option value="1">Mesas e Cadeiras</option>
+                    <option value="2">Bancadas</option>
+                    <option value="3">Laboratório</option>
+                </select>
+            </div>
 
-                <p>
-                <div class="form-group col-md-2 form-inline align-bottom">
-                    <button class="btn btn-primary col-md-12 form-inline align-bottom" type="button" data-toggle="collapse" data-target="#advancedOptions" aria-expanded="false" aria-controls="advancedOptions">
+            <p>
+                <div class="form-group col-md-2 align-self-end">
+                    <button class="btn btn-primary col-md-12" type="button" data-toggle="collapse" data-target="#advancedOptions"
+                        aria-expanded="false" aria-controls="advancedOptions">
                         + Opções
                     </button>
                 </div>
-                </p>
-                    <div class="form-row col-md-12 collapse" id="advancedOptions">
-                        <div class="form-group col-md-4">
-                            <label for="fator1">Turno Manhã</label>
-                            <input type="number" class="form-control" name="fator1" id="fator1" min="0" max="1000" placeholder="Fator 1 (numérico)" oninput="this.value = Math.abs(this.value)">
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="fator2">Turno Tarde</label>
-                            <input type="number" class="form-control" name="fator2" id="fator2" min="0" max="1000" placeholder="Fator 2 (numérico)" oninput="this.value = Math.abs(this.value)">
-                        </div>                
-                        <div class="form-group col-md-4">
-                            <label for="fator3">Turno Noite</label>
-                            <input type="number" class="form-control" name="fator3" id="fator3" min="0" max="1000" placeholder="Fator 3 (numérico)" oninput="this.value = Math.abs(this.value)">
-                        </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-            <button type="button" class="btn btn-primary">Ver salas cadastradas</button>
-            <button type="button" class="btn btn-primary">Download arquivo salas</button>
-        </form>
-
-        <form action="/cadastro-turma" method="post">
-        <h1>FORM 2</h1>
-            <div class="form-row">
+            </p>
+            <div class="form-row col-md-12 collapse" id="advancedOptions">
                 <div class="form-group col-md-4">
-                    <label for="">Disciplina</label>
-                    <input type="text" class="form-control" id="disciplina-id" name="disciplina" placeholder="CIT7122" required>
+                    <label for="fator1">Turno Manhã</label>
+                    <input type="number" class="form-control" name="fator1" id="fator1" min="0" max="1000" placeholder="Ex: 1" oninput="this.value = Math.abs(this.value)">
                 </div>
                 <div class="form-group col-md-4">
-                    <label for="">Fase do Curso</label>
-                    <input type="text" class="form-control" id="fase-id" name="fase" placeholder="09655" required>
+                    <label for="fator2">Turno Tarde</label>
+                    <input type="number" class="form-control" name="fator2" id="fator2" min="0" max="1000" placeholder="Ex: 3" oninput="this.value = Math.abs(this.value)">
                 </div>
-                <div class="form-group col-md-2">
-                    <label for="">Oferta</label>
-                    <input type="number" class="form-control" min="0" id="oferta-id" name="oferta" oninput="this.value = Math.abs(this.value)" required>
+                <div class="form-group col-md-4">
+                    <label for="fator3">Turno Noite</label>
+                    <input type="number" class="form-control" name="fator3" id="fator3" min="0" max="1000" placeholder="Ex: 5" oninput="this.value = Math.abs(this.value)">
                 </div>
-                <div class="form-group col-md-2">
-                    <label for="">Demanda</label>
-                    <input type="number" class="form-control" min="0" id="demanda-id" name="demanda" oninput="this.value = Math.abs(this.value)" required> 
-                </div>
-                {{!-- <div class="form-group col-md-12" id="wrapper-turma">
-                    <div class="col-md-4" id="time-container"> --}}
-                    <div class="row col-md-12">
-                            <div class="col-md-3">
-                                    <select name="dia" class="form-control" id="dia-timer" required>
-                                        <option value="" selected disabled hidden>DIA</option>
-                                        <option value="2">SEG</option>
-                                        <option value="3">TER</option>
-                                        <option value="4">QUA</option>
-                                        <option value="5">QUI</option>
-                                        <option value="6">SEX</option>
-                                        <option value="7">SAB</option>
-                                    </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <select name="startTimer" class="form-control" id="start-timer" required>
-                                    <option value="" selected disabled hidden>HORA INICIAL</option>
-                                    <option value="0730">07:30</option>
-                                    <option value="0820">08:20</option>
-                                    <option value="0910">09:10</option>
-                                    <option value="1010">10:10</option>
-                                    <option value="1100">11:00</option>
-                                    <option value="1330">13:30</option>
-                                    <option value="1420">14:20</option>
-                                    <option value="1510">15:10</option>
-                                    <option value="1620">16:20</option>
-                                    <option value="1710">17:10</option>
-                                    <option value="1830">18:30</option>
-                                    <option value="1920">19:20</option>
-                                    <option value="2020">20:20</option>
-                                    <option value="2110">21:10</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control" name="creditos" id="creditos" min="1" max="10" oninput="this.value = Math.abs(this.value)" required>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-control" id="tipo-sala-turma" name="salaTurma" required>
-                                    <option value="" selected disabled hidden>TIPO SALA</option>
-                                    <option value="1">Mesas e Cadeiras</option>
-                                    <option value="2">Bancadas</option>
-                                    <option value="3">Laboratório</option>
-                                </select>
-                            </div>
-                    </div>
-                            
-                            
-               {{!--      </div>
-                </div> --}}
-
-                {{! FIM DOS ITEMS BÁSICOS class=items-basicos}}
-
             </div>
-        </form>
+        </div>
+        <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
+        <button type="button" class="btn btn-primary">Ver salas cadastradas</button>
+        <button type="button" class="btn btn-primary">Download arquivo salas</button>
+    </form>
 
-        <form action="/cadastro-turma" method="post">
-            <div class="grade-turma">
-                <div class="turma-header">
-                    Horários
-                </div>
-                    <div class="wrapper-turma" id="wrapper-turma">            
-                    <div class="time-container" id="time-container">
-                        
-                        <input type="number" name="creditos" id="creditos" min="1" max="10" oninput="this.value = Math.abs(this.value)" required>
-                        <select id="tipo-sala-turma" name="salaTurma" required>
-                            <option value="" selected disabled hidden>TIPO SALA</option>
-                            <option value="1">Mesas e Cadeiras</option>
-                            <option value="2">Bancadas</option>
-                            <option value="3">Laboratório</option>
-                        </select>
-                    </div>
-                    </div>
-                    <input type="button" value="Novo campo de horário" onclick="createNewSchedule()">
-                    <input type="button" value="Remover campo" onclick="remove()">
-                    <input type="submit" value="CAD TURMA">
-                </div>
+    <form action="/cadastro-turma" method="post">
+        <h1>Cadastro de Turmas</h1>
+        <div class="form-row" id="wrapper-turma">
+            <div class="form-group col-md-4">
+                <label for="disciplina">Disciplina</label>
+                <input type="text" class="form-control" id="disciplina-id" name="disciplina" placeholder="CIT7122" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="fase">Fase do Curso</label>
+                <input type="text" class="form-control" id="fase-id" name="fase" placeholder="09655" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="oferta">Oferta</label>
+                <input type="number" class="form-control" placeholder="Ex: 50" min="0" id="oferta-id" name="oferta" oninput="this.value = Math.abs(this.value)"
+                    required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="demanda">Demanda</label>
+                <input type="number" class="form-control" placeholder="Ex: 35" min="0" id="demanda-id" name="demanda" oninput="this.value = Math.abs(this.value)"
+                    required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="dia">Dia</label>
+                <select name="dia" class="form-control" id="dia-timer" required>
+                    <option value="" selected disabled hidden>DIA</option>
+                    <option value="2">SEG</option>
+                    <option value="3">TER</option>
+                    <option value="4">QUA</option>
+                    <option value="5">QUI</option>
+                    <option value="6">SEX</option>
+                    <option value="7">SAB</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="startTimer">Horário</label>
+                <select name="startTimer" class="form-control" id="start-timer" required>
+                    <option value="" selected disabled hidden>HORA INICIAL</option>
+                    <option value="0730">07:30</option>
+                    <option value="0820">08:20</option>
+                    <option value="0910">09:10</option>
+                    <option value="1010">10:10</option>
+                    <option value="1100">11:00</option>
+                    <option value="1330">13:30</option>
+                    <option value="1420">14:20</option>
+                    <option value="1510">15:10</option>
+                    <option value="1620">16:20</option>
+                    <option value="1710">17:10</option>
+                    <option value="1830">18:30</option>
+                    <option value="1920">19:20</option>
+                    <option value="2020">20:20</option>
+                    <option value="2110">21:10</option>
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="creditos">Créditos de aula</label>
+                <input type="number" placeholder="Ex: 4" class="form-control" name="creditos" id="creditos" min="1" max="10" oninput="this.value = Math.abs(this.value)"
+                    required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="salaTurma">Estilo de sala</label>
+                <select class="form-control" id="tipo-sala-turma" name="salaTurma" required>
+                    <option value="" selected disabled hidden>Escolha um tipo</option>
+                    <option value="1">Mesas e Cadeiras</option>
+                    <option value="2">Bancadas</option>
+                    <option value="3">Laboratório</option>
+                </select>
+            </div>
 
-            </form>
-
-            <form action="/getturma" method="GET">
-                <input type="submit" value="Download Turmas" class="btn-salvar">
-            </form>
-            <form action="/getsala" method="get">
-                <input type="submit" value="Download Salas" class="btn-salvar">
-            </form>
+        </div>
+        <div class="row col-md-12">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Novo campo de horário" onclick="createNewSchedule()">
+                <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
+                <input type="submit" class="btn btn-primary" value="CAD TURMA">
+            </div>
+        </div>
+    </form>
 </div>
