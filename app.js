@@ -30,20 +30,14 @@ app.engine('hbs', hbs({
 }));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
+app.disable('x-powered-by');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-// post cases
-app.post('/login', usersRouter);
-app.post('/cadastro-sala', usersRouter);
-app.post('/cadastro-turma', usersRouter);
-app.post('/cadastrar', usersRouter);
+app.use('/', usersRouter);
 
 module.exports = app;
