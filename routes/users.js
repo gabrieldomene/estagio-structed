@@ -28,14 +28,16 @@ let classModel = require('../models/class-model');
 router.post('/login', function (req, res) {
   let userinput = req.body.username;
   let passinput = req.body.password;
-  
-  userModel.findOne({username: userinput}, function(err, user){
+
+  userModel.findOne({
+    username: userinput
+  }, function (err, user) {
     if (err) throw err;
-    else{
-      if(!user){ //nao achou usuario AVISAR
+    else {
+      if (!user) { //nao achou usuario AVISAR
         res.write('NAO ACHOU USER');
         res.end();
-      }else{ //achou usuario PRECISA VALIDAR NO PASSPORT
+      } else { //achou usuario PRECISA VALIDAR NO PASSPORT
         res.render('dashboard', {
           title: 'BEM VINDO'
         });
@@ -57,18 +59,20 @@ router.post('/cadastrar', function (req, res) {
 
   });
 
-  userModel.findOne({username: userInput}, function(err, userdb){
+  userModel.findOne({
+    username: userInput
+  }, function (err, userdb) {
     if (err) throw err;
-    else{
-      if(!userdb){
-        newUser.save(function(err){
+    else {
+      if (!userdb) {
+        newUser.save(function (err) {
           if (err) throw err;
         });
         console.log('Usuário cadastrado fazer message');
         res.render('index', {
           title: 'BEM VINDO'
         });
-      }else{
+      } else {
         console.log('Usuário ja cadastrado, login abaixo:\n');
         console.log(userdb);
       }
@@ -100,17 +104,19 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
     fator3: fator3
   });
 
-  roomModel.findOne({descricao: desc}, function(err, roomdb){
+  roomModel.findOne({
+    descricao: desc
+  }, function (err, roomdb) {
     if (err) throw err;
-    else{
-      if(!roomdb){//Sala cadastrada avisar mensagem
-        newRoom.save(function(err){
+    else {
+      if (!roomdb) { //Sala cadastrada avisar mensagem
+        newRoom.save(function (err) {
           if (err) throw err;
         });
         res.render('dashboard', {
           title: 'DASHBOARD'
         })
-      }else{
+      } else {
         res.write('JA CADASTRADA, FAZER MESSAGE');
         res.end();
       }
@@ -118,7 +124,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   });
 });
 
-router.post('/cadastro-turma', function(req, res){ //FALTA CADASTRAR O ID DA SESSAO!!!!
+router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
   let descricaoInput = req.body.disciplina;
   let faseInput = req.body.fase;
   let ofertaInput = req.body.oferta;
@@ -140,17 +146,19 @@ router.post('/cadastro-turma', function(req, res){ //FALTA CADASTRAR O ID DA SES
     tipoSalaTurma: salaTurmaInput
   });
 
-  classModel.findOne({descricao: descricaoInput}, function(err, classdb){
+  classModel.findOne({
+    descricao: descricaoInput
+  }, function (err, classdb) {
     if (err) throw err;
-    else{
-      if(!classdb){
-        newClass.save(function(err){
+    else {
+      if (!classdb) {
+        newClass.save(function (err) {
           if (err) throw err;
         });
         res.render('dashboard', {
           title: 'DASHBOARD'
         });
-      }else{
+      } else {
         console.log(classdb);
         res.write('Sala já cadastrada no sistema');
         res.end();
