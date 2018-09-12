@@ -3,21 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var mongoose = require('mongoose');
-
-//Connect to localhost
-mongoose.connect('mongodb://localhost:27017/LCC');
-
-//Connect to MongoLab sandbox...
-/* 
-mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc'); */
-
-//Check db connection
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
-db.once('open', function () {
-  console.log('DB CONECTADO!');
-
-})
+//Connection to mlab
 
 //Bring models
 let userModel = require('../models/user-model');
@@ -45,7 +31,7 @@ router.post('/login', function (req, res) {
     }
   });
 });
-
+//https://www.youtube.com/watch?v=onPlF3gC0T4
 router.post('/cadastrar', function (req, res) {
   let userInput = req.body.username;
   let passInput = req.body.password;
@@ -75,6 +61,7 @@ router.post('/cadastrar', function (req, res) {
       } else {
         console.log('Usuário ja cadastrado, login abaixo:\n');
         console.log(userdb);
+        res.render('index');
       }
     }
   });
