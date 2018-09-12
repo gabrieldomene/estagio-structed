@@ -5,20 +5,20 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var hbs = require('express-handlebars');
 var passport = require('passport');
+var mongoose = require('mongoose');
 
+//Connection to mlab
+const db = require('./config/keys').mongoURI;
+
+mongoose
+    .connect(db, {useNewUrlParser:true})
+    .then(() => console.log('Mongo connected'))
+    .catch(err => console.log(err));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-
-//Connect to localhost
-mongoose.connect('mongodb://localhost:27017/LCC');
-
-//Connect to MongoLab sandbox...
-
-/* mongoose.connect('mongodb://gabrieldomene:teste123@ds018248.mlab.com:18248/lcc'); */
-
 // view engine setup
 app.engine('hbs', hbs({
     extname: 'hbs',
@@ -36,7 +36,6 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 
