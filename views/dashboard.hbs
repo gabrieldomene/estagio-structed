@@ -55,9 +55,20 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-        <button type="button" class="btn btn-primary">Ver salas cadastradas</button>
-        <button type="button" class="btn btn-primary">Download arquivo salas</button>
     </form>
+    <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Ver salas cadastradas</button></form>
+    <button type="submit" class="btn btn-primary">Download arquivo salas</button>
+    {{#if created}}
+        <div class="alert alert-success" id="alert" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Sala {{ sala }} cadastrada com sucesso</strong>
+        </div>
+    {{else}}
+        <div class="alert alert-danger" id="alert" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>{{ sala }} já cadastrada no sistema</strong>
+        </div>
+    {{/if}}
 
     <form action="/cadastro-turma" method="post">
         <h1>Cadastro de Turmas</h1>
