@@ -4,6 +4,11 @@ var passport = require('passport');
 
 var mongoose = require('mongoose');
 //Connection to mlab
+var db = require("../config/keys").mongoURI;
+mongoose
+    .connect(db, {useNewUrlParser:true})
+    .then(() => console.log('Mongo connected'))
+    .catch(err => console.log(err));
 
 //Bring models
 let userModel = require('../models/user-model');
@@ -11,7 +16,7 @@ let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
 
 
-router.post('/login', function (req, res) {
+router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDACAO
   let userinput = req.body.username;
   let passinput = req.body.password;
 
@@ -32,17 +37,15 @@ router.post('/login', function (req, res) {
   });
 });
 //https://www.youtube.com/watch?v=onPlF3gC0T4
-router.post('/cadastrar', function (req, res) {
+router.post('/cadastrar', function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
   let userInput = req.body.username;
   let passInput = req.body.password;
   let centroInput = req.body.centroID;
-  console.log(userInput, passInput, centroInput);
 
   let newUser = new userModel({
     username: userInput,
     password: passInput,
     idcentro: centroInput
-
   });
 
   userModel.findOne({
@@ -80,7 +83,6 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   let fator3 = req.body.fator3;
   if (fator3 == '') fator3 = 0;
   // let iduser = algo
-  console.log(tipoSala);
 
   let newRoom = new roomModel({
     descricao: desc,
@@ -101,7 +103,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
           if (err) throw err;
         });
         res.render('dashboard', {
-          title: 'DASHBOARD'
+          title: 'DASHBOARD', 
         })
       } else {
         res.write('JA CADASTRADA, FAZER MESSAGE');
@@ -113,6 +115,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
 
 router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
   let descricaoInput = req.body.disciplina;
+  descricaoInput = descricaoInput.toUpperCase();
   let faseInput = req.body.fase;
   let ofertaInput = req.body.oferta;
   let demandaInput = req.body.demanda;
@@ -143,11 +146,29 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
           if (err) throw err;
         });
         res.render('dashboard', {
-          title: 'DASHBOARD'
+          title: 'DASHBOARD', created: 1, sala: descricaoInput
         });
       } else {
         console.log(classdb);
-        res.write('Sala já cadastrada no sistema');
+       res.render('dashboard', {
+          title: 'DASHBOARD', created: 0
+       });
+      }
+    }
+  });
+});
+
+
+router.get('/verSalas', function(req, res){
+  //Usa o room model definido previamente para fazer a busca no mlab
+  roomModel.find({}, function(err, result){
+    if (err) throw err;
+    else{
+      if (!result) {
+        console.log('SEM DADOS');
+        res.end();
+      } else {
+        console.log(result);
         res.end();
       }
     }
