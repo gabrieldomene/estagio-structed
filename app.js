@@ -8,12 +8,12 @@ var passport = require('passport');
 var mongoose = require('mongoose');
 
 //Connection to mlab
-const db = require('./config/keys').mongoURI;
+/* const db = require('./config/keys').mongoURI;
 
 mongoose
     .connect(db, {useNewUrlParser:true})
     .then(() => console.log('Mongo connected'))
-    .catch(err => console.log(err));
+    .catch(err => console.log(err)); */
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
