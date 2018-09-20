@@ -12,7 +12,7 @@ body
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: #48BEFF !important;
+    background-color: rgba(34, 129, 180, 0.753) !important;
 }
 
 form{
@@ -22,7 +22,9 @@ form{
 h1, h2, h3, label{
     color: #fff !important;
 }
-
+.centros{
+    color: black !important;
+}
 .container-fluid{
   display: table-cell;
   vertical-align: middle;
