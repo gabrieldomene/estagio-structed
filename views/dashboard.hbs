@@ -55,9 +55,14 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-    </form>
-    <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Ver salas cadastradas</button></form>
-    <button type="submit" class="btn btn-primary">Download arquivo salas</button>
+        <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Download Salas</button></form>
+            
+        </form>
+        {{!-- <div class="row col-md-12">
+            <div class="form-group">
+               </div>
+        </div> --}}
+
     {{#if created}}
         <div class="alert alert-success" id="alert" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -144,7 +149,8 @@
                 <input type="button" class="btn btn-primary" value="Novo campo de horário" onclick="createNewSchedule()">
                 <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
                 <input type="submit" class="btn btn-primary" value="CAD TURMA">
-            </div>
+                           </div>
         </div>
     </form>
+    <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Download Turmas</button></form>
 </div>
