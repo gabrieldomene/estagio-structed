@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var fs = require('fs');
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -168,11 +169,95 @@ router.get('/verSalas', function(req, res){
         console.log('SEM DADOS');
         res.end();
       } else {
-        console.log(result);
+        let conc = '';
+        let temp = [];
+        fs.unlink('OutSala.txt', function(err){
+          if(err){
+            console.log('Erro');
+          }else{
+            console.log('Out deletado');
+          }
+        });
+        for (let i = 0; i < result.length; i++){
+          conc = result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
+          fs.appendFile('OutSala.txt', conc, 'utf-8', function(err){
+            if (err){
+              console.log('Falha na escrita!');
+            }else{
+              console.log('Adicionado uma linha');
+            }
+          });
+        }
+      }
+    }
+  });
+  res.download('OutSala.txt');
+});
+
+
+router.get('/verTurmas', function(req, res){
+  classModel.find({}, function(err, result){
+    if (err) throw new Error(err);
+    else{
+      if (!result){
+        console.log('SEM DADOS');
+        res.end()
+      }else{
+        fs.unlink('OutTurma.txt', function(err){
+          if (err){
+            console.log('ERRO');
+          }else{
+            console.log('OutTurma deletado!');
+          }
+        });
+        let conc = '';
+        for (let i = 0; i < result.length; i++){
+          if(result[i].dia.length > 1){//More than one field in hour/day
+            let temp = []
+            for (let j = 0; j < result[i].dia.length; j++){
+              var temparray = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + temp.push(temparray);
+            }
+            for (let k = 0; k < temp.length; k++){
+              if (k == 0){//primeiro valor, precisa do {
+                conc = '{' + temp[k];
+              }else if ( k == (temp.length-1)){
+                conc = conc + ', ' + temp[k] + '}';
+              }else{
+                conc = conc + ', ' + temp[k];
+              }
+            }
+          }else{//Only one field in hour/day
+            conc = '{' + result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma + '}';
+          }
+          let result_conc = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' ' + result[i].demanda + ' ' + conc;
+          let text = result_conc + '\r\n';
+          fs.appendFile('OutTurma.txt', text, function(err){
+            if (err){
+              console.log('Falha na inserção');
+            }else{
+              console.log('Adiciondo uma linha');
+            }
+          });
+        }
+      }
+    }
+  });
+  res.download('OutTurma.txt');
+});
+/* 
+router.get('/verTurmas', function(req, res){
+  classModel.find({}, function(err, result){
+    if (err) throw new Error(err)
+    else{
+      if (!result){
+        console.log('NAO TEM DADOS');
+        res.end();
+      }else{
+        console.log(result.demanda);
         res.end();
       }
     }
   });
 });
-
+ */
 module.exports = router;
