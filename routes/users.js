@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var fs = require('fs');
+var path = require('path');
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -195,7 +196,7 @@ router.get('/verSalas', function(req, res){
 });
 
 
-router.get('/verTurmas', function(req, res){
+/* router.get('/verTurmas', function(req, res){
   classModel.find({}, function(err, result){
     if (err) throw new Error(err);
     else{
@@ -226,8 +227,12 @@ router.get('/verTurmas', function(req, res){
                 conc = conc + ', ' + temp[k];
               }
             }
+            console.log('Conc + de 1 dia no for\n');
+            console.log(conc);
           }else{//Only one field in hour/day
             conc = '{' + result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma + '}';
+            console.log('Conc com 1 dia só\n');
+            console.log(conc);
           }
           let result_conc = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' ' + result[i].demanda + ' ' + conc;
           let text = result_conc + '\r\n';
@@ -243,21 +248,63 @@ router.get('/verTurmas', function(req, res){
     }
   });
   res.download('OutTurma.txt');
-});
-/* 
+}); */
 router.get('/verTurmas', function(req, res){
   classModel.find({}, function(err, result){
-    if (err) throw new Error(err)
+    if (err) throw new Error(err);
     else{
       if (!result){
-        console.log('NAO TEM DADOS');
-        res.end();
+        console.log('Não existe dados');
       }else{
-        console.log(result.demanda);
-        res.end();
+        fs.unlink('OutTurma.txt', function(err){
+          if (err){
+            console.log('ERRO');
+          }else{
+            console.log('OutTurma deletado!');
+          }
+        });
+        for (let i = 0; i < result.length; i++){
+          //console.log(result[i]);
+          let base = '';
+          base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
+          let temp = []
+          if (result[i].dia.length > 1){
+            for (let j = 0; j < result[i].dia.length; j++){
+              let temporaria = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + result[i].tipoSalaTurma[j];
+              temp.push(temporaria);
+            }
+          }else{
+            let temporaria = result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma;
+            temp.push(temporaria);
+          }
+          let conc = '';
+          if (temp.length > 1){
+            for (let k = 0; k < temp.length; k++){
+              if (k == 0 ){
+                conc = '{' + temp[k] + ', ';
+              }else if (k == (temp.length - 1)){
+                conc = conc + temp[k] + '}';
+              }else{
+                conc = conc + temp[k] + ', '
+              }
+            }
+          }else{
+            conc = '{' + temp +'}';
+          }
+          let final = base + ' ' + conc+'\n';
+          console.log(final);
+          fs.appendFile('OutTurma.txt', final, function(err){
+            if (err){
+              console.log('Falha');
+            }else{
+              console.log('Linha adicionada');
+            }
+          });
+        }
       }
     }
+    res.attachment('/OutTurma.txt');
   });
+  res.end();
 });
- */
 module.exports = router;
