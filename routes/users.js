@@ -304,6 +304,7 @@ router.get('/verTurmas', function(req, res){
       }
     }
     res.attachment('/OutTurma.txt');
+    console.log('New commit')
   });
   res.end();
 });
