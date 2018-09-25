@@ -249,6 +249,7 @@ router.get('/verSalas', function(req, res){
   });
   res.download('OutTurma.txt');
 }); */
+
 router.get('/verTurmas', function(req, res){
   classModel.find({}, function(err, result){
     if (err) throw new Error(err);
@@ -264,7 +265,6 @@ router.get('/verTurmas', function(req, res){
           }
         });
         for (let i = 0; i < result.length; i++){
-          //console.log(result[i]);
           let base = '';
           base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
           let temp = []
@@ -303,9 +303,7 @@ router.get('/verTurmas', function(req, res){
         }
       }
     }
-    res.attachment('/OutTurma.txt');
-    console.log('New commit')
   });
-  res.end();
+  res.download('OutTurma.txt');
 });
 module.exports = router;
