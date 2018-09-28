@@ -79,11 +79,11 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   let capac = req.body.capcSala;
   let tipoSala = req.body.tipoSala;
   let fator1 = req.body.fator1;
-  if (fator1 == '') fator1 = 0;
+  if (fator1 == '') fator1 = 1;
   let fator2 = req.body.fator2;
-  if (fator2 == '') fator2 = 0;
+  if (fator2 == '') fator2 = 1;
   let fator3 = req.body.fator3;
-  if (fator3 == '') fator3 = 0;
+  if (fator3 == '') fator3 = 1;
   // let iduser = algo
 
   let newRoom = new roomModel({
