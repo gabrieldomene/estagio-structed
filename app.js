@@ -2,18 +2,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var mongoose = require('mongoose');
 var hbs = require('express-handlebars');
 var passport = require('passport');
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-//Connection to mlab
-/* const db = require('./config/keys').mongoURI;
+var options = require("./config/keys").mongoURI;
 
-mongoose
-    .connect(db, {useNewUrlParser:true})
-    .then(() => console.log('Mongo connected'))
-    .catch(err => console.log(err)); */
+//Mongo connection
+mongoose.connect(options, {useNewUrlParser:true});
+
+//Auth package
+var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -36,7 +36,20 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
+//Express Session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    //cookie: { secure: true }
+  }));
+//Passport authentication
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+
 
 module.exports = app;
