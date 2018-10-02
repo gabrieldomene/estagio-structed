@@ -8,13 +8,13 @@ var data_out = O("result-comb");
 var toogle = O('advanced-options');
 var btnO = O('btn-options');
 
-document.addEventListener('DOMContentLoaded', function(){
-    window.setTimeout(function() {
-        document.getElementById(".alert").fadeTo(500, 0).slideUp(500, function(){
-            document.getElementById(this).style.display = none; 
-        });
-    }, 2000);
-}, false);
+/* app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+})) */
 
 function O(msg) {
     return document.getElementById(msg);
