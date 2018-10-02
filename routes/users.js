@@ -17,7 +17,11 @@ let userModel = require('../models/user-model');
 let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
 
-
+router.get('/', function(req, res) {
+  console.log(req.user);
+  console.log(req.isAuthenticated());
+  res.render('index', { title: 'Ensalamento UFSC' });
+});
 router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDACAO
   let userinput = req.body.username;
   let passinput = req.body.password;
@@ -31,13 +35,28 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
         res.write('NAO ACHOU USER');
         res.end();
       } else { //achou usuario PRECISA VALIDAR NO PASSPORT
-        res.render('dashboard', {
-          title: 'BEM VINDO'
+        const user_id = user.username;
+        req.login(user_id, function(err){
+          res.render('dashboard', {
+            title: 'BEM VINDO'
+          });
         });
+        //console.log(user.username, user.idcentro);
       }
     }
   });
 });
+
+passport.serializeUser(function(user_id, done) {
+  done(null, user_id);
+});
+
+passport.deserializeUser(function(user_id, done) {
+    done(null, user_id);
+});
+
+
+
 //https://www.youtube.com/watch?v=onPlF3gC0T4
 router.post('/cadastrar', function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
   let userInput = req.body.username;
@@ -160,8 +179,8 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
   });
 });
 
-
-router.get('/verSalas', function(req, res){
+//Autenticar ver salas
+router.get('/verSalas', authenticationMiddleware(), function(req, res){
   //Usa o room model definido previamente para fazer a busca no mlab
   roomModel.find({}, function(err, result){
     if (err) throw err;
@@ -196,61 +215,8 @@ router.get('/verSalas', function(req, res){
 });
 
 
-/* router.get('/verTurmas', function(req, res){
-  classModel.find({}, function(err, result){
-    if (err) throw new Error(err);
-    else{
-      if (!result){
-        console.log('SEM DADOS');
-        res.end()
-      }else{
-        fs.unlink('OutTurma.txt', function(err){
-          if (err){
-            console.log('ERRO');
-          }else{
-            console.log('OutTurma deletado!');
-          }
-        });
-        let conc = '';
-        for (let i = 0; i < result.length; i++){
-          if(result[i].dia.length > 1){//More than one field in hour/day
-            let temp = []
-            for (let j = 0; j < result[i].dia.length; j++){
-              var temparray = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + temp.push(temparray);
-            }
-            for (let k = 0; k < temp.length; k++){
-              if (k == 0){//primeiro valor, precisa do {
-                conc = '{' + temp[k];
-              }else if ( k == (temp.length-1)){
-                conc = conc + ', ' + temp[k] + '}';
-              }else{
-                conc = conc + ', ' + temp[k];
-              }
-            }
-            console.log('Conc + de 1 dia no for\n');
-            console.log(conc);
-          }else{//Only one field in hour/day
-            conc = '{' + result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma + '}';
-            console.log('Conc com 1 dia só\n');
-            console.log(conc);
-          }
-          let result_conc = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' ' + result[i].demanda + ' ' + conc;
-          let text = result_conc + '\r\n';
-          fs.appendFile('OutTurma.txt', text, function(err){
-            if (err){
-              console.log('Falha na inserção');
-            }else{
-              console.log('Adiciondo uma linha');
-            }
-          });
-        }
-      }
-    }
-  });
-  res.download('OutTurma.txt');
-}); */
-
-router.get('/verTurmas', function(req, res){
+//Autenticar ver turmas
+router.get('/verTurmas', authenticationMiddleware(), function(req, res){
   classModel.find({}, function(err, result){
     if (err) throw new Error(err);
     else{
@@ -306,4 +272,14 @@ router.get('/verTurmas', function(req, res){
   });
   res.download('OutTurma.txt');
 });
+
+//Auth to restricted pages
+function authenticationMiddleware () {  
+	return (req, res, next) => {
+		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+
+	    if (req.isAuthenticated()) return next();
+	    res.render('index')
+	}
+}
 module.exports = router;
