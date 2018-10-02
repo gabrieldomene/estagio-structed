@@ -282,4 +282,5 @@ function authenticationMiddleware () {
 	    res.render('index')
 	}
 }
+
 module.exports = router;
