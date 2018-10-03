@@ -1,7 +1,7 @@
 <div class="container">
     <div class="card text-white bg-primary mb-3 mb-12">
         <div class="card-body text-white">
-            <h5 class="card-title">Como usar?</h5>
+            <h5 class="card-title">Bem vindo {{ name }}, como utilizar?</h5>
             <p class="card-text">Portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web
                 você poderá fazer o cadastramento das salas ou das turmas e posteriormente solicitar a solução do problema
                 de alocação. O programa lhe retornará um arquivo em forma de download, com a melhor solução que encontrar
@@ -55,15 +55,9 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-        <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Download Salas</button></form>
-            
+           
         </form>
-        {{!-- <div class="row col-md-12">
-            <div class="form-group">
-               </div>
-        </div> --}}
-
-    
+        <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Download Salas</button></form>
 
     <form action="/cadastro-turma" method="post">
         <h1>Cadastro de Turmas</h1>
