@@ -3,6 +3,8 @@ var router = express.Router();
 var passport = require('passport');
 var fs = require('fs');
 var path = require('path');
+var bcrypt = require('bcryptjs');
+const { check, validationResult } = require('express-validator/check');
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -20,8 +22,17 @@ let classModel = require('../models/class-model');
 router.get('/', function(req, res) {
   console.log(req.user);
   console.log(req.isAuthenticated());
-  res.render('index', { title: 'Ensalamento UFSC' });
+  if(req.isAuthenticated()){
+    res.render('dashboard', { title : 'Ensalamento ', name : req.user});
+  }else{
+    res.render('index', { title: 'Ensalamento UFSC' });
+  }
 });
+
+router.get('/dashboard', function(req, res){
+  res.redirect('/');
+});
+
 router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDACAO
   let userinput = req.body.username;
   let passinput = req.body.password;
@@ -38,7 +49,8 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
         const user_id = user.username;
         req.login(user_id, function(err){
           res.render('dashboard', {
-            title: 'BEM VINDO'
+            title: 'BEM VINDO',
+            name : req.user
           });
         });
         //console.log(user.username, user.idcentro);
@@ -63,32 +75,40 @@ router.post('/cadastrar', function (req, res) {// FALTA ATRELAR O LOGIN A CADA I
   let passInput = req.body.password;
   let centroInput = req.body.centroID;
 
-  let newUser = new userModel({
-    username: userInput,
-    password: passInput,
-    idcentro: centroInput
-  });
+  check('password').isLength({min: 8}).withMessage('Deve possuir ao menos 8 dígitos entre letras e números!').matches(/\d/).withMessage('deve conter um número')
 
-  userModel.findOne({
-    username: userInput
-  }, function (err, userdb) {
-    if (err) throw err;
-    else {
-      if (!userdb) {
-        newUser.save(function (err) {
-          if (err) throw err;
-        });
-        console.log('Usuário cadastrado fazer message');
-        res.render('index', {
-          title: 'BEM VINDO'
-        });
-      } else {
-        console.log('Usuário ja cadastrado, login abaixo:\n');
-        console.log(userdb);
-        res.render('index');
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render('index', {errors : errors});
+  }else{
+
+    let newUser = new userModel({
+      username: userInput,
+      password: passInput,
+      idcentro: centroInput
+    });
+
+    userModel.findOne({
+      username: userInput
+    }, function (err, userdb) {
+      if (err) throw err;
+      else {
+        if (!userdb) {
+          newUser.save(function (err) {
+            if (err) throw err;
+          });
+          console.log('Usuário cadastrado fazer message');
+          res.render('index', {
+            title: 'BEM VINDO'
+          });
+        } else {
+          console.log('Usuário ja cadastrado, login abaixo:\n');
+          console.log(userdb);
+          res.render('index');
+        }
       }
-    }
-  });
+    });
+  }
 });
 
 
