@@ -19,6 +19,14 @@
                 </div>
             </form>
         </div>
+
+        {{#if errors}}
+            {{#each errors}}
+                <div class="alert alert-danger" id="alert" role="alert">
+                    {{this.msg}}
+                </div>
+            {{/each}}
+        {{/if}}
         <div class="col-lg-3">
             <h3>CADASTRO DE USUÁRIOS</h3>
             <form action="/cadastrar" method="POST" id="form-cadastro">
