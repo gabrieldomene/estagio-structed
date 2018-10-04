@@ -20,6 +20,7 @@ let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
 
 router.get('/', function(req, res) {
+  //Console mostrando quem é o user e se está autenticado
   console.log(req.user);
   console.log(req.isAuthenticated());
   if(req.isAuthenticated()){
@@ -50,7 +51,7 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
         req.login(user_id, function(err){
           res.render('dashboard', {
             title: 'BEM VINDO',
-            name : req.user
+            name : user_id
           });
         });
         //console.log(user.username, user.idcentro);
@@ -123,7 +124,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   if (fator2 == '') fator2 = 1;
   let fator3 = req.body.fator3;
   if (fator3 == '') fator3 = 1;
-  // let iduser = algo
+  let condicao = 0;
 
   let newRoom = new roomModel({
     descricao: desc,
@@ -133,25 +134,33 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
     fator2: fator2,
     fator3: fator3
   });
-
-  roomModel.findOne({
-    descricao: desc
-  }, function (err, roomdb) {
-    if (err) throw err;
-    else {
-      if (!roomdb) { //Sala cadastrada avisar mensagem
-        newRoom.save(function (err) {
-          if (err) throw err;
-        });
-        res.render('dashboard', {
-          title: 'DASHBOARD', 
-        })
-      } else {
-        res.write('JA CADASTRADA, FAZER MESSAGE');
-        res.end();
+  if (condicao == 0){
+    let userSession = req.user;
+    console.log('REQ.USER = '+ userSession);
+    let idSessionMatch = searchID(userSession);
+    console.log('[+] idcentro = ' + idSessionMatch)
+    res.render('dashboard', {name : req.user});
+  }else{
+    //TEMPORARIO TESTANDO QUERY ID
+    roomModel.findOne({
+      descricao: desc
+    }, function (err, roomdb) {
+      if (err) throw err;
+      else {
+        if (!roomdb) { //Sala cadastrada avisar mensagem
+          newRoom.save(function (err) {
+            if (err) throw err;
+          });
+          res.render('dashboard', {
+            title: 'DASHBOARD', 
+          })
+        } else {
+          res.write('JA CADASTRADA, FAZER MESSAGE');
+          res.end();
+        }
       }
-    }
-  });
+    });
+  }
 });
 
 router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
@@ -192,7 +201,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
       } else {
         console.log(classdb);
        res.render('dashboard', {
-          title: 'DASHBOARD', created: 0
+          title: 'DASHBOARD', created: 0, name : req.user
        });
       }
     }
@@ -302,5 +311,28 @@ function authenticationMiddleware () {
 	    res.render('index')
 	}
 }
+
+//Function to search in DB the user in session to identify his value of idcentro
+
+function searchID(user_name){
+  let nameToSearch = user_name;
+  let y = userModel.findOne({
+    username: nameToSearch
+  }, function(err, user) {
+    if (err) throw err;
+    else {
+      if (!user) {
+        return 0
+      } else {
+        console.log(user.idcentro)
+        return user.idcentro
+      }
+    }
+  });
+  console.log(y)
+  return y
+}
+
+
 
 module.exports = router;
