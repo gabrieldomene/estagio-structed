@@ -126,21 +126,61 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   if (fator3 == '') fator3 = 1;
   let condicao = 0;
 
-  let newRoom = new roomModel({
-    descricao: desc,
-    capacidade: capac,
-    tipoSala: tipoSala,
-    fator1: fator1,
-    fator2: fator2,
-    fator3: fator3
-  });
-  if (condicao == 0){
+  let userSession = req.user;
+  console.log('USUARIO = ', userSession);
+
+  function searchIDroom (user_name, desc, capac, tipoSala, fator1, fator2, fator3){
+    let nameToSearch = user_name;
+    userModel.findOne({
+      username: nameToSearch
+    }, function(err, user) {
+      if (err) throw err;
+      else {
+        if (!user) {
+          return 0
+        } else {
+          roomModel.findOne({
+            descricao: desc
+          }, function (err, roomdb) {
+            if (err) throw err;
+            else {
+              if (!roomdb) { //Sala cadastrada avisar mensagem
+                let newRoom = new roomModel({
+                  descricao: desc,
+                  capacidade: capac,
+                  tipoSala: tipoSala,
+                  fator1: fator1,
+                  fator2: fator2,
+                  fator3: fator3,
+                  idcentro: user.idcentro
+                });
+                newRoom.save(function (err) {
+                  if (err) throw err;
+                });
+                res.render('dashboard', {
+                  title: 'DASHBOARD',
+                  name : req.user 
+                });
+              } else {
+                res.render('dashboard', {
+                  title: 'DASHBOARD',
+                  name: req.user
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  }
+  searchIDroom (userSession, desc, capac, tipoSala, fator1, fator2, fator3);
+
+/* 
     let userSession = req.user;
     console.log('REQ.USER = '+ userSession);
     let idSessionMatch = searchID(userSession);
     console.log('[+] idcentro = ' + idSessionMatch)
-    res.render('dashboard', {name : req.user});
-  }else{
+
     //TEMPORARIO TESTANDO QUERY ID
     roomModel.findOne({
       descricao: desc
@@ -148,19 +188,29 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
       if (err) throw err;
       else {
         if (!roomdb) { //Sala cadastrada avisar mensagem
+          let newRoom = new roomModel({
+            descricao: desc,
+            capacidade: capac,
+            tipoSala: tipoSala,
+            fator1: fator1,
+            fator2: fator2,
+            fator3: fator3,
+            idcentro: idSessionMatch
+          });
           newRoom.save(function (err) {
             if (err) throw err;
           });
           res.render('dashboard', {
-            title: 'DASHBOARD', 
-          })
+            title: 'DASHBOARD',
+            name : req.user 
+          });
         } else {
           res.write('JA CADASTRADA, FAZER MESSAGE');
           res.end();
         }
       }
-    });
-  }
+    }); */
+
 });
 
 router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
@@ -175,37 +225,58 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
   let salaTurmaInput = req.body.salaTurma;
   //let iduser = algo
 
-  let newClass = new classModel({
-    descricao: descricaoInput,
-    fase: faseInput,
-    oferta: ofertaInput,
-    demanda: demandaInput,
-    dia: diaInput,
-    start: startInput,
-    creditos: creditosInput,
-    tipoSalaTurma: salaTurmaInput
-  });
+  let userSession = req.user;
+  console.log('USUARIO = ', userSession);
 
-  classModel.findOne({
-    descricao: descricaoInput
-  }, function (err, classdb) {
-    if (err) throw err;
-    else {
-      if (!classdb) {
-        newClass.save(function (err) {
-          if (err) throw err;
-        });
-        res.render('dashboard', {
-          title: 'DASHBOARD', created: 1, sala: descricaoInput
-        });
-      } else {
-        console.log(classdb);
-       res.render('dashboard', {
-          title: 'DASHBOARD', created: 0, name : req.user
-       });
+
+  function searchIDclass (user_name, desc, fase, oferta, demanda, dia, start, creditos, tipoSalaTurma){
+    let nameToSearch = user_name;
+    userModel.findOne({
+      username: nameToSearch
+    }, function(err, user) {
+      if (err) throw err;
+      else {
+        if (!user) {
+          return 0
+        } else {
+          classModel.findOne({
+            descricao: desc
+          }, function (err, classdb) {
+            if (err) throw err;
+            else {
+              if (!classdb) { //Sala cadastrada avisar mensagem
+                let newClass = new roomModel({
+                  descricao: descricaoInput,
+                  fase: faseInput,
+                  oferta: ofertaInput,
+                  demanda: demandaInput,
+                  dia: diaInput,
+                  start: startInput,
+                  creditos: creditosInput,
+                  tipoSalaTurma: salaTurmaInput,
+                  idcentro: user.idcentro
+                });
+                newClass.save(function (err) {
+                  if (err) throw err;
+                });
+                res.render('dashboard', {
+                  title: 'DASHBOARD',
+                  name : req.user 
+                });
+              } else {
+                res.render('dashboard', {
+                  title: 'DASHBOARD',
+                  name: req.user
+                });
+              }
+            }
+          });
+        }
       }
-    }
-  });
+    });
+  }
+  searchIDclass (userSession, desc, fase, oferta, demanda, dia, start, creditos, tipoSalaTurma);
+
 });
 
 //Autenticar ver salas
@@ -314,24 +385,7 @@ function authenticationMiddleware () {
 
 //Function to search in DB the user in session to identify his value of idcentro
 
-function searchID(user_name){
-  let nameToSearch = user_name;
-  let y = userModel.findOne({
-    username: nameToSearch
-  }, function(err, user) {
-    if (err) throw err;
-    else {
-      if (!user) {
-        return 0
-      } else {
-        console.log(user.idcentro)
-        return user.idcentro
-      }
-    }
-  });
-  console.log(y)
-  return y
-}
+
 
 
 
