@@ -20,24 +20,24 @@
             </form>
         </div>
 
-        {{#if errors}}
-            {{#each errors}}
-                <div class="alert alert-danger" id="alert" role="alert">
-                    {{this.msg}}
-                </div>
-            {{/each}}
-        {{/if}}
+       
         <div class="col-lg-3">
-            <h3>CADASTRO DE USUÁRIOS</h3>
+            <h3>CADASTRO</h3>
             <form action="/cadastrar" method="POST" id="form-cadastro">
+            
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" name="username" id="cad-username" aria-describedby="username" placeholder="Username"
-                        required oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                        {{!-- required --}} oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" class="form-control" name="password" id="password" aria-describedby="username" placeholder="Digite uma senha"
+                        oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" aria-describedby="username" placeholder="exemplo@examplo.com"
                         oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
                 </div>
 
@@ -67,6 +67,23 @@
                         </select>
                     </div>
                 </div>
+                {{#if errors}}
+                    {{#each errors}}
+                        <div class="alert alert-danger" id="alert" role="alert">
+                            {{this.msg}}
+                        </div>
+                    {{/each}}
+                {{/if}}
+                {{#if cadastro}}
+                    <div class="alert alert-success" role="alert">
+                        {{cadastro}}
+                    </div>
+                {{/if}}
+                {{#if user_already}}
+                    <div class="alert alert-danger" role="alert">
+                        {{user_already}}
+                    </div>
+                {{/if}}
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="btnCadastro" for="form-cadastro" disable>CADASTRAR</button>
                 </div>
