@@ -5,6 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
+var BCRYPT_SALT_ROUNDS = 12;
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -71,21 +72,34 @@ passport.deserializeUser(function(user_id, done) {
 
 
 //https://www.youtube.com/watch?v=onPlF3gC0T4
-router.post('/cadastrar', function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
+router.post('/cadastrar',
+
+  check('username', 'Insira um usuário').isLength({min:1}),
+  check('password', 'Senha inválida, mínimo 6 caracteres').isLength({min: 6}),
+  check('email', 'Insira um email válido').isEmail()
+
+,function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
   let userInput = req.body.username;
   let passInput = req.body.password;
   let centroInput = req.body.centroID;
+  let emailInput = req.body.email;
 
-  check('password').isLength({min: 8}).withMessage('Deve possuir ao menos 8 dígitos entre letras e números!').matches(/\d/).withMessage('deve conter um número')
-
-  const errors = validationResult(req);
+  let errors = validationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
-    return res.render('index', {errors : errors});
+    let arrayErrors = errors.mapped()
+
+    let mensagens = arrayErrors
+
+    console.log(arrayErrors)
+
+    return res.render('index', {errors: mensagens})
   }else{
 
     let newUser = new userModel({
       username: userInput,
       password: passInput,
+      email:    emailInput,
       idcentro: centroInput
     });
 
@@ -100,12 +114,14 @@ router.post('/cadastrar', function (req, res) {// FALTA ATRELAR O LOGIN A CADA I
           });
           console.log('Usuário cadastrado fazer message');
           res.render('index', {
-            title: 'BEM VINDO'
+            title: 'BEM VINDO',
+            cadastro: 'Cadastro completo'
           });
         } else {
-          console.log('Usuário ja cadastrado, login abaixo:\n');
-          console.log(userdb);
-          res.render('index');
+          res.render('index', {
+            title: 'Usuário existente',
+            user_already: 'Usuário já existe, insira outro novamente.'
+          });
         }
       }
     });
@@ -124,7 +140,6 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   if (fator2 == '') fator2 = 1;
   let fator3 = req.body.fator3;
   if (fator3 == '') fator3 = 1;
-  let condicao = 0;
 
   let userSession = req.user;
   console.log('USUARIO = ', userSession);
