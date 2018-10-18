@@ -14,6 +14,11 @@
                     <label for="password">Password</label>
                     <input type="password" class="form-control" id="loginpassword" aria-describedby="username" placeholder="Digite senha" name="password">
                 </div>
+                {{#if msg_login}}
+                    <div class="alert alert-danger" role="alert">
+                        {{msg_login}}
+                    </div>
+                {{/if}}
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="btnLogin" form="form-login">LOGIN</button>
                 </div>
