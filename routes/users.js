@@ -318,95 +318,84 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
 //Autenticar ver salas
 router.get('/verSalas', authenticationMiddleware(), function(req, res){
   //Usa o room model definido previamente para fazer a busca no mlab
-  roomModel.find({}, function(err, result){
-    if (err) throw err;
-    else{
-      if (!result) {
-        console.log('SEM DADOS');
-        res.end();
-      } else {
-        let conc = '';
-        let temp = [];
-        fs.unlink('OutSala.txt', function(err){
-          if(err){
-            console.log('Erro');
-          }else{
-            console.log('Out deletado');
+  let nameToSearch = req.user;
+    userModel.findOne({
+      username: nameToSearch
+    }, function(err, user) {
+    roomModel.find({idcentro: user.idcentro}, function(err, result){
+      if (err) throw err;
+      else{
+        if (!result) {
+          console.log('SEM DADOS');
+          res.end();
+        } else {
+          let conc = ''
+          for(let i=0; i<result.length; i++){
+            conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
           }
-        });
-        for (let i = 0; i < result.length; i++){
-          conc = result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
-          fs.appendFile('OutSala.txt', conc, 'utf-8', function(err){
-            if (err){
-              console.log('Falha na escrita!');
-            }else{
-              console.log('Adicionado uma linha');
-            }
+          fs.writeFile('OutSala'+user.idcentro+'.txt', conc, 'utf8', function(err){
+            if (err) throw new Error(err)
+            console.log('Salvo');
           });
+          }
         }
-      }
-    }
+    });
+    res.download('OutSala.txt');
   });
-  res.download('OutSala.txt');
 });
 
 
 //Autenticar ver turmas
 router.get('/verTurmas', authenticationMiddleware(), function(req, res){
-  classModel.find({}, function(err, result){
-    if (err) throw new Error(err);
-    else{
-      if (!result){
-        console.log('Não existe dados');
-      }else{
-        fs.unlink('OutTurma.txt', function(err){
-          if (err){
-            console.log('ERRO');
-          }else{
-            console.log('OutTurma deletado!');
-          }
-        });
-        for (let i = 0; i < result.length; i++){
-          let base = '';
-          base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
-          let temp = []
-          if (result[i].dia.length > 1){
-            for (let j = 0; j < result[i].dia.length; j++){
-              let temporaria = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + result[i].tipoSalaTurma[j];
+  let nameToSearch = req.user;
+  userModel.findOne({
+    username: nameToSearch
+  }, function(err, user) {
+    classModel.find({idcentro: user.idcentro}, function(err, result){
+      if (err) throw new Error(err);
+      else{
+        if (!result){
+          console.log('Não existe dados');
+        }else{
+          for (let i = 0; i < result.length; i++){
+            let base = '';
+            base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
+            let temp = []
+            if (result[i].dia.length > 1){
+              for (let j = 0; j < result[i].dia.length; j++){
+                let temporaria = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + result[i].tipoSalaTurma[j];
+                temp.push(temporaria);
+              }
+            }else{
+              let temporaria = result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma;
               temp.push(temporaria);
             }
-          }else{
-            let temporaria = result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma;
-            temp.push(temporaria);
-          }
-          let conc = '';
-          if (temp.length > 1){
-            for (let k = 0; k < temp.length; k++){
-              if (k == 0 ){
-                conc = '{' + temp[k] + ', ';
-              }else if (k == (temp.length - 1)){
-                conc = conc + temp[k] + '}';
-              }else{
-                conc = conc + temp[k] + ', '
+            let conc = '';
+            if (temp.length > 1){
+              for (let k = 0; k < temp.length; k++){
+                if (k == 0 ){
+                  conc = '{' + temp[k] + ', ';
+                }else if (k == (temp.length - 1)){
+                  conc = conc + temp[k] + '}';
+                }else{
+                  conc = conc + temp[k] + ', '
+                }
               }
-            }
-          }else{
-            conc = '{' + temp +'}';
-          }
-          let final = base + ' ' + conc+'\n';
-          console.log(final);
-          fs.appendFile('OutTurma.txt', final, function(err){
-            if (err){
-              console.log('Falha');
             }else{
-              console.log('Linha adicionada');
+              conc = '{' + temp +'}';
             }
-          });
+            let final = base + ' ' + conc+'\n';
+            fs.writeFile('OutTurma'+user.idcentro+'.txt', final, function(err){
+              if (err) throw new Error(err)
+              console.log('Salvo');
+            });
+          }
         }
       }
-    }
-  });
-  res.download('OutTurma.txt');
+    });
+  })
+  //res.download('OutTurma.txt');
+  res.render('dashboard')
 });
 
 //Auth to restricted pages
