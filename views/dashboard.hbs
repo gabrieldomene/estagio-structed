@@ -55,10 +55,23 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-           
+        {{#if msg_sala}}
+            <div class="alert alert-success" id="alert" role="alert">
+                {{msg_sala}}
+            </div>
+        {{/if}}
         </form>
-        <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Download Salas</button></form>
-
+        <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Montar Arquivo</button></form>
+        {{#if msg_erro}}
+            <div class="alert alert-danger" id="alert" role="alert">
+                {{msg_erro}}
+            </div>
+        {{/if}}
+        {{#if msg_success}}
+            <div class="alert alert-success" id="alert" role="alert">
+                {{msg_success}}
+            </div>
+        {{/if}}
     <form action="/cadastro-turma" method="post">
         <h1>Cadastro de Turmas</h1>
         <div class="form-row" id="wrapper-turma">
@@ -128,16 +141,10 @@
             </div>
 
         </div>
-        {{#if created}}
+        {{#if msg_turma}}
             <div class="alert alert-success" id="alert" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>Sala {{ sala }} cadastrada com sucesso</strong>
+                {{msg_turma}}
             </div>
-        {{else}}
-            {{!-- <div class="alert alert-danger" id="alert" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>{{ sala }} já cadastrada no sistema</strong>
-            </div> --}}
         {{/if}}
         <div class="row col-md-12">
             <div class="form-group">
@@ -147,5 +154,15 @@
                            </div>
         </div>
     </form>
-    <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Download Turmas</button></form>
+    <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form>
+    {{#if msg_erroT}}
+            <div class="alert alert-danger" id="alert" role="alert">
+                {{msg_erroT}}
+            </div>
+        {{/if}}
+        {{#if msg_successT}}
+            <div class="alert alert-success" id="alert" role="alert">
+                {{msg_successT}}
+            </div>
+        {{/if}}
 </div>
