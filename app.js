@@ -41,8 +41,8 @@ app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
-    //cookie: { secure: true }
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    cookie: { maxAge: 86400000 }
   }));
 //Passport authentication
 app.use(passport.initialize());
