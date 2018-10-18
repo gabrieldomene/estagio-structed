@@ -5,7 +5,7 @@ var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
-var BCRYPT_SALT_ROUNDS = 12;
+const BCRYPT_SALT_ROUNDS = 12;
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -48,12 +48,25 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
         res.write('NAO ACHOU USER');
         res.end();
       } else { //achou usuario PRECISA VALIDAR NO PASSPORT
-        const user_id = user.username;
-        req.login(user_id, function(err){
-          res.render('dashboard', {
-            title: 'BEM VINDO',
-            name : user_id
-          });
+        bcrypt.compare(passinput, user.password, function(err, result){
+          if (err) throw new Error(err)
+          else{
+            if(!result){
+              //Não existe match no BD
+              res.render('index', {
+                title: 'Login inválido',
+                msg_login: 'Usuário/Senha inválida'
+              })
+            }else{
+              const user_id = user.username;
+              req.login(user_id, function(err){
+                res.render('dashboard', {
+                  title: 'BEM VINDO',
+                  name : user_id
+                });
+              });
+            }
+          }
         });
         //console.log(user.username, user.idcentro);
       }
@@ -96,12 +109,7 @@ router.post('/cadastrar',
     return res.render('index', {errors: mensagens})
   }else{
 
-    let newUser = new userModel({
-      username: userInput,
-      password: passInput,
-      email:    emailInput,
-      idcentro: centroInput
-    });
+    
 
     userModel.findOne({
       username: userInput
@@ -109,15 +117,28 @@ router.post('/cadastrar',
       if (err) throw err;
       else {
         if (!userdb) {
-          newUser.save(function (err) {
-            if (err) throw err;
+          //Hashing password before saving
+          bcrypt.hash(passInput, BCRYPT_SALT_ROUNDS, function(err, hash) { 
+            if (err) throw new Error(err)
+            else{
+              let newUser = new userModel({
+                username: userInput,
+                password: hash,
+                email:    emailInput,
+                idcentro: centroInput
+              });
+              //Cadastro feito
+              newUser.save(function (err) {
+                if (err) throw err;
+              });
+              //Redirecionamento
+              res.render('index', {
+                title: 'BEM VINDO',
+                cadastro: 'Cadastro completo'
+              });
+            }
           });
-          console.log('Usuário cadastrado fazer message');
-          res.render('index', {
-            title: 'BEM VINDO',
-            cadastro: 'Cadastro completo'
-          });
-        } else {
+        } else { //Cadastro falhou, usuário já existe
           res.render('index', {
             title: 'Usuário existente',
             user_already: 'Usuário já existe, insira outro novamente.'
@@ -142,7 +163,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   if (fator3 == '') fator3 = 1;
 
   let userSession = req.user;
-  console.log('USUARIO = ', userSession);
+  //console.log('USUARIO = ', userSession);
 
   function searchIDroom (user_name, desc, capac, tipoSala, fator1, fator2, fator3){
     let nameToSearch = user_name;
@@ -260,7 +281,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
             if (err) throw err;
             else {
               if (!classdb) { //Sala cadastrada avisar mensagem
-                let newClass = new roomModel({
+                let newClass = new classModel({
                   descricao: descricaoInput,
                   fase: faseInput,
                   oferta: ofertaInput,
@@ -290,7 +311,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
       }
     });
   }
-  searchIDclass (userSession, desc, fase, oferta, demanda, dia, start, creditos, tipoSalaTurma);
+  searchIDclass (userSession, descricaoInput, faseInput, ofertaInput, demandaInput, diaInput, startInput, creditosInput, salaTurmaInput);
 
 });
 
@@ -397,11 +418,5 @@ function authenticationMiddleware () {
 	    res.render('index')
 	}
 }
-
-//Function to search in DB the user in session to identify his value of idcentro
-
-
-
-
 
 module.exports = router;
