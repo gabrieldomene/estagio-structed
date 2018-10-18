@@ -6,6 +6,7 @@ var path = require('path');
 var bcrypt = require('bcryptjs');
 const { check, validationResult } = require('express-validator/check');
 const BCRYPT_SALT_ROUNDS = 12;
+const exec = require("child_process").exec
 
 var mongoose = require('mongoose');
 //Connection to mlab
@@ -22,6 +23,20 @@ let classModel = require('../models/class-model');
 
 router.get('/', function(req, res) {
   //Console mostrando quem é o user e se está autenticado
+
+  exec("touch ARQUIVOCRIADO.txt", (error, stdout, stderr) => {
+    exec("ls", (err, stdout, stderr) =>{
+      console.log('\n LISTAGEM \n')
+      if(!err)
+      console.log(stdout)
+    })
+   })
+
+  /*  exec("ls", (err, stdout, stderr) =>{
+    console.log('\n LISTAGEM \n')
+    console.log(stdout)
+  }) */
+
   console.log(req.user);
   console.log(req.isAuthenticated());
   if(req.isAuthenticated()){
@@ -195,7 +210,8 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
                 });
                 res.render('dashboard', {
                   title: 'DASHBOARD',
-                  name : req.user 
+                  name : req.user,
+                  msg_sala: 'Sala ' + desc + ' cadastrada' 
                 });
               } else {
                 res.render('dashboard', {
@@ -210,43 +226,6 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
     });
   }
   searchIDroom (userSession, desc, capac, tipoSala, fator1, fator2, fator3);
-
-/* 
-    let userSession = req.user;
-    console.log('REQ.USER = '+ userSession);
-    let idSessionMatch = searchID(userSession);
-    console.log('[+] idcentro = ' + idSessionMatch)
-
-    //TEMPORARIO TESTANDO QUERY ID
-    roomModel.findOne({
-      descricao: desc
-    }, function (err, roomdb) {
-      if (err) throw err;
-      else {
-        if (!roomdb) { //Sala cadastrada avisar mensagem
-          let newRoom = new roomModel({
-            descricao: desc,
-            capacidade: capac,
-            tipoSala: tipoSala,
-            fator1: fator1,
-            fator2: fator2,
-            fator3: fator3,
-            idcentro: idSessionMatch
-          });
-          newRoom.save(function (err) {
-            if (err) throw err;
-          });
-          res.render('dashboard', {
-            title: 'DASHBOARD',
-            name : req.user 
-          });
-        } else {
-          res.write('JA CADASTRADA, FAZER MESSAGE');
-          res.end();
-        }
-      }
-    }); */
-
 });
 
 router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
@@ -297,7 +276,8 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
                 });
                 res.render('dashboard', {
                   title: 'DASHBOARD',
-                  name : req.user 
+                  name : req.user,
+                  msg_turma: 'Turma ' + desc + ' cadastrada'  
                 });
               } else {
                 res.render('dashboard', {
@@ -334,13 +314,19 @@ router.get('/verSalas', authenticationMiddleware(), function(req, res){
             conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
           }
           fs.writeFile('OutSala'+user.idcentro+'.txt', conc, 'utf8', function(err){
-            if (err) throw new Error(err)
+            if (err) 
+            {
+              res.render('dashboard', {title: 'Erro', name: req.user, msg_erro: 'Falha ao gerar arquivo'})
+              throw new Error(err)
+            }else{
+
             console.log('Salvo');
+            res.render('dashboard', {title: 'Ensalamento UFSC', name: req.user, msg_success: 'Arquivo gerado'})
+            }
           });
           }
         }
     });
-    res.download('OutSala.txt');
   });
 });
 
@@ -395,8 +381,9 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
     });
   })
   //res.download('OutTurma.txt');
-  res.render('dashboard')
+  res.render('dashboard', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
 });
+
 
 //Auth to restricted pages
 function authenticationMiddleware () {  
