@@ -4,6 +4,7 @@ var passport = require('passport');
 var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer');
 const { check, validationResult } = require('express-validator/check');
 const BCRYPT_SALT_ROUNDS = 12;
 const exec = require("child_process").exec
@@ -24,18 +25,49 @@ let classModel = require('../models/class-model');
 router.get('/', function(req, res) {
   //Console mostrando quem é o user e se está autenticado
 
-  exec("touch ARQUIVOCRIADO.txt", (error, stdout, stderr) => {
-    exec("ls", (err, stdout, stderr) =>{
-      console.log('\n LISTAGEM \n')
-      if(!err)
-      console.log(stdout)
-    })
-   })
+  exec("./classroom.sh " + "configCTS20182.txt " +"roomsCTS20182.txt " + "classesCTS20182.txt", (err, stdout, stderr) =>{
 
-  /*  exec("ls", (err, stdout, stderr) =>{
-    console.log('\n LISTAGEM \n')
-    console.log(stdout)
-  }) */
+      let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'EMAIL HERE', // generated ethereal user
+            pass: 'PASS HERE'// generated ethereal password
+        }
+    });
+
+    let msg_corpo = 'Olá ' + req.user + '. A solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.'
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: '"NAME SENDER" <EMAIL SENDER>', // sender address
+        to: 'EMAIL TO SEND', // list of receivers
+        subject: 'Solução ensalamento',
+        text: msg_corpo,
+        attachments: [
+          { 
+            filename: 'outCTS20182.txt',
+            path: './outCTS20182.txt' // stream this file
+          },
+          { 
+            filename: 'statisticsCTS20182.txt',
+            path: './statisticsCTS20182.txt' // stream this file
+          }
+        ]
+        
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+        
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
+  })
+  
 
   console.log(req.user);
   console.log(req.isAuthenticated());
