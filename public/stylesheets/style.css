@@ -12,14 +12,15 @@ body
     position: absolute;
     height: 100%;
     width: 100%;
-    background-color: rgba(34, 129, 180, 0.753) !important;
+    /* background-color: rgba(34, 129, 180, 0.753) !important; */
+    background-color: #add5f7 !important;
 }
 
 form{
     margin-bottom: 3%;
 }
 
-h1, h2, h3, label{
+h1, h2, h3, h4, label{
     color: #fff !important;
 }
 .centros{
@@ -31,10 +32,9 @@ h1, h2, h3, label{
 }
 
 .container{
-    margin-top: 5%;
-}
-.card{
-    margin-bottom: 5%;
+    padding: 3% 0 3% 0;
+    background: #7fb2f0;
+    height: 100% !important;
 }
 
 
@@ -63,4 +63,12 @@ h1, h2, h3, label{
     font-weight: 600;
     border: 1px solid #fff;
     box-shadow: inset 500px 0 0 0 #fff;
+}
+
+.card-header, .card-body{
+    background: #7fb2f0 !important;
+}
+
+.btn-link{
+    text-decoration: none !important;
 }
