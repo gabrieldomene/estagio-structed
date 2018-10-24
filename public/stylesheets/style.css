@@ -12,8 +12,8 @@ body
     position: absolute;
     height: 100%;
     width: 100%;
-    /* background-color: rgba(34, 129, 180, 0.753) !important; */
-    background-color: #add5f7 !important;
+    background: #f6f8fa !important;
+    
 }
 
 form{
@@ -21,10 +21,10 @@ form{
 }
 
 h1, h2, h3, h4, label{
-    color: #fff !important;
+    color: #0366d6 !important;
 }
 .centros{
-    color: black !important;
+    color: #0366d6 !important;
 }
 .container-fluid{
   display: table-cell;
@@ -33,7 +33,6 @@ h1, h2, h3, h4, label{
 
 .container{
     padding: 3% 0 3% 0;
-    background: #7fb2f0;
     height: 100% !important;
 }
 
@@ -65,10 +64,18 @@ h1, h2, h3, h4, label{
     box-shadow: inset 500px 0 0 0 #fff;
 }
 
-.card-header, .card-body{
-    background: #7fb2f0 !important;
+.card-header{
+    background: #e9ecef !important;
+}
+
+p, .myColorHeader{
+    color: #586069 !important;
 }
 
 .btn-link{
     text-decoration: none !important;
+}
+
+.card-body{
+    background: #f6f8fa !important;
 }
