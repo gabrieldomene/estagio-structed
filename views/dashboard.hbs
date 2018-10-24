@@ -1,29 +1,20 @@
 <div class="container">
-    <p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-            Como usar?
-        </button>
-        </p>
-        <div class="collapse" id="collapseExample">
-        <div class="card text-white bg-primary mb-3 mb-12">
-        <div class="card-body text-white">
-            <h5 class="card-title">Bem vindo {{ name }}, como utilizar?</h5>
-            <p class="card-text">Portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web
-                você poderá fazer o cadastramento das salas ou das turmas e posteriormente solicitar a solução do problema
-                de alocação. O programa lhe retornará um arquivo em forma de download, com a melhor solução que encontrar
-                para o problema.</p>
-        </div>
-    </div>
-        
+
+    <div class="jumbotron">
+        <h4>Bem vindo {{ name }}, como utilizar?</h1>
+        <p class="">Este é um portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web você poderá fazer o cadastramento das salas e das turmas, de acordo com os campos propostos nessa página e posteriormente solicitar a solução do problema de alocação feita por um software em nossos servidores, como a alocação pode variar com o tamanho do arquivo a resposta não é disponibilizada na hora, mas enviaremos por email assim que o resultado for definido.</p>
+        <hr class="">
+        <p>Para encerrar a sessão clique no botão abaixo</p>
+        <button type="button" class="btn btn-danger flot-md-left">Logout</button>
     </div>
 
     <div class="accordion" id="accordionExample">
         {{!-- Card das salas --}}
-        <div class="card">
+        <div class="card" autofocus>
             <div class="card-header" id="headingOne">
             <h5 class="mb-0">
                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                <h4>Cadastro de salas</h4>
+                <h4 class="myColorHeader">Cadastro de salas</h4>
                 </button>
             </h5>
             </div>
@@ -101,7 +92,7 @@
             <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                <h4>Cadastro de turmas</h4>
+                <h4 class="myColorHeader">Cadastro de turmas</h4>
                 </button>
             </h5>
             </div>
@@ -184,8 +175,9 @@
                         <div class="form-group">
                             <input type="button" class="btn btn-primary" value="Novo campo de horário" onclick="createNewSchedule()">
                             <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
-                            <input type="submit" class="btn btn-primary" value="CAD TURMA">
-                                    </div>
+                            {{!-- <input type="submit" class="btn btn-primary" value="Cadastrar turma"> --}}
+                            <button type="submit" class="btn btn-primary">Cadastrar turma</button>
+                        </div>
                     </div>
                 </form>
                 <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form>
@@ -208,7 +200,7 @@
             <div class="card-header" id="headingThree">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                <h4>Gerar a solução final</h4>
+                <h4 class="myColorHeader">Gerar a solução final</h4>
                 </button>
             </h5>
             </div>
