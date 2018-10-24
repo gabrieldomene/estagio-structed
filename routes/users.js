@@ -24,51 +24,6 @@ let classModel = require('../models/class-model');
 
 router.get('/', function(req, res) {
   //Console mostrando quem é o user e se está autenticado
-
-  exec("./classroom.sh " + "configCTS20182.txt " +"roomsCTS20182.txt " + "classesCTS20182.txt", (err, stdout, stderr) =>{
-
-      let transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: 'EMAIL HERE', // generated ethereal user
-            pass: 'PASS HERE'// generated ethereal password
-        }
-    });
-
-    let msg_corpo = 'Olá ' + req.user + '. A solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.'
-    // setup email data with unicode symbols
-    let mailOptions = {
-        from: '"NAME SENDER" <EMAIL SENDER>', // sender address
-        to: 'EMAIL TO SEND', // list of receivers
-        subject: 'Solução ensalamento',
-        text: msg_corpo,
-        attachments: [
-          { 
-            filename: 'outCTS20182.txt',
-            path: './outCTS20182.txt' // stream this file
-          },
-          { 
-            filename: 'statisticsCTS20182.txt',
-            path: './statisticsCTS20182.txt' // stream this file
-          }
-        ]
-        
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message sent: %s', info.messageId);
-        
-        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    });
-  })
-  
-
   console.log(req.user);
   console.log(req.isAuthenticated());
   if(req.isAuthenticated()){
@@ -375,6 +330,7 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
         if (!result){
           console.log('Não existe dados');
         }else{
+          var final = ""
           for (let i = 0; i < result.length; i++){
             let base = '';
             base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
@@ -402,18 +358,84 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
             }else{
               conc = '{' + temp +'}';
             }
-            let final = base + ' ' + conc+'\n';
-            fs.writeFile('OutTurma'+user.idcentro+'.txt', final, function(err){
-              if (err) throw new Error(err)
-              console.log('Salvo');
-            });
+            final = final+base + ' ' + conc+'\n';
+            console.log(final)
           }
+          let file_name = "OutTurma"+user.idcentro+".txt"
+          fs.writeFile(file_name, final, function(err){
+            if (err) throw new Error(err)
+            console.log('Salvo');
+          });
         }
       }
     });
   })
   //res.download('OutTurma.txt');
   res.render('dashboard', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
+});
+
+router.get('/solucao', authenticationMiddleware(), (req, res) => {
+  req.setTimeout(500000);
+  let userinput = req.user
+  
+  userModel.findOne({username: userinput}, (err, user) => {
+    if (err) throw err
+    else {
+      if (!user){
+        res.write('Falhou');
+        res.end();
+      }else{
+        let arq_rooms = 'OutSala'+user.idcentro+'.txt';
+        let arq_classes = 'OutTurma'+user.idcentro+'.txt';
+        let comando = "./classroom.sh configCTS20182.txt " + arq_rooms + " " + arq_classes 
+        console.log(comando)
+          exec(comando, (err, stdout, stderr) =>{
+
+            let transporter = nodemailer.createTransport({
+              host: 'smtp.gmail.com',
+              port: 587,
+              secure: false, // true for 465, false for other ports
+              auth: {
+                  user: 'lcc.ufsc@gmail.com', // generated ethereal user
+                  pass: 'PASS HERE'// generated ethereal password
+              }
+            });
+      
+            let msg_corpo = 'Olá ' + req.user + '. A solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.'
+            // setup email data with unicode symbols
+            let mailOptions = {
+                from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+                to: 'domenee.g@gmail.com', // list of receivers
+                subject: 'Resultado do ensalamento',
+                text: msg_corpo,
+                attachments: [
+                  { 
+                    filename: 'outCTS20182.txt',
+                    path: './outCTS20182.txt' // stream this file
+                  },
+                  { 
+                    filename: 'statisticsCTS20182.txt',
+                    path: './statisticsCTS20182.txt' // stream this file
+                  }
+                ]
+                
+            };
+        
+            // send mail with defined transport object
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log('Message sent: %s', info.messageId);
+                
+                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            });
+          res.render('dashboard', {title: 'Sucesso'});
+        })
+      }
+    }
+  });
+
 });
 
 
