@@ -1,0 +1,29 @@
+<div class="container">
+
+    <div class="table-responsive">
+        <table class="table table-hover table-sm">
+            {{#if objeto}}
+            <thead>
+                <tr>   
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Capacidade</th>
+                    <th scope="col">Tipo da Sala</th>
+                    {{!-- <th scope="col">ID Centro</th>   --}}  
+                </tr>
+            </thead>
+            <tbody>
+                {{#each objeto}}
+                    <tr>
+                        {{!-- <th scope="row">{{@index+1}}</th> --}}
+                        <td>{{this.descricao}}</td>
+                        <td>{{this.capacidade}}</td>
+                        <td>{{this.tipoSala}}</td>
+                        {{!-- <td>{{this.idcentro}}</td> --}}
+                    </tr>
+                {{/each}}
+            </tbody>
+            {{/if}}
+        </table>
+    </div>
+
+</div>
