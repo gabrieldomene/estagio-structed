@@ -33,6 +33,11 @@ router.get('/', function(req, res) {
   }
 });
 
+router.get('/teste', (req, res) => {
+  console.log('Deslogou')
+  res.end()
+});
+
 router.get('/dashboard', function(req, res){
   res.redirect('/');
 });
@@ -300,7 +305,8 @@ router.get('/verSalas', authenticationMiddleware(), function(req, res){
           for(let i=0; i<result.length; i++){
             conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
           }
-          fs.writeFile('OutSala'+user.idcentro+'.txt', conc, 'utf8', function(err){
+          let file_name = "./outputs/outSala"+user.idcentro+".txt"
+          fs.writeFile(file_name, conc, 'utf8', function(err){
             if (err) 
             {
               res.render('dashboard', {title: 'Erro', name: req.user, msg_erro: 'Falha ao gerar arquivo'})
@@ -359,9 +365,9 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
               conc = '{' + temp +'}';
             }
             final = final+base + ' ' + conc+'\n';
-            console.log(final)
+            //console.log(final)
           }
-          let file_name = "OutTurma"+user.idcentro+".txt"
+          let file_name = "./outputs/OutTurma"+user.idcentro+".txt"
           fs.writeFile(file_name, final, function(err){
             if (err) throw new Error(err)
             console.log('Salvo');
@@ -385,10 +391,14 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
         res.write('Falhou');
         res.end();
       }else{
+        let arq_config = "ConfigCentro"+user.idcentro+".txt"
         let arq_rooms = 'OutSala'+user.idcentro+'.txt';
         let arq_classes = 'OutTurma'+user.idcentro+'.txt';
-        let comando = "./classroom.sh configCTS20182.txt " + arq_rooms + " " + arq_classes 
-        console.log(comando)
+        /* console.log(arq_config)
+        console.log(arq_rooms)
+        console.log(arq_classes) */
+        let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
+        /* console.log(comando) */
           exec(comando, (err, stdout, stderr) =>{
 
             let transporter = nodemailer.createTransport({
@@ -403,6 +413,15 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
       
             let msg_corpo = 'Olá ' + req.user + '. A solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.'
             // setup email data with unicode symbols
+
+            let attachments_out = 'outCentro'+user.idcentro+'.txt'
+            let path_out = './algoritmo/'+attachments_out
+            console.log(path_out)
+
+            let attachments_stats = 'statisticsCentro'+user.idcentro+'.txt'
+            let path_stats = './algoritmo/'+attachments_stats
+            console.log(path_stats)
+
             let mailOptions = {
                 from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
                 to: 'domenee.g@gmail.com', // list of receivers
@@ -410,12 +429,12 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                 text: msg_corpo,
                 attachments: [
                   { 
-                    filename: 'outCTS20182.txt',
-                    path: './outCTS20182.txt' // stream this file
+                    filename: attachments_out,
+                    path: path_out // stream this file
                   },
                   { 
-                    filename: 'statisticsCTS20182.txt',
-                    path: './statisticsCTS20182.txt' // stream this file
+                    filename: attachments_stats,
+                    path: path_stats // stream this file
                   }
                 ]
                 
