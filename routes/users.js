@@ -33,9 +33,14 @@ router.get('/', function(req, res) {
   }
 });
 
-router.get('/teste', (req, res) => {
-  console.log('Deslogou')
-  res.end()
+router.get('/logout', authenticationMiddleware(), (req, res) => {
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      res.render('index');
+    }
+  });
 });
 
 router.get('/dashboard', function(req, res){
@@ -115,9 +120,6 @@ router.post('/cadastrar',
 
     return res.render('index', {errors: mensagens})
   }else{
-
-    
-
     userModel.findOne({
       username: userInput
     }, function (err, userdb) {
@@ -399,7 +401,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
         console.log(arq_classes) */
         let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
         /* console.log(comando) */
-          exec(comando, (err, stdout, stderr) =>{
+          exec(comando, (err, stdout, stderr) => {
 
             let transporter = nodemailer.createTransport({
               host: 'smtp.gmail.com',
@@ -407,7 +409,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
               secure: false, // true for 465, false for other ports
               auth: {
                   user: 'lcc.ufsc@gmail.com', // generated ethereal user
-                  pass: 'PASS HERE'// generated ethereal password
+                  pass: 'PASSHERE'// generated ethereal password
               }
             });
       
@@ -455,6 +457,13 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
     }
   });
 
+});
+
+router.get('/atualizar', (req, res) => {
+  roomModel.find({},{_id: 0, __v: 0}, (err, result) => {
+    if (err) throw err;
+    res.render('update', {title: 'Alterar', objeto : result})
+  }) 
 });
 
 
