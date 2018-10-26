@@ -79,3 +79,28 @@ p, .myColorHeader{
 .card-body{
     background: #f6f8fa !important;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #BFC2C4; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(167, 170, 172); 
+}
+
+#titulo{
+    align-items: center !important;
+}
