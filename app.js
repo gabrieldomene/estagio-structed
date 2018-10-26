@@ -38,7 +38,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
 //Express Session
 app.use(session({
-    secret: 'keyboard cat',
+    secret: 'AD7FDDE3E0B292D1A9C595138823E59E',
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
