@@ -71,6 +71,7 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
               })
             }else{
               const user_id = user.username;
+              req.session.userId = user.idcentro
               req.login(user_id, function(err){
                 res.render('dashboard', {
                   title: 'BEM VINDO',
@@ -202,13 +203,13 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
                 newRoom.save(function (err) {
                   if (err) throw err;
                 });
-                res.render('dashboard', {
+                res.render('room', {
                   title: 'DASHBOARD',
                   name : req.user,
                   msg_sala: 'Sala ' + desc + ' cadastrada' 
                 });
               } else {
-                res.render('dashboard', {
+                res.render('room', {
                   title: 'DASHBOARD',
                   name: req.user
                 });
@@ -268,13 +269,13 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
                 newClass.save(function (err) {
                   if (err) throw err;
                 });
-                res.render('dashboard', {
+                res.render('class', {
                   title: 'DASHBOARD',
                   name : req.user,
                   msg_turma: 'Turma ' + desc + ' cadastrada'  
                 });
               } else {
-                res.render('dashboard', {
+                res.render('class', {
                   title: 'DASHBOARD',
                   name: req.user
                 });
@@ -311,12 +312,12 @@ router.get('/verSalas', authenticationMiddleware(), function(req, res){
           fs.writeFile(file_name, conc, 'utf8', function(err){
             if (err) 
             {
-              res.render('dashboard', {title: 'Erro', name: req.user, msg_erro: 'Falha ao gerar arquivo'})
+              res.render('room', {title: 'Erro', name: req.user, msg_erro: 'Falha ao gerar arquivo'})
               throw new Error(err)
             }else{
 
             console.log('Salvo');
-            res.render('dashboard', {title: 'Ensalamento UFSC', name: req.user, msg_success: 'Arquivo gerado'})
+            res.render('room', {title: 'Ensalamento UFSC', name: req.user, msg_success: 'Arquivo gerado'})
             }
           });
           }
@@ -379,7 +380,7 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
     });
   })
   //res.download('OutTurma.txt');
-  res.render('dashboard', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
+  res.render('class', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
 });
 
 router.get('/solucao', authenticationMiddleware(), (req, res) => {
@@ -459,11 +460,24 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
 
 });
 
-router.get('/atualizar', (req, res) => {
-  roomModel.find({},{_id: 0, __v: 0}, (err, result) => {
+router.get('/atualizar', authenticationMiddleware(), (req, res) => {
+
+  roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
     if (err) throw err;
     res.render('update', {title: 'Alterar', objeto : result})
   }) 
+});
+
+router.post('/roomDelete', authenticationMiddleware(), (req, res) => {
+  
+});
+
+router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
+  let desc = req.body.descricao
+  let capac = req.body.capacidade
+  let tipo = req.body.tipoSala
+  console.log('UPDATE '+ desc + ' ' + capac + ' ' + tipo)
+  res.end()
 });
 
 
@@ -473,7 +487,7 @@ function authenticationMiddleware () {
 		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
 	    if (req.isAuthenticated()) return next();
-	    res.render('index')
+	    res.render('index', {title: 'Não autenticado'})
 	}
 }
 
