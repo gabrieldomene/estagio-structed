@@ -8,29 +8,10 @@ var data_out = O("result-comb");
 var toogle = O('advanced-options');
 var btnO = O('btn-options');
 
-/* app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: true }
-})) */
-
 function O(msg) {
     return document.getElementById(msg);
 }
 
-/* function concatenar() {
-    data_out.value = idSala.value + ' ' + capacidade.value + ' ' + tipoSala.value + ' ' + fator1.value + ' ' + fator2.value + ' ' + fator3.value;
-}
-
-function saveResult() {
-    var blob = new Blob(data_out.value, {
-        type: "text/plain;charset=utf-8"
-    });
-    saveAs(blob, "room_output.txt");
-}
- */
 function remove() {
     var el = document.getElementById('wrapper-turma');
 
@@ -40,14 +21,6 @@ function remove() {
         el.lastChild.remove()
     }
 }
-
-/* function hideOptions() {
-    if (toogle.style.display === "none") {
-        toogle.style.display = "inline-block";
-    } else {
-        toogle.style.display = "none";
-    }
-} */
 
 function createNewSchedule() {
     let div = document.getElementById('wrapper-turma');
@@ -70,19 +43,16 @@ function createNewSchedule() {
 
     diadiv.className = horadiv.className = creditdiv.className = tipodiv.className = "form-group col-md-3";
     selectSala.name = 'salaTurma';
-    selectSala.className = "form-control";
+    selectSala.className = credit.className = selectDays.className = selectHour.className = "form-control";
     selectSala.required = true;
     selectSala.placeholder = "Escolha um tipo";
     credit.type = 'number';
     credit.placeholder = "Ex: 4";
-    credit.className = "form-control";
     credit.name = 'creditos';
     credit.required = true;
     selectDays.name = 'dia';
-    selectDays.className = "form-control";
     selectDays.required = true;
     selectHour.name = 'startTimer';
-    selectHour.className = "form-control";
     selectHour.required = true;
 
     diadiv.appendChild(selectDays);
@@ -139,4 +109,20 @@ function createNewSchedule() {
         }
         selectSala.appendChild(option);
     }
+}
+
+function teste()
+{
+    var $table = $('#table'),
+        $button = $('#btnEdit');
+    $(function () {
+        $button.click(function () {
+            alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')));
+        });
+    });
+}
+
+function dispara()
+{
+    
 }
