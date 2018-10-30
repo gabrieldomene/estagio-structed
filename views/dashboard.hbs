@@ -66,13 +66,15 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
+                    <a href="/atualizar" class="btn btn-primary" >Atualizar Salas</a>
+                    <a href="/verSalas" class="btn btn-primary">Montar Arquivo</a>
                     {{#if msg_sala}}
                         <div class="alert alert-success" id="alert" role="alert">
                             {{msg_sala}}
                         </div>
                     {{/if}}
                 </form>
-                <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Montar Arquivo</button></form>
+                {{!-- <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Montar Arquivo</button></form> --}}
                 {{#if msg_erro}}
                     <div class="alert alert-danger" id="alert" role="alert">
                         {{msg_erro}}
@@ -177,10 +179,12 @@
                             <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
                             {{!-- <input type="submit" class="btn btn-primary" value="Cadastrar turma"> --}}
                             <button type="submit" class="btn btn-primary">Cadastrar turma</button>
+                            <a href="/atualizarTurma" class="btn btn-primary">Atualizar Turmas</a>
+                            <a href="/verTurmas" class="btn btn-primary">Montar Arquivo</a>
                         </div>
                     </div>
                 </form>
-                <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form>
+                {{!-- <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form> --}}
                 {{#if msg_erroT}}
                     <div class="alert alert-danger" id="alert" role="alert">
                         {{msg_erroT}}
