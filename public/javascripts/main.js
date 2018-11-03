@@ -122,7 +122,28 @@ function teste()
     });
 }
 
-function dispara()
-{
-    
+function editField(trID)
+{   
+    var btnID = '#'+trID+'btn'
+    console.log(btnID)
+    $(btnID).removeClass('btn-warning').addClass('btn-success').text('Confirmar');
+    var array_content = []
+
+    var inputHash = "#"+trID
+    var element = $(inputHash)
+    console.log(inputHash)
+
+    $.each(element.find("td:not(:last-child)"), function(){
+        var content = $(this).text();
+        var html = $(this).html();
+        var input = $('<input></input>');
+        input.val(content);
+        input.addClass('form-control col-md3')
+        $(this).html(input);
+        console.log(element)
+        //console.log(this)
+        array_content.push(content)
+    });
+    //console.log(array_content)
+
 }
