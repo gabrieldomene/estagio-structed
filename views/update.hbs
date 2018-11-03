@@ -1,7 +1,9 @@
-<div class="container">
+<div class="container-fluid">
+
+    <h3 class="row justify-content-center mb-5">Atualização e remoção de salas</h3>  
 
     <div class="table-responsive">
-        <table data-toggle="table" id="table" class="table table-hover table-sm">
+        <table data-toggle="table" id="table" class="table table-hover table-sm text-center">
             {{#if objeto}}
             <thead>
                 <tr>   
@@ -23,12 +25,12 @@
                         <td>
                             
 
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#{{this.descricao}}">Editar</button>
-                            <a href="#" class="btn btn-danger" onclick="dispara()">Remover</a>
+                            <a href="#" id="{{this.descricao}}btn"class="btn btn-warning" onclick="editField('{{this.descricao}}')">Editar</a>
+                            <a href="#" id="{{this.descricao}}btn"class="btn btn-danger" onclick="">Remover</a>
                             
                         </td>
                     </tr>
-                    <div class="modal fade" id="{{this.descricao}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <!-- <div class="modal fade" id="{{this.descricao}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -60,7 +62,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 {{/each}}
             </tbody>
             {{/if}}

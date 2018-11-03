@@ -19,9 +19,10 @@
             </h5>
             </div>
 
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
                 <form action="/cadastro-sala" method="post">
+                    <p class="mb-5"> Para realizar o cadastro de salas é necessário possuir ao menos três informações sobre ela, o NOME representado pelo campo descrição que não possui restrição, a CAPACIDADE deverá ser um numeral positivo e o TIPO DE SALA a característica da mesma. Mais opções de cadastro são disponibilizadas caso seja necessário alterar os fatores da sala, deixe em branco se estiver em dúvida qual seria o fator. Caso contrário preencha com números referentes ao fator do horário sobre a sala.<br><br>Após realizar todo o preenchimento dos dados, <b>DEVE-SE</b> clicar no botão <b>GERAR ARQUIVO</b> pois ele é necessário na hora de montar a solução, sempre que houver alterações nas salas ou na quantidade é preciso refazer o arquivo.</p>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="input-sala-id">Descrição</label>
@@ -89,17 +90,18 @@
             </div>
         </div>
 
-        {{!-- Card das turmas --}}
+        {{!-- Card das disciplinas --}}
         <div class="card">
             <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                <h4 class="myColorHeader">Cadastro de turmas</h4>
+                <h4 class="myColorHeader">Cadastro de disciplinas</h4>
                 </button>
             </h5>
             </div>
-            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
             <div class="card-body">
+                 <p class="mb-5"> Para realizar o cadastro de matérias todas as opções abaixo devem serem preenchidas. O campo DISCIPLINA não possui restrição e deverá conter o nome da mesma, a TURMA deve conter um identificador único, OFERTA e DEMANDA devem ser números inteiros e positivos, as opções de dias podem ser uma ou mais de uma clicando no botão novo campo e preenchendo DIA, HORÁRIO, CRÉDITOS (número inteiro e positivo) e ESTILO DE SALA. Caso não precise de todos os campos de horário basta removê-los no botão ao lado, por fim GERE O ARQUIVO antes de solicitar o ensalamento<br><br><b>ATENÇÃO!! SE PRECISAR REMOVER UM HORÁRIO, REMOVA TODA A LINHA DE HORÁRIO ANTES DE CADASTRAR CASO CONTRÁRIO IRÁ GERAR ERRO EM SUA SOLUÇÃO DE ENSALAMENTO!!</b></p>
                 <form action="/cadastro-turma" method="post">
                     <div class="form-row" id="wrapper-turma">
                         <div class="form-group col-md-4">
@@ -107,7 +109,7 @@
                             <input type="text" class="form-control" id="disciplina-id" name="disciplina" placeholder="CIT7122" required>
                         </div>
                         <div class="form-group col-md-4">
-                            <label for="fase">Fase do Curso</label>
+                            <label for="fase">Turma</label>
                             <input type="text" class="form-control" id="fase-id" name="fase" placeholder="09655" required>
                         </div>
                         <div class="form-group col-md-2">
@@ -210,171 +212,10 @@
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
             <div class="card-body">
-                BOTAO FINAL E ALGUMA OUTRAS COISAS
+                <p><b>ATENÇÃO!!</b><br><br>Se você preencheu todas as salas e disciplinas desejadas você está bem próximo de terminar o ensalamento, lembre-se de solicitar somente depois de ter gerado os arquivos mencionados anteriormente para não ocorrer erros na alocação.<br><br>Todo processamento será feito e enviaremos por email o resultado final, como cada solução depende da quantidade de dados a ser manipulado a resposta não será imediato porém logo que for encontrada será enviada ao email cadastrado com o usuário.</p>
+                <a href="#" class="btn btn-success">Solicitar ensalamento</a>
             </div>
             </div>
         </div>
     </div>
-
-
-{{!-- 
-    <form action="/cadastro-sala" method="post">
-        <h1>Cadastro de Salas</h1>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="input-sala-id">Descrição</label>
-                <input type="text" class="form-control" id="sala-desc" name="descSala" placeholder="CTS-SL104A" required>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="input-sala-capac">Capacidade</label>
-                <input type="number" class="form-control" min="0" max="1000" placeholder="Ex: 50" id="sala-capac" name="capcSala" oninput="this.value = Math.abs(this.value)"
-                    required>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="tipo-sala">Tipo de sala</label>
-                <select id="tipo-sala" class="form-control" name="tipoSala" required>
-                    <option value="" selected disabled hidden>Escolha um tipo</option>
-                    <option value="1">Mesas e Cadeiras</option>
-                    <option value="2">Bancadas</option>
-                    <option value="3">Laboratório</option>
-                </select>
-            </div>
-
-            <p>
-                <div class="form-group col-md-2 align-self-end">
-                    <button class="btn btn-primary col-md-12" type="button" data-toggle="collapse" data-target="#advancedOptions"
-                        aria-expanded="false" aria-controls="advancedOptions">
-                        + Opções
-                    </button>
-                </div>
-            </p>
-            <div class="form-row col-md-12 collapse" id="advancedOptions">
-                <div class="form-group col-md-4">
-                    <label for="fator1">Turno Manhã</label>
-                    <input type="number" class="form-control" name="fator1" id="fator1" min="0" max="1000" placeholder="Ex: 1" oninput="this.value = Math.abs(this.value)">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="fator2">Turno Tarde</label>
-                    <input type="number" class="form-control" name="fator2" id="fator2" min="0" max="1000" placeholder="Ex: 3" oninput="this.value = Math.abs(this.value)">
-                </div>
-                <div class="form-group col-md-4">
-                    <label for="fator3">Turno Noite</label>
-                    <input type="number" class="form-control" name="fator3" id="fator3" min="0" max="1000" placeholder="Ex: 5" oninput="this.value = Math.abs(this.value)">
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Cadastrar Sala</button>
-        {{#if msg_sala}}
-            <div class="alert alert-success" id="alert" role="alert">
-                {{msg_sala}}
-            </div>
-        {{/if}}
-    </form>
-
-    <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Montar Arquivo</button></form>
-        {{#if msg_erro}}
-            <div class="alert alert-danger" id="alert" role="alert">
-                {{msg_erro}}
-            </div>
-        {{/if}}
-        {{#if msg_success}}
-            <div class="alert alert-success" id="alert" role="alert">
-                {{msg_success}}
-            </div>
-        {{/if}}
-
-
-    <form action="/cadastro-turma" method="post">
-        <h1>Cadastro de Turmas</h1>
-        <div class="form-row" id="wrapper-turma">
-            <div class="form-group col-md-4">
-                <label for="disciplina">Disciplina</label>
-                <input type="text" class="form-control" id="disciplina-id" name="disciplina" placeholder="CIT7122" required>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="fase">Fase do Curso</label>
-                <input type="text" class="form-control" id="fase-id" name="fase" placeholder="09655" required>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="oferta">Oferta</label>
-                <input type="number" class="form-control" placeholder="Ex: 50" min="0" id="oferta-id" name="oferta" oninput="this.value = Math.abs(this.value)"
-                    required>
-            </div>
-            <div class="form-group col-md-2">
-                <label for="demanda">Demanda</label>
-                <input type="number" class="form-control" placeholder="Ex: 35" min="0" id="demanda-id" name="demanda" oninput="this.value = Math.abs(this.value)"
-                    required>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="dia">Dia</label>
-                <select name="dia" class="form-control" id="dia-timer" required>
-                    <option value="" selected disabled hidden>DIA</option>
-                    <option value="2">SEG</option>
-                    <option value="3">TER</option>
-                    <option value="4">QUA</option>
-                    <option value="5">QUI</option>
-                    <option value="6">SEX</option>
-                    <option value="7">SAB</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="startTimer">Horário</label>
-                <select name="startTimer" class="form-control" id="start-timer" required>
-                    <option value="" selected disabled hidden>HORA INICIAL</option>
-                    <option value="0730">07:30</option>
-                    <option value="0820">08:20</option>
-                    <option value="0910">09:10</option>
-                    <option value="1010">10:10</option>
-                    <option value="1100">11:00</option>
-                    <option value="1330">13:30</option>
-                    <option value="1420">14:20</option>
-                    <option value="1510">15:10</option>
-                    <option value="1620">16:20</option>
-                    <option value="1710">17:10</option>
-                    <option value="1830">18:30</option>
-                    <option value="1920">19:20</option>
-                    <option value="2020">20:20</option>
-                    <option value="2110">21:10</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="creditos">Créditos de aula</label>
-                <input type="number" placeholder="Ex: 4" class="form-control" name="creditos" id="creditos" min="1" max="10" oninput="this.value = Math.abs(this.value)"
-                    required>
-            </div>
-            <div class="form-group col-md-3">
-                <label for="salaTurma">Estilo de sala</label>
-                <select class="form-control" id="tipo-sala-turma" name="salaTurma" required>
-                    <option value="" selected disabled hidden>Escolha um tipo</option>
-                    <option value="1">Mesas e Cadeiras</option>
-                    <option value="2">Bancadas</option>
-                    <option value="3">Laboratório</option>
-                </select>
-            </div>
-
-        </div>
-        {{#if msg_turma}}
-            <div class="alert alert-success" id="alert" role="alert">
-                {{msg_turma}}
-            </div>
-        {{/if}}
-        <div class="row col-md-12">
-            <div class="form-group">
-                <input type="button" class="btn btn-primary" value="Novo campo de horário" onclick="createNewSchedule()">
-                <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
-                <input type="submit" class="btn btn-primary" value="CAD TURMA">
-                           </div>
-        </div>
-    </form>
-    <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form>
-    {{#if msg_erroT}}
-        <div class="alert alert-danger" id="alert" role="alert">
-            {{msg_erroT}}
-        </div>
-    {{/if}}
-    {{#if msg_successT}}
-        <div class="alert alert-success" id="alert" role="alert">
-            {{msg_successT}}
-        </div>
-    {{/if}} --}}
 </div>
