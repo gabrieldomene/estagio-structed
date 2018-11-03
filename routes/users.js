@@ -21,6 +21,7 @@ mongoose
 let userModel = require('../models/user-model');
 let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
+//teste
 
 router.get('/', function(req, res) {
   //Console mostrando quem é o user e se está autenticado
@@ -151,7 +152,7 @@ router.post('/cadastrar',
         } else { //Cadastro falhou, usuário já existe
           res.render('index', {
             title: 'Usuário existente',
-            user_already: 'Usuário já existe, insira outro novamente.'
+            user_already: 'Usuário já existente!'
           });
         }
       }
