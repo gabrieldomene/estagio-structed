@@ -10,27 +10,31 @@
                     <th scope="col">Descrição</th>
                     <th scope="col">Capacidade</th>
                     <th scope="col">Tipo da Sala</th>
-                    <th scope="col">ID Centro</th>  
+                    <!--<th scope="col">ID Centro</th>-->
                     <th scope="col">Ação</th>  
                 </tr>
             </thead>
             <tbody>
                 {{#each objeto}}
                     <tr id="{{this.descricao}}">
-                       
                         <td>{{this.descricao}}</td>
                         <td>{{this.capacidade}}</td>
                         <td>{{this.tipoSala}}</td>
-                        <td>{{this.idcentro}}</td>
+                        <!--<td>{{this.idcentro}}</td>-->
                         <td>
-                            
-
-                            <a href="#" id="{{this.descricao}}btn"class="btn btn-warning" onclick="editField('{{this.descricao}}')">Editar</a>
-                            <a href="#" id="{{this.descricao}}btn"class="btn btn-danger" onclick="">Remover</a>
-                            
+                            <a href="#" id="{{this.descricao}}btn"class="btn btn-warning col-md-5" onclick="editField('{{this.descricao}}')">Editar</a>
+                            <a href="#" id="{{this.descricao}}btn"class="btn btn-danger col-md-5" onclick="">Remover</a>    
                         </td>
                     </tr>
-                    <!-- <div class="modal fade" id="{{this.descricao}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    
+                {{/each}}
+            </tbody>
+            {{/if}}
+        </table>
+    </div>
+    <a href="/" class="btn btn-primary" onclick="teste()">VOLTAR</a>
+</div>
+<!-- <div class="modal fade" id="{{this.descricao}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -63,11 +67,3 @@
                             </div>
                         </div>
                     </div>-->
-                {{/each}}
-            </tbody>
-            {{/if}}
-        </table>
-    </div>
-    <a href="/" class="btn btn-primary" onclick="teste()">VOLTAR</a>
-
-</div>
