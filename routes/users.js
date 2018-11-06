@@ -467,6 +467,7 @@ router.get('/atualizar', authenticationMiddleware(), (req, res) => {
 
   roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
     if (err) throw err;
+    
     res.render('update', {title: 'Alterar', objeto : result})
   }) 
 });
@@ -477,14 +478,15 @@ router.post('/roomDelete', authenticationMiddleware(), (req, res) => {
 
 router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
   //Procura o ID que bate com a sala e faz a alteracao enviada pelo ajax
+  let desc = req.body.descricao;
+  desc = desc.toUpperCase();
   
-  
-  roomModel.findOne({descricao:req.body.descricao}, (err, result) => {
+  roomModel.findOne({descricao:desc}, (err, result) => {
     if (err) throw Error;
     else {
       if(!result){
         //Pode substituir
-        roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:req.body.descricao, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+        roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:desc, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
           if (err) throw new Error
           else{
             console.log('Update feito');
@@ -492,13 +494,14 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
               if (err) throw err;
               console.log('entrou')
               //res.render('update', {title: 'Alterado', objeto : result})
+              res.send('sucesso')
+              res.end();
             }) 
           }
         })
       }
       else{
-        console.log('ja existe uma sala com esse ID');
-        res.status(404).json({error: 'ID já existente no banco'});
+        res.send('erro');
         res.end()
       }
     }
