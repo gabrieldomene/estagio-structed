@@ -198,12 +198,12 @@ function sendEdit(trID)
         data: dadojson,
         async: false,
         success: function(msg){
-            alert('Atualização feita, clique ok para atualizar');
-            location.reload();
-        },
-        error: function(msg){
-            alert(error);
-            location.reload();
+            if(msg == 'sucesso'){
+                alert('Atualização feita, clique ok para atualizar');
+                location.reload();
+            }else{
+                alert('ID já existente, sala não alterada');
+            }
         }
     });
     console.log(dadojson)
