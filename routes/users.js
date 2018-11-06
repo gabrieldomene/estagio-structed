@@ -10,6 +10,8 @@ const BCRYPT_SALT_ROUNDS = 12;
 const exec = require("child_process").exec
 
 var mongoose = require('mongoose');
+
+mongoose.set('useFindAndModify', false);
 //Connection to mlab
 var db = require("../config/keys").mongoURI;
 mongoose
@@ -474,11 +476,35 @@ router.post('/roomDelete', authenticationMiddleware(), (req, res) => {
 });
 
 router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
-  let desc = req.body.descricao
-  let capac = req.body.capacidade
-  let tipo = req.body.tipoSala
-  console.log('UPDATE '+ desc + ' ' + capac + ' ' + tipo)
-  res.end()
+  //Procura o ID que bate com a sala e faz a alteracao enviada pelo ajax
+  
+  
+  roomModel.findOne({descricao:req.body.descricao}, (err, result) => {
+    if (err) throw Error;
+    else {
+      if(!result){
+        //Pode substituir
+        roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:req.body.descricao, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+          if (err) throw new Error
+          else{
+            console.log('Update feito');
+            roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
+              if (err) throw err;
+              console.log('entrou')
+              //res.render('update', {title: 'Alterado', objeto : result})
+            }) 
+          }
+        })
+      }
+      else{
+        console.log('ja existe uma sala com esse ID');
+        res.status(404).json({error: 'ID já existente no banco'});
+        res.end()
+      }
+    }
+  });
+  
+  //res.end();
 });
 
 
