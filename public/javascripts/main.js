@@ -125,25 +125,86 @@ function teste()
 function editField(trID)
 {   
     var btnID = '#'+trID+'btn'
-    console.log(btnID)
-    $(btnID).removeClass('btn-warning').addClass('btn-success').text('Confirmar');
+    let newID = '"'+trID+'"'
+    //console.log(btnID)
+    $(btnID).removeClass('btn-warning').addClass('btn-success col-md-5').text('Confirmar').attr('onclick','sendEdit('+newID+')');
     var array_content = []
 
-    var inputHash = "#"+trID
-    var element = $(inputHash)
-    console.log(inputHash)
+    let inputHash = "#"+trID
+    let element = $(inputHash)
+    let i = 0
+    console.log(trID)
 
     $.each(element.find("td:not(:last-child)"), function(){
+        i += 1
+        //console.log(i)
+
         var content = $(this).text();
         var html = $(this).html();
         var input = $('<input></input>');
         input.val(content);
-        input.addClass('form-control col-md3')
+        input.addClass('form-control')
+        input.css("text-align", "center");
         $(this).html(input);
-        console.log(element)
+        if(i == 1)
+        {
+            input.attr('name', 'descricao');
+        }else if(i == 2){
+            input.attr('name', 'capacidade');
+            input.attr('type', 'number');
+            input.attr('min', '0');
+            input.attr('max', '100')
+            input.attr('oninput', 'this.value = Math.abs(this.value)')
+        }else{
+            input.attr('name', 'tipoSala');
+            input.attr('type', 'number');
+            input.attr('min', '1');
+            input.attr('max', '3')
+            input.attr('oninput', 'this.value = Math.abs(this.value)')
+        }
+        //console.log("ELEMENTOS CONSOLE LOG")
+        //console.log(element)
         //console.log(this)
         array_content.push(content)
     });
     //console.log(array_content)
+}
 
+function sendEdit(trID)
+{
+    let inputHash = "#"+trID
+
+    let element = $(inputHash)
+    let array = []
+    let dadojson = {}
+
+    /*$.each(element.find('td:first-child'), function(){
+        var old = $(this).find('input').val()
+        array.push(old)
+    })*/
+
+    // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
+    $.each(element.find('td:not(:last-child)'), function(){
+        // Procura dentro de cada elemento TD os valores de seus input's
+        var dado = $(this).find('input').val()
+        array.push(dado)
+    });
+
+    dadojson = {old: trID, descricao:array[0], capacidade:array[1], tiposala:array[2]}
+
+    $.ajax({
+        type: 'POST',
+        url: '/roomUpdate',
+        data: dadojson,
+        async: false,
+        success: function(msg){
+            alert('Atualização feita, clique ok para atualizar');
+            location.reload();
+        },
+        error: function(msg){
+            alert(error);
+            location.reload();
+        }
+    });
+    console.log(dadojson)
 }
