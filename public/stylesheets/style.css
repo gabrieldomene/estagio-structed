@@ -107,3 +107,7 @@ p, .myColorHeader{
 td, th, tr{
     text-align: center;
 }
+
+.table-responsive{
+    height: 450px;
+}
