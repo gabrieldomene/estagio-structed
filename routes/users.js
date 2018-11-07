@@ -102,12 +102,12 @@ passport.deserializeUser(function(user_id, done) {
 
 //https://www.youtube.com/watch?v=onPlF3gC0T4
 router.post('/cadastrar',
-
+  //Validação
   check('username', 'Insira um usuário').isLength({min:1}),
   check('password', 'Senha inválida, mínimo 6 caracteres').isLength({min: 6}),
-  check('email', 'Insira um email válido').isEmail()
+  check('email', 'Insira um email válido').isEmail(),
 
-,function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
+  function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
   let userInput = req.body.username;
   let passInput = req.body.password;
   let centroInput = req.body.centroID;
@@ -189,11 +189,12 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
           return 0
         } else {
           roomModel.findOne({
-            descricao: desc
+            descricao: desc,
+            idcentro: user.idcentro
           }, function (err, roomdb) {
             if (err) throw err;
             else {
-              if (!roomdb) { //Sala cadastrada avisar mensagem
+              if (!roomdb) { //Sala não existe, cadastrada e avisado sucesso
                 let newRoom = new roomModel({
                   descricao: desc,
                   capacidade: capac,
@@ -211,10 +212,12 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
                   name : req.user,
                   msg_sala: 'Sala ' + desc + ' cadastrada' 
                 });
-              } else {
+              } else /*if(user.idcentro != roomdb.idcentro)*/{
+                console.log('SALA JÁ EXISTE COM ESSE ID')
                 res.render('room', {
                   title: 'DASHBOARD',
-                  name: req.user
+                  name: req.user,
+                  msg_sala_erro: 'Sala ' + desc + ' não cadastrada, já existe'
                 });
               }
             }
@@ -293,7 +296,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
 
 });
 
-//Autenticar ver salas
+//Rota para montagem do arquivo txt necessário para o algoritmo - SALAS
 router.get('/verSalas', authenticationMiddleware(), function(req, res){
   //Usa o room model definido previamente para fazer a busca no mlab
   let nameToSearch = req.user;
@@ -330,7 +333,7 @@ router.get('/verSalas', authenticationMiddleware(), function(req, res){
 });
 
 
-//Autenticar ver turmas
+//Rota para montagem do arquivo txt necessário para o algoritmo - DISCIPLINAS
 router.get('/verTurmas', authenticationMiddleware(), function(req, res){
   let nameToSearch = req.user;
   userModel.findOne({
@@ -386,6 +389,7 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
   res.render('class', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
 });
 
+//Solução final do ensalamento
 router.get('/solucao', authenticationMiddleware(), (req, res) => {
   req.setTimeout(500000);
   let userinput = req.user
@@ -463,55 +467,107 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
 
 });
 
-router.get('/atualizar', authenticationMiddleware(), (req, res) => {
-
+//Rota para carregar a página de CRUD sala
+router.get('/attRoom', authenticationMiddleware(), (req, res) => {
   roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
     if (err) throw err;
-    
-    res.render('update', {title: 'Alterar', objeto : result})
-  }) 
+    res.render('updateRoom', {title: 'Alterar', objeto : result});
+  });
 });
 
-router.post('/roomDelete', authenticationMiddleware(), (req, res) => {
-  
+//Rota para carregar a página de CRUD disciplina
+router.get('/attClass', authenticationMiddleware(), (req, res) => {
+  classModel.find({idcentro: req.session.userId}, {_id: 0, __v: 0}, (err, result) => {
+    if (err) throw err;
+    console.log(result);
+    res.render('updateClass', {title: 'Alterar', objeto : result});
+  });
+})
+
+router.post('/roomRemove', authenticationMiddleware(), (req, res) => {
+  let desc = req.body.descricao;
+  desc = desc.toUpperCase();
+  console.log(req.body)
+  if(desc == ''){
+    res.send('erro');
+    res.end();
+  }else{
+    //Busca e deleta o primeiro match com id da descricao (id sala único)
+    roomModel.deleteOne({descricao:desc}, (err, result) => {
+      if (err){
+        throw Error;
+        res.send('erro');
+        res.end();
+      }else{
+        if(!result){
+          res.send('erro')
+        }else{
+          res.send('sucesso');
+          res.end();
+        }
+      }
+    })
+  }
+
 });
 
 router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
   //Procura o ID que bate com a sala e faz a alteracao enviada pelo ajax
   let desc = req.body.descricao;
   desc = desc.toUpperCase();
-  
-  roomModel.findOne({descricao:desc}, (err, result) => {
-    if (err) throw Error;
-    else {
-      if(!result){
-        //Pode substituir
-        roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:desc, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
-          if (err) throw new Error
-          else{
-            console.log('Update feito');
-            roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
-              if (err) throw err;
-              console.log('entrou')
-              //res.render('update', {title: 'Alterado', objeto : result})
-              res.send('sucesso')
-              res.end();
-            }) 
-          }
-        })
-      }
-      else{
+  if(desc == ''){
+    res.send('erro');
+    res.end();
+  }else{
+    roomModel.findOne({descricao:desc}, (err, result) => {
+      if(err) {
+        throw Error;
         res.send('erro');
-        res.end()
+        res.end();
+      }else {
+        if(!result){
+          //Caso a sala NÃO EXISTA, é permitido a troca de ID
+          roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:desc, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+            if (err) throw new Error
+            else{
+              console.log('Update feito');
+              /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
+                if (err) throw err;
+                console.log('entrou')
+                //res.render('update', {title: 'Alterado', objeto : result})
+                res.send('sucesso')
+                res.end();
+              });*/
+              res.send('sucesso')
+              res.end(); 
+            }
+          });
+        }
+        else{
+          //Caso a sala JÁ EXISTA, só é permitido a troca dos outros campos menos o ID!!
+          roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+            if (err) throw new Error
+            else{
+              console.log('Update parcial feito');
+              /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
+                if (err) throw err;
+                console.log('entrou')
+                //res.render('update', {title: 'Alterado', objeto : result})
+                res.send('sucesso')
+                res.end();
+              });*/
+              res.send('partial')
+              res.end(); 
+            }
+          });
+        }
       }
-    }
-  });
-  
-  //res.end();
+    });
+  }
 });
 
 
-//Auth to restricted pages
+//Verifica autenticação para ver páginas
 function authenticationMiddleware () {  
 	return (req, res, next) => {
 		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
