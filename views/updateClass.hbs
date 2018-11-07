@@ -1,0 +1,47 @@
+<div class="container-fluid">
+
+    <h3 class="row justify-content-center mb-4">Atualização e remoção de disciplinas</h3>  
+    <p>Esta página é dedicada à atualização e remoção de salas previamente cadastradas, para alterar algum dado basta clica no botar editar, trocar as informações de seus campos e confirmar no botão verde. A remoção de uma sala é feita diretamente por cada botão de sua linha, apenas clique e ela será deletada.</p>
+    <div class="table-responsive">
+        <table data-toggle="table" id="table" class="table table-hover table-sm text-center">
+            {{#if objeto}}
+            <thead>
+                <tr>   
+                    <th scope="col">Disciplina</th>
+                    <th scope="col">Turma</th>
+                    <th scope="col">Oferta</th>
+                    <th scope="col">Demanda</th>
+                    <th scope="col">Dia</th>
+                    <th scope="col">Horário</th>
+                    <th scope="col">Créditos</th>
+                    <th scope="col">Estilo de sala</th>       
+                </tr>
+            </thead>
+            <tbody>
+                {{#each objeto}}
+
+                    <tr id="{{this.fase}}">
+                        <td>{{this.descricao}}</td>
+                        <td>{{this.fase}}</td>
+                        <td>{{this.oferta}}</td>
+                        <td>{{this.demanda}}</td>
+                        <td>{{this.dia}}</td>
+                        <td>{{this.start}}</td>
+                        <td>{{this.creditos}}</td>
+                        <td>{{this.tipoSalaTurma}}</td>
+                        <!--<td>{{this.idcentro}}</td>-->
+                        <td>
+                            <a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="editField('{{this.fase}}')">Editar</a>
+                            <!--<a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="removeField('{{this.fase}}')">Remover</a>-->
+                            <!--<a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="">Editar</a>-->
+                            <a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="">Remover</a>    
+                        </td>
+                    </tr>
+                    
+                {{/each}}
+            </tbody>
+            {{/if}}
+        </table>
+    </div>
+    <a href="/" class="btn btn-primary" onclick="teste()">VOLTAR</a>
+</div>
