@@ -169,7 +169,70 @@ function editField(trID)
     });
     //console.log(array_content)
 }
+//Funções para salas
+function sendEdit(trID)
+{
+    let inputHash = "#"+trID
 
+    let element = $(inputHash)
+    let array = []
+    let dadojson = {}
+
+
+    // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
+    $.each(element.find('td:not(:last-child)'), function(){
+        // Procura dentro de cada elemento TD os valores de seus input's
+            console.log((this).find('input').val())
+        //var dado = $(this).find('input').val()
+        //array.push(dado)
+    });
+
+    //dadojson = {old: trID, descricao:array[0], capacidade:array[1], tiposala:array[2]}
+
+    /*$.ajax({
+        type: 'POST',
+        url: '/roomUpdate',
+        data: dadojson,
+        async: false,
+        success: function(msg){
+            if(msg == 'sucesso'){
+                alert('Atualização completa, todos os campos alterados!');
+                location.reload();
+            }else if(msg == 'partial'){
+                alert('ID já existente, somente capacidade e tipo alterado');
+                location.reload();
+            }else{
+                alert('Erro, não atualizado!')
+                location.reload();
+            }
+        }
+    });*/
+    console.log(dadojson)
+}
+
+function removeField(trID){
+    console.log(trID);
+    let dadosjson = {}
+    dadosjson = {descricao : trID}
+    console.log(dadosjson)
+    $.ajax({
+        type: 'POST',
+        url: '/roomRemove',
+        data: dadosjson,
+        async: false,
+        success: function(msg){
+            if(msg == 'sucesso'){
+                alert('Sala ' + trID + ' deletada com sucesso.');
+                location.reload();
+            }else{
+                alert('Erro ao deletar ' + trID);
+                location.reload();
+            }
+        }
+    });
+}
+
+//Funções para disciplinas
 function sendEdit(trID)
 {
     let inputHash = "#"+trID
@@ -199,10 +262,14 @@ function sendEdit(trID)
         async: false,
         success: function(msg){
             if(msg == 'sucesso'){
-                alert('Atualização feita, clique ok para atualizar');
+                alert('Atualização completa, todos os campos alterados!');
+                location.reload();
+            }else if(msg == 'partial'){
+                alert('ID já existente, somente capacidade e tipo alterado');
                 location.reload();
             }else{
-                alert('ID já existente, sala não alterada');
+                alert('Erro, não atualizado!')
+                location.reload();
             }
         }
     });
