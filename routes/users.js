@@ -428,74 +428,6 @@ router.get('/verTurmas', authenticationMiddleware(), function (req, res) {
 router.get('/solucao', authenticationMiddleware(), (req, res) => {
   req.setTimeout(3600000);
 
-  /*userModel.findOne({username: userinput}, (err, user) => {
-    if (err) throw err
-    else {
-      if (!user){
-        res.write('Falhou');
-        res.end();
-      }else{
-        let arq_config = "ConfigCentro"+user.idcentro+".txt"
-        let arq_rooms = 'OutSala'+user.idcentro+'.txt';
-        let arq_classes = 'OutTurma'+user.idcentro+'.txt';
-        
-        let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
-          exec(comando, (err, stdout, stderr) => {
-
-            let transporter = nodemailer.createTransport({
-              host: 'smtp.gmail.com',
-              port: 587,
-              secure: false, // true for 465, false for other ports
-              auth: {
-                  user: 'lcc.ufsc@gmail.com', // generated ethereal user
-                  pass: 'PASSHERE'// generated ethereal password
-              }
-            });
-      
-            let msg_corpo = 'Olá ' + req.user + '. A solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.'
-            // setup email data with unicode symbols
-
-            let attachments_out = 'outCentro'+user.idcentro+'.txt'
-            let path_out = './algoritmo/'+attachments_out
-            console.log(path_out)
-
-            let attachments_stats = 'statisticsCentro'+user.idcentro+'.txt'
-            let path_stats = './algoritmo/'+attachments_stats
-            console.log(path_stats)
-
-            let mailOptions = {
-                from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
-                to: 'domenee.g@gmail.com', // list of receivers
-                subject: 'Resultado do ensalamento',
-                text: msg_corpo,
-                attachments: [
-                  { 
-                    filename: attachments_out,
-                    path: path_out // stream this file
-                  },
-                  { 
-                    filename: attachments_stats,
-                    path: path_stats // stream this file
-                  }
-                ]
-                
-            };
-        
-            // send mail with defined transport object
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    return console.log(error);
-                }
-                console.log('Message sent: %s', info.messageId);
-                
-                console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-            });
-          res.render('dashboard', {title: 'Sucesso'});
-        })
-      }
-    }
-  }); */
-
   let arq_config = "ConfigCentro" + req.session.userId + ".txt"
   let arq_rooms = 'outSala' + req.session.userId + '.txt';
   let arq_classes = 'outTurma' + req.session.userId + '.txt';
@@ -657,13 +589,7 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
             if (err) throw new Error
             else {
               console.log('Update feito');
-              /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
-                if (err) throw err;
-                console.log('entrou')
-                //res.render('update', {title: 'Alterado', objeto : result})
-                res.send('sucesso')
-                res.end();
-              });*/
+              
               res.send('sucesso')
               res.end();
             }
@@ -683,13 +609,6 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
             if (err) throw new Error
             else {
               console.log('Update parcial feito');
-              /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
-                if (err) throw err;
-                console.log('entrou')
-                //res.render('update', {title: 'Alterado', objeto : result})
-                res.send('sucesso')
-                res.end();
-              });*/
               res.send('partial')
               res.end();
             }
