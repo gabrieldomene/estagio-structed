@@ -5,7 +5,10 @@ var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
-const { check, validationResult } = require('express-validator/check');
+const {
+  check,
+  validationResult
+} = require('express-validator/check');
 const BCRYPT_SALT_ROUNDS = 12;
 const exec = require("child_process").exec
 
@@ -15,9 +18,11 @@ mongoose.set('useFindAndModify', false);
 //Connection to mlab
 var db = require("../config/keys").mongoURI;
 mongoose
-    .connect(db, {useNewUrlParser:true})
-    .then(() => console.log('Mongo connected'))
-    .catch(err => console.log(err));
+  .connect(db, {
+    useNewUrlParser: true
+  })
+  .then(() => console.log('Mongo connected'))
+  .catch(err => console.log(err));
 
 //Bring models
 let userModel = require('../models/user-model');
@@ -25,20 +30,25 @@ let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
 //teste
 
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
   //Console mostrando quem é o user e se está autenticado
   console.log(req.user);
   console.log(req.isAuthenticated());
-  if(req.isAuthenticated()){
-    res.render('dashboard', { title : 'Ensalamento ', name : req.user});
-  }else{
-    res.render('index', { title: 'Ensalamento UFSC' });
+  if (req.isAuthenticated()) {
+    res.render('dashboard', {
+      title: 'Ensalamento ',
+      name: req.user
+    });
+  } else {
+    res.render('index', {
+      title: 'Ensalamento UFSC'
+    });
   }
 });
 
 router.get('/logout', authenticationMiddleware(), (req, res) => {
-  req.session.destroy(function(err) {
-    if(err) {
+  req.session.destroy(function (err) {
+    if (err) {
       console.log(err);
     } else {
       res.render('index');
@@ -46,7 +56,7 @@ router.get('/logout', authenticationMiddleware(), (req, res) => {
   });
 });
 
-router.get('/dashboard', function(req, res){
+router.get('/dashboard', function (req, res) {
   res.redirect('/');
 });
 
@@ -63,22 +73,22 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
         res.write('NAO ACHOU USER');
         res.end();
       } else { //achou usuario PRECISA VALIDAR NO PASSPORT
-        bcrypt.compare(passinput, user.password, function(err, result){
+        bcrypt.compare(passinput, user.password, function (err, result) {
           if (err) throw new Error(err)
-          else{
-            if(!result){
+          else {
+            if (!result) {
               //Não existe match no BD
               res.render('index', {
                 title: 'Login inválido',
                 msg_login: 'Usuário/Senha inválida'
               })
-            }else{
+            } else {
               const user_id = user.username;
               req.session.userId = user.idcentro
-              req.login(user_id, function(err){
+              req.login(user_id, function (err) {
                 res.render('dashboard', {
                   title: 'BEM VINDO',
-                  name : user_id
+                  name: user_id
                 });
               });
             }
@@ -90,12 +100,12 @@ router.post('/login', function (req, res) { //FALTA CRIPTOGRAFAR SENHA + VALIDAC
   });
 });
 
-passport.serializeUser(function(user_id, done) {
+passport.serializeUser(function (user_id, done) {
   done(null, user_id);
 });
 
-passport.deserializeUser(function(user_id, done) {
-    done(null, user_id);
+passport.deserializeUser(function (user_id, done) {
+  done(null, user_id);
 });
 
 
@@ -103,64 +113,70 @@ passport.deserializeUser(function(user_id, done) {
 //https://www.youtube.com/watch?v=onPlF3gC0T4
 router.post('/cadastrar',
   //Validação
-  check('username', 'Insira um usuário').isLength({min:1}),
-  check('password', 'Senha inválida, mínimo 6 caracteres').isLength({min: 6}),
+  check('username', 'Insira um usuário').isLength({
+    min: 1
+  }),
+  check('password', 'Senha inválida, mínimo 6 caracteres').isLength({
+    min: 6
+  }),
   check('email', 'Insira um email válido').isEmail(),
 
-  function (req, res) {// FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
-  let userInput = req.body.username;
-  let passInput = req.body.password;
-  let centroInput = req.body.centroID;
-  let emailInput = req.body.email;
+  function (req, res) { // FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
+    let userInput = req.body.username;
+    let passInput = req.body.password;
+    let centroInput = req.body.centroID;
+    let emailInput = req.body.email;
 
-  let errors = validationResult(req);
-  console.log(errors);
-  if (!errors.isEmpty()) {
-    let arrayErrors = errors.mapped()
+    let errors = validationResult(req);
+    console.log(errors);
+    if (!errors.isEmpty()) {
+      let arrayErrors = errors.mapped()
 
-    let mensagens = arrayErrors
+      let mensagens = arrayErrors
 
-    console.log(arrayErrors)
+      console.log(arrayErrors)
 
-    return res.render('index', {errors: mensagens})
-  }else{
-    userModel.findOne({
-      username: userInput
-    }, function (err, userdb) {
-      if (err) throw err;
-      else {
-        if (!userdb) {
-          //Hashing password before saving
-          bcrypt.hash(passInput, BCRYPT_SALT_ROUNDS, function(err, hash) { 
-            if (err) throw new Error(err)
-            else{
-              let newUser = new userModel({
-                username: userInput,
-                password: hash,
-                email:    emailInput,
-                idcentro: centroInput
-              });
-              //Cadastro feito
-              newUser.save(function (err) {
-                if (err) throw err;
-              });
-              //Redirecionamento
-              res.render('index', {
-                title: 'BEM VINDO',
-                cadastro: 'Cadastro completo'
-              });
-            }
-          });
-        } else { //Cadastro falhou, usuário já existe
-          res.render('index', {
-            title: 'Usuário existente',
-            user_already: 'Usuário já existente!'
-          });
+      return res.render('index', {
+        errors: mensagens
+      })
+    } else {
+      userModel.findOne({
+        username: userInput
+      }, function (err, userdb) {
+        if (err) throw err;
+        else {
+          if (!userdb) {
+            //Hashing password before saving
+            bcrypt.hash(passInput, BCRYPT_SALT_ROUNDS, function (err, hash) {
+              if (err) throw new Error(err)
+              else {
+                let newUser = new userModel({
+                  username: userInput,
+                  password: hash,
+                  email: emailInput,
+                  idcentro: centroInput
+                });
+                //Cadastro feito
+                newUser.save(function (err) {
+                  if (err) throw err;
+                });
+                //Redirecionamento
+                res.render('index', {
+                  title: 'BEM VINDO',
+                  cadastro: 'Cadastro completo'
+                });
+              }
+            });
+          } else { //Cadastro falhou, usuário já existe
+            res.render('index', {
+              title: 'Usuário existente',
+              user_already: 'Usuário já existente!'
+            });
+          }
         }
-      }
-    });
-  }
-});
+      });
+    }
+  });
 
 
 router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
@@ -178,11 +194,11 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
   let userSession = req.user;
   //console.log('USUARIO = ', userSession);
 
-  function searchIDroom (user_name, desc, capac, tipoSala, fator1, fator2, fator3){
+  function searchIDroom(user_name, desc, capac, tipoSala, fator1, fator2, fator3) {
     let nameToSearch = user_name;
     userModel.findOne({
       username: nameToSearch
-    }, function(err, user) {
+    }, function (err, user) {
       if (err) throw err;
       else {
         if (!user) {
@@ -209,10 +225,10 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
                 });
                 res.render('room', {
                   title: 'DASHBOARD',
-                  name : req.user,
-                  msg_sala: 'Sala ' + desc + ' cadastrada' 
+                  name: req.user,
+                  msg_sala: 'Sala ' + desc + ' cadastrada'
                 });
-              } else /*if(user.idcentro != roomdb.idcentro)*/{
+              } else /*if(user.idcentro != roomdb.idcentro)*/ {
                 console.log('SALA JÁ EXISTE COM ESSE ID')
                 res.render('room', {
                   title: 'DASHBOARD',
@@ -226,7 +242,7 @@ router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SE
       }
     });
   }
-  searchIDroom (userSession, desc, capac, tipoSala, fator1, fator2, fator3);
+  searchIDroom(userSession, desc, capac, tipoSala, fator1, fator2, fator3);
 });
 
 router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
@@ -245,11 +261,11 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
   console.log('USUARIO = ', userSession);
 
 
-  function searchIDclass (user_name, desc, fase, oferta, demanda, dia, start, creditos, tipoSalaTurma){
+  function searchIDclass(user_name, desc, fase, oferta, demanda, dia, start, creditos, tipoSalaTurma) {
     let nameToSearch = user_name;
     userModel.findOne({
       username: nameToSearch
-    }, function(err, user) {
+    }, function (err, user) {
       if (err) throw err;
       else {
         if (!user) {
@@ -277,8 +293,8 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
                 });
                 res.render('class', {
                   title: 'DASHBOARD',
-                  name : req.user,
-                  msg_turma: 'Turma ' + desc + ' cadastrada'  
+                  name: req.user,
+                  msg_turma: 'Turma ' + desc + ' cadastrada'
                 });
               } else {
                 res.render('class', {
@@ -292,96 +308,107 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
       }
     });
   }
-  searchIDclass (userSession, descricaoInput, faseInput, ofertaInput, demandaInput, diaInput, startInput, creditosInput, salaTurmaInput);
+  searchIDclass(userSession, descricaoInput, faseInput, ofertaInput, demandaInput, diaInput, startInput, creditosInput, salaTurmaInput);
 
 });
 
 //Rota para montagem do arquivo txt necessário para o algoritmo - SALAS
-router.get('/verSalas', authenticationMiddleware(), function(req, res){
+router.get('/verSalas', authenticationMiddleware(), function (req, res) {
   //Usa o room model definido previamente para fazer a busca no mlab
   let nameToSearch = req.user;
-    userModel.findOne({
-      username: nameToSearch
-    }, function(err, user) {
-    roomModel.find({idcentro: user.idcentro}, function(err, result){
+  userModel.findOne({
+    username: nameToSearch
+  }, function (err, user) {
+    roomModel.find({
+      idcentro: user.idcentro
+    }, function (err, result) {
       if (err) throw err;
-      else{
+      else {
         if (!result) {
           console.log('SEM DADOS');
           res.end();
         } else {
           let conc = ''
-          for(let i=0; i<result.length; i++){
+          for (let i = 0; i < result.length; i++) {
             conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
           }
           //Comando caso for separar os txt do script
           //let file_name = "./outputs/outSala"+user.idcentro+".txt"
-          let file_name = "./algoritmo/outSala"+user.idcentro+".txt"
-          fs.writeFile(file_name, conc, 'utf8', function(err){
-            if (err) 
-            {
-              res.render('room', {title: 'Erro', name: req.user, msg_erro: 'Falha ao gerar arquivo'})
+          let file_name = "./algoritmo/outSala" + user.idcentro + ".txt"
+          fs.writeFile(file_name, conc, 'utf8', function (err) {
+            if (err) {
+              res.render('room', {
+                title: 'Erro',
+                name: req.user,
+                msg_erro: 'Falha ao gerar arquivo'
+              })
               throw new Error(err)
-            }else{
+            } else {
 
-            console.log('Salvo');
-            res.render('room', {title: 'Ensalamento UFSC', name: req.user, msg_success: 'Arquivo gerado'})
+              console.log('Salvo');
+              res.render('room', {
+                title: 'Ensalamento UFSC',
+                name: req.user,
+                msg_success: 'Arquivo gerado'
+              })
             }
           });
-          }
         }
+      }
     });
   });
 });
 
 
 //Rota para montagem do arquivo txt necessário para o algoritmo - DISCIPLINAS
-router.get('/verTurmas', authenticationMiddleware(), function(req, res){
+router.get('/verTurmas', authenticationMiddleware(), function (req, res) {
   let nameToSearch = req.user;
   userModel.findOne({
     username: nameToSearch
-  }, function(err, user) {
-    classModel.find({idcentro: user.idcentro}, function(err, result){
+  }, function (err, user) {
+    classModel.find({
+      idcentro: user.idcentro
+    }, function (err, result) {
       if (err) throw new Error(err);
-      else{
-        if (!result){
+      else {
+        if (!result) {
           console.log('Não existe dados');
-        }else{
+        } else {
           var final = ""
-          for (let i = 0; i < result.length; i++){
+          for (let i = 0; i < result.length; i++) {
             let base = '';
-            base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' '  + result[i].demanda;
+            base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' ' + result[i].demanda;
             let temp = []
-            if (result[i].dia.length > 1){
-              for (let j = 0; j < result[i].dia.length; j++){
+            if (result[i].dia.length > 1) {
+              for (let j = 0; j < result[i].dia.length; j++) {
                 let temporaria = result[i].dia[j] + ' ' + result[i].start[j] + ' ' + result[i].creditos[j] + ' : ' + result[i].tipoSalaTurma[j];
                 temp.push(temporaria);
               }
-            }else{
+            } else {
               let temporaria = result[i].dia + ' ' + result[i].start + ' ' + result[i].creditos + ' : ' + result[i].tipoSalaTurma;
               temp.push(temporaria);
             }
             let conc = '';
-            if (temp.length > 1){
-              for (let k = 0; k < temp.length; k++){
-                if (k == 0 ){
+            if (temp.length > 1) {
+              for (let k = 0; k < temp.length; k++) {
+                if (k == 0) {
                   conc = '{' + temp[k] + ', ';
-                }else if (k == (temp.length - 1)){
+                } else if (k == (temp.length - 1)) {
                   conc = conc + temp[k] + '}';
-                }else{
+                } else {
                   conc = conc + temp[k] + ', '
                 }
               }
-            }else{
-              conc = '{' + temp +'}';
+            } else {
+              conc = '{' + temp + '}';
             }
-            final = final+base + ' ' + conc+'\n';
+            final = final + base + ' ' + conc + '\n';
             //console.log(final)
           }
           //Linha caso for separar os txt do script
           //let file_name = "./outputs/outTurma"+user.idcentro+".txt"
-          let file_name = "./algoritmo/outTurma"+user.idcentro+".txt"
-          fs.writeFile(file_name, final, function(err){
+          let file_name = "./algoritmo/outTurma" + user.idcentro + ".txt"
+          fs.writeFile(file_name, final, function (err) {
             if (err) throw new Error(err)
             console.log('Salvo');
           });
@@ -390,13 +417,17 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
     });
   })
   //res.download('OutTurma.txt');
-  res.render('class', {title:'Ensalamento', msg_successT: 'Arquivo gerado',name: req.user})
+  res.render('class', {
+    title: 'Ensalamento',
+    msg_successT: 'Arquivo gerado',
+    name: req.user
+  })
 });
 
 //Solução final do ensalamento
 router.get('/solucao', authenticationMiddleware(), (req, res) => {
   req.setTimeout(3600000);
-  
+
   /*userModel.findOne({username: userinput}, (err, user) => {
     if (err) throw err
     else {
@@ -465,85 +496,101 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
     }
   }); */
 
-    let arq_config = "ConfigCentro"+req.session.userId+".txt"
-    let arq_rooms = 'outSala'+req.session.userId+'.txt';
-    let arq_classes = 'outTurma'+req.session.userId+'.txt';
-    console.log(arq_config)
-    console.log(arq_rooms)
-    console.log(arq_classes)
-    let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
-    console.log(comando)
-    
-    
-      /* exec(comando, (err, stdout, stderr) => {
+  let arq_config = "ConfigCentro" + req.session.userId + ".txt"
+  let arq_rooms = 'outSala' + req.session.userId + '.txt';
+  let arq_classes = 'outTurma' + req.session.userId + '.txt';
+  console.log(arq_config)
+  console.log(arq_rooms)
+  console.log(arq_classes)
+  let comando = "cd algoritmo/ && ./classroom.sh " + arq_config + " " + arq_rooms + " " + arq_classes
+  console.log(comando)
 
-        let transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false, // true for 465, false for other ports
-          auth: {
-              user: 'lcc.ufsc@gmail.com', // generated ethereal user
-              pass: 'lccufsc2018'// generated ethereal password
-          }
-        });
-  
-        let msg_corpo = 'Olá ' + req.user + '. \n\nA solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.\n\nCaso este email não possua 2 (dois) arquivos txt sendo eles o outCentro e statisticsCentro por favor entre em contato.'
-        // setup email data with unicode symbols
 
-        let attachments_out = 'outCentro'+req.session.userId+'.txt'
-        let path_out = './algoritmo/'+attachments_out
-        console.log(path_out)
+  exec(comando, (err, stdout, stderr) => {
 
-        let attachments_stats = 'statisticsCentro'+req.session.userId+'.txt'
-        let path_stats = './algoritmo/'+attachments_stats
-        console.log(path_stats)
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'lcc.ufsc@gmail.com', // generated ethereal user
+        pass: 'lccufsc2018' // generated ethereal password
+      }
+    });
 
-        let mailOptions = {
-            from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
-            to: 'domenee.g@gmail.com', // list of receivers
-            subject: 'Resultado do ensalamento',
-            text: msg_corpo,
-            attachments: [
-              { 
-                filename: attachments_out,
-                path: path_out // stream this file
-              },
-              { 
-                filename: attachments_stats,
-                path: path_stats // stream this file
-              }
-            ]
-            
-        };
-    
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
-            console.log('Message sent: %s', info.messageId);
-            
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-        });
-      res.render('success', {title: 'Sucesso'});
-      }) */
-      res.render('success')
+    let msg_corpo = 'Olá ' + req.user + '. \n\nA solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.\n\nCaso este email não possua 2 (dois) arquivos txt sendo eles o outCentro e statisticsCentro por favor entre em contato.'
+    // setup email data with unicode symbols
+
+    let attachments_out = 'outCentro' + req.session.userId + '.txt'
+    let path_out = './algoritmo/' + attachments_out
+    console.log(path_out)
+
+    let attachments_stats = 'statisticsCentro' + req.session.userId + '.txt'
+    let path_stats = './algoritmo/' + attachments_stats
+    console.log(path_stats)
+
+    let mailOptions = {
+      from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+      to: 'domenee.g@gmail.com', // list of receivers
+      subject: 'Resultado do ensalamento',
+      text: msg_corpo,
+      attachments: [{
+          filename: attachments_out,
+          path: path_out // stream this file
+        },
+        {
+          filename: attachments_stats,
+          path: path_stats // stream this file
+        }
+      ]
+
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log('Message sent: %s', info.messageId);
+
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    });
+    res.render('success', {
+      title: 'Sucesso'
+    });
+  });
 });
 
 //Rota para carregar a página de CRUD sala
 router.get('/attRoom', authenticationMiddleware(), (req, res) => {
-  roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
+  roomModel.find({
+    idcentro: req.session.userId
+  }, {
+    _id: 0,
+    __v: 0
+  }, (err, result) => {
     if (err) throw err;
-    res.render('updateRoom', {title: 'Alterar', objeto : result});
+    res.render('updateRoom', {
+      title: 'Alterar',
+      objeto: result
+    });
   });
 });
 
 //Rota para carregar a página de CRUD disciplina
 router.get('/attClass', authenticationMiddleware(), (req, res) => {
-  classModel.find({idcentro: req.session.userId}, {_id: 0, __v: 0}, (err, result) => {
+  classModel.find({
+    idcentro: req.session.userId
+  }, {
+    _id: 0,
+    __v: 0
+  }, (err, result) => {
     if (err) throw err;
     console.log(result);
-    res.render('updateClass', {title: 'Alterar', objeto : result});
+    res.render('updateClass', {
+      title: 'Alterar',
+      objeto: result
+    });
   });
 })
 
@@ -552,20 +599,22 @@ router.post('/roomRemove', authenticationMiddleware(), (req, res) => {
   let desc = req.body.descricao;
   desc = desc.toUpperCase();
   console.log(req.body)
-  if(desc == ''){
+  if (desc == '') {
     res.send('erro');
     res.end();
-  }else{
+  } else {
     //Busca e deleta o primeiro match com id da descricao (id sala único)
-    roomModel.deleteOne({descricao:desc}, (err, result) => {
-      if (err){
+    roomModel.deleteOne({
+      descricao: desc
+    }, (err, result) => {
+      if (err) {
         throw Error;
         res.send('erro');
         res.end();
-      }else{
-        if(!result){
+      } else {
+        if (!result) {
           res.send('erro')
-        }else{
+        } else {
           res.send('sucesso');
           res.end();
         }
@@ -580,21 +629,33 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
   //Procura o ID que bate com a sala e faz a alteracao enviada pelo ajax
   let desc = req.body.descricao;
   desc = desc.toUpperCase();
-  if(desc == ''){
+  if (desc == '') {
     res.send('erro');
     res.end();
-  }else{
-    roomModel.findOne({descricao:desc}, (err, result) => {
-      if(err) {
+  } else {
+    roomModel.findOne({
+      descricao: desc
+    }, (err, result) => {
+      if (err) {
         throw Error;
         res.send('erro');
         res.end();
-      }else {
-        if(!result){
+      } else {
+        if (!result) {
           //Caso a sala NÃO EXISTA, é permitido a troca de ID
-          roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{descricao:desc, capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+          roomModel.findOneAndUpdate({
+            descricao: req.body.old
+          }, {
+            $set: {
+              descricao: desc,
+              capacidade: req.body.capacidade,
+              tipoSala: req.body.tiposala
+            }
+          }, {
+            new: true
+          }, (err, result) => {
             if (err) throw new Error
-            else{
+            else {
               console.log('Update feito');
               /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
                 if (err) throw err;
@@ -604,15 +665,23 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
                 res.end();
               });*/
               res.send('sucesso')
-              res.end(); 
+              res.end();
             }
           });
-        }
-        else{
+        } else {
           //Caso a sala JÁ EXISTA, só é permitido a troca dos outros campos menos o ID!!
-          roomModel.findOneAndUpdate({descricao:req.body.old}, {$set:{capacidade:req.body.capacidade, tipoSala:req.body.tiposala}}, {new: true}, (err, result) => {
+          roomModel.findOneAndUpdate({
+            descricao: req.body.old
+          }, {
+            $set: {
+              capacidade: req.body.capacidade,
+              tipoSala: req.body.tiposala
+            }
+          }, {
+            new: true
+          }, (err, result) => {
             if (err) throw new Error
-            else{
+            else {
               console.log('Update parcial feito');
               /*roomModel.find({idcentro: req.session.userId},{_id: 0, __v: 0}, (err, result) => {
                 if (err) throw err;
@@ -622,7 +691,7 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
                 res.end();
               });*/
               res.send('partial')
-              res.end(); 
+              res.end();
             }
           });
         }
@@ -636,13 +705,15 @@ router.post('/classRemove', authenticationMiddleware(), (req, res) => {
 });
 
 //Verifica autenticação para ver páginas
-function authenticationMiddleware () {  
-	return (req, res, next) => {
-		console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
+function authenticationMiddleware() {
+  return (req, res, next) => {
+    console.log(`req.session.passport.user: ${JSON.stringify(req.session.passport)}`);
 
-	    if (req.isAuthenticated()) return next();
-	    res.render('index', {title: 'Não autenticado'})
-	}
+    if (req.isAuthenticated()) return next();
+    res.render('index', {
+      title: 'Não autenticado'
+    })
+  }
 }
 
 module.exports = router;
