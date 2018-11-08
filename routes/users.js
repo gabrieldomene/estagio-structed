@@ -314,7 +314,9 @@ router.get('/verSalas', authenticationMiddleware(), function(req, res){
           for(let i=0; i<result.length; i++){
             conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
           }
-          let file_name = "./outputs/outSala"+user.idcentro+".txt"
+          //Comando caso for separar os txt do script
+          //let file_name = "./outputs/outSala"+user.idcentro+".txt"
+          let file_name = "./algoritmo/outSala"+user.idcentro+".txt"
           fs.writeFile(file_name, conc, 'utf8', function(err){
             if (err) 
             {
@@ -376,7 +378,9 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
             final = final+base + ' ' + conc+'\n';
             //console.log(final)
           }
-          let file_name = "./outputs/OutTurma"+user.idcentro+".txt"
+          //Linha caso for separar os txt do script
+          //let file_name = "./outputs/outTurma"+user.idcentro+".txt"
+          let file_name = "./algoritmo/outTurma"+user.idcentro+".txt"
           fs.writeFile(file_name, final, function(err){
             if (err) throw new Error(err)
             console.log('Salvo');
@@ -391,10 +395,9 @@ router.get('/verTurmas', authenticationMiddleware(), function(req, res){
 
 //Solução final do ensalamento
 router.get('/solucao', authenticationMiddleware(), (req, res) => {
-  req.setTimeout(500000);
-  let userinput = req.user
+  req.setTimeout(3600000);
   
-  userModel.findOne({username: userinput}, (err, user) => {
+  /*userModel.findOne({username: userinput}, (err, user) => {
     if (err) throw err
     else {
       if (!user){
@@ -404,11 +407,8 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
         let arq_config = "ConfigCentro"+user.idcentro+".txt"
         let arq_rooms = 'OutSala'+user.idcentro+'.txt';
         let arq_classes = 'OutTurma'+user.idcentro+'.txt';
-        /* console.log(arq_config)
-        console.log(arq_rooms)
-        console.log(arq_classes) */
+        
         let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
-        /* console.log(comando) */
           exec(comando, (err, stdout, stderr) => {
 
             let transporter = nodemailer.createTransport({
@@ -463,8 +463,71 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
         })
       }
     }
-  });
+  }); */
 
+    let arq_config = "ConfigCentro"+req.session.userId+".txt"
+    let arq_rooms = 'outSala'+req.session.userId+'.txt';
+    let arq_classes = 'outTurma'+req.session.userId+'.txt';
+    console.log(arq_config)
+    console.log(arq_rooms)
+    console.log(arq_classes)
+    let comando = "cd algoritmo/ && ./classroom.sh "+ arq_config + " " + arq_rooms + " " + arq_classes 
+    console.log(comando)
+    
+    
+      /* exec(comando, (err, stdout, stderr) => {
+
+        let transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+              user: 'lcc.ufsc@gmail.com', // generated ethereal user
+              pass: 'lccufsc2018'// generated ethereal password
+          }
+        });
+  
+        let msg_corpo = 'Olá ' + req.user + '. \n\nA solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.\n\nCaso este email não possua 2 (dois) arquivos txt sendo eles o outCentro e statisticsCentro por favor entre em contato.'
+        // setup email data with unicode symbols
+
+        let attachments_out = 'outCentro'+req.session.userId+'.txt'
+        let path_out = './algoritmo/'+attachments_out
+        console.log(path_out)
+
+        let attachments_stats = 'statisticsCentro'+req.session.userId+'.txt'
+        let path_stats = './algoritmo/'+attachments_stats
+        console.log(path_stats)
+
+        let mailOptions = {
+            from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+            to: 'domenee.g@gmail.com', // list of receivers
+            subject: 'Resultado do ensalamento',
+            text: msg_corpo,
+            attachments: [
+              { 
+                filename: attachments_out,
+                path: path_out // stream this file
+              },
+              { 
+                filename: attachments_stats,
+                path: path_stats // stream this file
+              }
+            ]
+            
+        };
+    
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        });
+      res.render('success', {title: 'Sucesso'});
+      }) */
+      res.render('success')
 });
 
 //Rota para carregar a página de CRUD sala
@@ -484,6 +547,7 @@ router.get('/attClass', authenticationMiddleware(), (req, res) => {
   });
 })
 
+//Rota para remover a linha selecionada
 router.post('/roomRemove', authenticationMiddleware(), (req, res) => {
   let desc = req.body.descricao;
   desc = desc.toUpperCase();
@@ -511,6 +575,7 @@ router.post('/roomRemove', authenticationMiddleware(), (req, res) => {
 
 });
 
+//Rota para atualizar linha selecionada (modificar dados)
 router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
   //Procura o ID que bate com a sala e faz a alteracao enviada pelo ajax
   let desc = req.body.descricao;
@@ -566,6 +631,9 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
   }
 });
 
+router.post('/classRemove', authenticationMiddleware(), (req, res) => {
+
+});
 
 //Verifica autenticação para ver páginas
 function authenticationMiddleware () {  
