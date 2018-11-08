@@ -7,14 +7,15 @@
             {{#if objeto}}
             <thead>
                 <tr>   
-                    <th scope="col">Disciplina</th>
-                    <th scope="col">Turma</th>
-                    <th scope="col">Oferta</th>
-                    <th scope="col">Demanda</th>
-                    <th scope="col">Dia</th>
-                    <th scope="col">Horário</th>
-                    <th scope="col">Créditos</th>
-                    <th scope="col">Estilo de sala</th>       
+                    <th scope="">Disciplina</th>
+                    <th scope="">Turma</th>
+                    <th scope="">Oferta</th>
+                    <th scope="">Demanda</th>
+                    <th scope="">Dia</th>
+                    <th scope="">Horário</th>
+                    <th scope="">Créditos</th>
+                    <th scope="">Estilo de sala</th>
+                    <th scope="">Ação</th>   
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +30,6 @@
                         <td>{{this.start}}</td>
                         <td>{{this.creditos}}</td>
                         <td>{{this.tipoSalaTurma}}</td>
-                        <!--<td>{{this.idcentro}}</td>-->
                         <td>
                             <a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="editField('{{this.fase}}')">Editar</a>
                             <!--<a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="removeField('{{this.fase}}')">Remover</a>-->
