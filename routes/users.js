@@ -518,7 +518,7 @@ router.get('/attClass', authenticationMiddleware(), (req, res) => {
     __v: 0
   }, (err, result) => {
     if (err) throw err;
-    console.log(result);
+    //console.log(result);
     res.render('updateClass', {
       title: 'Alterar',
       objeto: result
