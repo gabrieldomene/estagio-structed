@@ -6,32 +6,32 @@
         <table data-toggle="table" id="table" class="table table-hover table-sm text-center">
             {{#if objeto}}
             <thead>
-                <tr>   
-                    <th scope="">Disciplina</th>
-                    <th scope="">Turma</th>
-                    <th scope="">Oferta</th>
-                    <th scope="">Demanda</th>
-                    <th scope="">Dia</th>
-                    <th scope="">Horário</th>
-                    <th scope="">Créditos</th>
-                    <th scope="">Estilo de sala</th>
-                    <th scope="">Ação</th>   
+                <tr class="d-flex">   
+                    <th scope="" class="col-2">Disciplina</th>
+                    <th scope="" class="col-2">Turma</th>
+                    <th scope="" class="col-1">Oferta</th>
+                    <th scope="" class="col-1">Demanda</th>
+                    <th scope="" class="col-1">Dia</th>
+                    <th scope="" class="col-1">Horário</th>
+                    <th scope="" class="col-1">Créditos</th>
+                    <th scope="" class="col-1">Estilo de sala</th>
+                    <th scope="" class="col-2">Ação</th>   
                 </tr>
             </thead>
             <tbody>
                 {{#each objeto}}
 
-                    <tr id="{{this.fase}}">
-                        <td>{{this.descricao}}</td>
-                        <td>{{this.fase}}</td>
-                        <td>{{this.oferta}}</td>
-                        <td>{{this.demanda}}</td>
-                        <td>{{this.dia}}</td>
-                        <td>{{this.start}}</td>
-                        <td>{{this.creditos}}</td>
-                        <td>{{this.tipoSalaTurma}}</td>
-                        <td>
-                            <a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="editField('{{this.fase}}')">Editar</a>
+                    <tr id="{{this.fase}}" class="d-flex">
+                        <td class="col-2">{{this.descricao}}</td>
+                        <td class="col-2">{{this.fase}}</td>
+                        <td class="col-1">{{this.oferta}}</td>
+                        <td class="col-1">{{this.demanda}}</td>
+                        <td class="col-1">{{this.dia}}</td>
+                        <td class="col-1">{{this.start}}</td>
+                        <td class="col-1">{{this.creditos}}</td>
+                        <td class="col-1">{{this.tipoSalaTurma}}</td>
+                        <td class="col-2">
+                            <a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="editFieldD('{{this.fase}}')">Editar</a>
                             <!--<a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="removeField('{{this.fase}}')">Remover</a>-->
                             <!--<a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="">Editar</a>-->
                             <a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="">Remover</a>    
