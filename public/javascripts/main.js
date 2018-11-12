@@ -111,17 +111,8 @@ function createNewSchedule() {
     }
 }
 
-function teste()
-{
-    var $table = $('#table'),
-        $button = $('#btnEdit');
-    $(function () {
-        $button.click(function () {
-            alert('getSelections: ' + JSON.stringify($table.bootstrapTable('getSelections')));
-        });
-    });
-}
 
+//Funções para salas
 function editField(trID)
 {   
     var btnID = '#'+trID+'btn'
@@ -182,73 +173,6 @@ function sendEdit(trID)
     // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
     $.each(element.find('td:not(:last-child)'), function(){
         // Procura dentro de cada elemento TD os valores de seus input's
-            console.log((this).find('input').val())
-        //var dado = $(this).find('input').val()
-        //array.push(dado)
-    });
-
-    //dadojson = {old: trID, descricao:array[0], capacidade:array[1], tiposala:array[2]}
-
-    /*$.ajax({
-        type: 'POST',
-        url: '/roomUpdate',
-        data: dadojson,
-        async: false,
-        success: function(msg){
-            if(msg == 'sucesso'){
-                alert('Atualização completa, todos os campos alterados!');
-                location.reload();
-            }else if(msg == 'partial'){
-                alert('ID já existente, somente capacidade e tipo alterado');
-                location.reload();
-            }else{
-                alert('Erro, não atualizado!')
-                location.reload();
-            }
-        }
-    });*/
-    console.log(dadojson)
-}
-
-function removeField(trID){
-    console.log(trID);
-    let dadosjson = {}
-    dadosjson = {descricao : trID}
-    console.log(dadosjson)
-    $.ajax({
-        type: 'POST',
-        url: '/roomRemove',
-        data: dadosjson,
-        async: false,
-        success: function(msg){
-            if(msg == 'sucesso'){
-                alert('Sala ' + trID + ' deletada com sucesso.');
-                location.reload();
-            }else{
-                alert('Erro ao deletar ' + trID);
-                location.reload();
-            }
-        }
-    });
-}
-
-//Funções para disciplinas
-function sendEdit(trID)
-{
-    let inputHash = "#"+trID
-
-    let element = $(inputHash)
-    let array = []
-    let dadojson = {}
-
-    /*$.each(element.find('td:first-child'), function(){
-        var old = $(this).find('input').val()
-        array.push(old)
-    })*/
-
-    // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
-    $.each(element.find('td:not(:last-child)'), function(){
-        // Procura dentro de cada elemento TD os valores de seus input's
         var dado = $(this).find('input').val()
         array.push(dado)
     });
@@ -275,3 +199,92 @@ function sendEdit(trID)
     });
     console.log(dadojson)
 }
+
+//Funções para salas
+function removeField(trID){
+    console.log(trID);
+    let dadosjson = {}
+    dadosjson = {descricao : trID}
+    console.log(dadosjson)
+    $.ajax({
+        type: 'POST',
+        url: '/roomRemove',
+        data: dadosjson,
+        async: false,
+        success: function(msg){
+            if(msg == 'sucesso'){
+                alert('Sala ' + trID + ' deletada com sucesso.');
+                location.reload();
+            }else{
+                alert('Erro ao deletar ' + trID);
+                location.reload();
+            }
+        }
+    });
+}
+
+//Funções para disciplinas
+function editDisciplina(trID)
+{
+    
+    let inputHash = "#"+trID
+    let element = $(inputHash)
+    let array_content = []
+    let dadojson = {}
+    let old = ''
+    var btnID = '#'+trID+'btn'
+    let newID = '"'+trID+'"'
+    //console.log(btnID)
+    $(btnID).removeClass('btn-warning').addClass('btn-success col-md-5').text('Confirmar').attr('onclick','sendDisciplina('+newID+')');
+    
+    //Element pega a tr do id e em cells as 8 colunas, ultima é botao
+    
+    $.each(element.find('td:not(:last-child)'), function(){
+        //Cada this é minhas linhas de td, separando em cada virgula
+        let content = $(this).text().split(",");
+        let input = $(document.createElement('input'));
+        
+        //Tamanho de cada "td"
+        //console.log('Tamanho '+content.length)
+        if(content.length > 1){//Se meus campos possuirem mais de um valor
+            //Remove a primeira linha de texto
+            $(this)[0].innerHTML = '';
+            for(let i = 0; i < content.length; i++){
+                //Cria os inputs de acordo com a quantidade (separados na vírgula)
+                input.val(content[i]);
+                input.addClass('form-control');
+                input.attr('type', 'number');
+                input.css("text-align", "center");
+                $(this).append(input.clone());
+            }
+        }else{     
+            input.val(content);
+            input.addClass('form-control')
+            input.css("text-align", "center");
+            $(this).html(input)
+        }
+    });
+}
+
+function sendDisciplina(trID){
+    
+    let inputHash = "#"+trID
+
+    let element = $(inputHash)
+    let array = []
+    let dadojson = {}
+
+
+    // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
+    $.each(element.find('td:not(:last-child)'), function(){
+        // Procura dentro de cada elemento TD os valores de seus input's
+        var dado = $(this).find('input').val()
+        array.push(dado)
+    });
+    console.log(array)
+}
+
+function removeDisciplina(trID){
+
+}
+
