@@ -4,6 +4,7 @@ var passport = require('passport');
 var fs = require('fs');
 var path = require('path');
 var bcrypt = require('bcryptjs');
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 const {
   check,
@@ -17,6 +18,7 @@ var mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
 //Connection to mlab
 var db = require("../config/keys").mongoURI;
+
 mongoose
   .connect(db, {
     useNewUrlParser: true
@@ -28,7 +30,6 @@ mongoose
 let userModel = require('../models/user-model');
 let roomModel = require('../models/room-model');
 let classModel = require('../models/class-model');
-//teste
 
 router.get('/', function (req, res) {
   //Console mostrando quem é o user e se está autenticado
