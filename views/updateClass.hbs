@@ -15,7 +15,8 @@
                     <th scope="" class="col-1">Horário</th>
                     <th scope="" class="col-1">Créditos</th>
                     <th scope="" class="col-1">Estilo de sala</th>
-                    <th scope="" class="col-2">Ação</th>   
+                    <th scope="" class="col-2">Ação</th>
+                    {{!-- <th scope="" class="col-1">Centro</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@
                             <!--<a href="#" id="{{this.fase}}btn"class="btn btn-warning col-md-5" onclick="">Editar</a>-->
                             <a href="#" id="{{this.fase}}btn"class="btn btn-danger col-md-5" onclick="">Remover</a>    
                         </td>
+                        {{!-- <td class="col-1">{{this.idcentro}}</td> --}}
                     </tr>
                     
                 {{/each}}
