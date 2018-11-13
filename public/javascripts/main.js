@@ -273,15 +273,35 @@ function sendDisciplina(trID){
     let element = $(inputHash)
     let array = []
     let dadojson = {}
+    let temp_array = []
 
 
     // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
     $.each(element.find('td:not(:last-child)'), function(){
         // Procura dentro de cada elemento TD os valores de seus input's
-        var dado = $(this).find('input').val()
-        array.push(dado)
+        var dado = $(this).find('input')
+        
+        if(dado.length > 1){
+            console.log((this).val())
+        }else{
+            console.log(dado.val())
+            //array.push(dado)
+        }
     });
-    console.log(array)
+    //console.log(array)
+    /* let temp_array = []
+    for(let i = 0; i < array.length; i++){
+        if(array[i].length > 1){
+            for(let k = 0; k < array[i].length; k++){
+                temp_array[i][k] = array[i].val()
+            }
+
+            console.log(array[i])
+        }else{
+            temp_array[i] = array[i].val()
+        }
+    }
+    console.log(temp_array) */
 }
 
 function removeDisciplina(trID){
