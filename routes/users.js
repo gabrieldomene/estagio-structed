@@ -770,6 +770,70 @@ router.post('/classRemove', authenticationMiddleware(), (req, res) => {
 
 });
 
+router.post('/classUpdate', authenticationMiddleware(), (req,res) => {
+
+  //SE COLOCAR UM ID JÁ EXISTENTE, ELA SOBREESCREVE COM AQUELE ID!!! ARRUMAR
+  let turma = req.body.old;
+  console.log(req.body.descricao)
+  classModel.findOne({
+    fase: turma
+  }, (err, result) => {
+    if (err){
+      throw Error;
+        res.send('erro');
+        res.end();
+    }else{
+      if (!result) {
+        //Caso a sala NÃO EXISTA, é permitido a troca de ID
+        classModel.findOneAndUpdate({
+          fase: turma
+        }, {
+          $set: {
+            //ALTERAR TODOS OS DADOS
+            descricao: req.body.descricao,
+            fase: req.body.fase,
+            oferta: req.body.oferta,
+            demanda: req.body.demanda
+          }
+        }, {
+          new: true
+        }, (err, result) => {
+          if (err) throw new Error
+          else {
+            console.log('Update feito');
+            
+            res.send('sucesso')
+            res.end();
+          }
+        });
+      } else {
+        //Caso a sala JÁ EXISTA, só é permitido a troca dos outros campos menos o ID!!
+        classModel.findOneAndUpdate({
+          fase: turma
+        }, {
+          $set: {
+            //ALTERAR TUDO MENOS A TURMA
+            descricao: req.body.descricao,
+            oferta: req.body.oferta,
+            demanda: req.body.demanda
+          }
+        }, {
+          new: true
+        }, (err, result) => {
+          if (err) throw new Error
+          else {
+            console.log('Update parcial feito');
+            res.send('partial')
+            res.end();
+          }
+        });
+      }
+    }
+  })
+  console.log('UPDATE ENVIADO: \n')
+  console.log(req.body)
+});
+
 //Verifica autenticação para ver páginas
 function authenticationMiddleware() {
   return (req, res, next) => {
