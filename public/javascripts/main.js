@@ -273,8 +273,8 @@ function sendDisciplina(trID){
     let element = $(inputHash)
     let array = []
     let dadojson = {}
-    let temp_array = []
-
+    let n = 0
+    let old = ''
 
     // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
     $.each(element.find('td:not(:last-child)'), function(){
@@ -282,26 +282,46 @@ function sendDisciplina(trID){
         var dado = $(this).find('input')
         
         if(dado.length > 1){
-            console.log((this).val())
+            //dado retorna um vetor de n posicoes (dado[n] acessa a posicao passada)
+            /* console.log(dado.length)
+            console.log('pula linha') */
+            let temp_array = []
+            for(let i =0; i < dado.length; i++){
+                let temp = $(dado[i]).val()
+                temp_array.push(temp)
+            }
+            array.push(temp_array)
+
+            
         }else{
-            console.log(dado.val())
-            //array.push(dado)
+            if(n == 1) old = dado.val() //Guarda valor do id disciplina para não ser igual
+            array.push(dado.val())
+        }
+        n = n+1
+    });
+    console.log(old)
+    console.log(array)
+    dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
+    $.ajax({
+        type: 'POST',
+        url: '/classUpdate',
+        data: dadojson,
+        async: false,
+        success: function(msg){
+            if(msg == 'sucesso'){
+                alert('Atualização completa, todos os campos alterados!');
+                location.reload();
+            }else if(msg == 'partial'){
+                alert('Turma já existente, somente os outros dados alterados');
+                location.reload();
+            }else{
+                //alert('Erro, não atualizado!')
+                //location.reload();
+            }
         }
     });
-    //console.log(array)
-    /* let temp_array = []
-    for(let i = 0; i < array.length; i++){
-        if(array[i].length > 1){
-            for(let k = 0; k < array[i].length; k++){
-                temp_array[i][k] = array[i].val()
-            }
-
-            console.log(array[i])
-        }else{
-            temp_array[i] = array[i].val()
-        }
-    }
-    console.log(temp_array) */
+    console.log(dadojson)
+    
 }
 
 function removeDisciplina(trID){
