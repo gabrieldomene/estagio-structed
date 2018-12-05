@@ -61,7 +61,7 @@ router.get('/dashboard', function (req, res) {
   res.redirect('/');
 });
 
-router.post('/login', function (req, res) { 
+router.post('/login', function (req, res) {
   let userinput = req.body.username;
   let passinput = req.body.password;
 
@@ -181,7 +181,7 @@ router.post('/cadastrar',
 
 
 
-  router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
+router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
   let desc = req.body.descSala;
   desc = desc.toUpperCase();
   let capac = req.body.capcSala;
@@ -465,7 +465,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
           //let file_name = "./outputs/outSala"+user.idcentro+".txt"
           let file_name = "./algoritmo/outSala" + user.idcentro + ".txt"
           fs.writeFile(file_name, conc, 'utf8', function (err) {
-            if (err) {             
+            if (err) {
               throw new Error(err)
             } else {
 
@@ -515,10 +515,10 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                     let file_name = "./algoritmo/outTurma" + user.idcentro + ".txt"
                     fs.writeFile(file_name, final, function (err) {
                       if (err) throw new Error(err)
-                      else{
+                      else {
                         console.log(' -------------- ARQ DE CLAS ESCRITO ----------------');
                         // CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
-                         exec(comando, (err, stdout, stderr) => {
+                        exec(comando, (err, stdout, stderr) => {
 
                           let transporter = nodemailer.createTransport({
                             host: 'smtp.gmail.com',
@@ -584,7 +584,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
   });
 
 
-    // CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
+  // CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
   /* exec(comando, (err, stdout, stderr) => {
 
     let transporter = nodemailer.createTransport({
@@ -653,6 +653,8 @@ router.get('/attRoom', authenticationMiddleware(), (req, res) => {
       title: 'Alterar',
       objeto: result
     });
+  }).sort({//Ordenação da lista
+    descricao: 1
   });
 });
 
@@ -670,7 +672,9 @@ router.get('/attClass', authenticationMiddleware(), (req, res) => {
       title: 'Alterar',
       objeto: result
     });
-  });
+  }).sort({//Ordenação da lista
+    descricao: 1
+  });;
 })
 
 //Rota para remover a linha selecionada
@@ -736,7 +740,7 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
             if (err) throw new Error
             else {
               console.log('Update feito');
-              
+
               res.send('sucesso')
               res.end();
             }
@@ -767,22 +771,133 @@ router.post('/roomUpdate', authenticationMiddleware(), (req, res) => {
 });
 
 router.post('/classRemove', authenticationMiddleware(), (req, res) => {
-
+  let turma = req.body.descricao;
+  turma = turma.toUpperCase();
+  console.log(req.body)
+  if (turma == '') {
+    res.send('erro');
+    res.end();
+  } else {
+    //Busca e deleta o primeiro match com id da descricao (id sala único)
+    classModel.deleteOne({
+      fase: turma
+    }, (err, result) => {
+      if (err) {
+        throw Error;
+        res.send('erro');
+        res.end();
+      } else {
+        if (!result) {
+          res.send('erro')
+        } else {
+          res.send('sucesso');
+          res.end();
+        }
+      }
+    })
+  }
 });
 
-router.post('/classUpdate', authenticationMiddleware(), (req,res) => {
+router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
 
   //SE COLOCAR UM ID JÁ EXISTENTE, ELA SOBREESCREVE COM AQUELE ID!!! ARRUMAR
-  let turma = req.body.old;
-  console.log(req.body.descricao)
+  let turma = req.body.old.toUpperCase();
+  let desc = req.body.descricao.toUpperCase();
+  let newTurma = req.body.fase.toUpperCase();
+  let jsondia = JSON.stringify(req.body.dia);
+  let jsonstart = JSON.stringify(req.body.start);
+  let jsontipoSalaTurma  = JSON.stringify(req.body.tipoSalaTurma);
+  let jsoncreditos = JSON.stringify(req.body.creditos);
+
+  console.log(turma)
+  console.log(newTurma)
+  if (newTurma == '')
+  {
+    res.send('erro');
+    res.end();
+  } else {
+    classModel.findOne({
+      fase: newTurma
+    }, (err, result) => {
+      if (err)
+      {
+        throw Error;
+        res.send('erro');
+        res.end();
+      } else {
+        if (!result)
+        {//Caso a disciplina nao exista com essa turma, é permitido uma nova
+          classModel.findOneAndUpdate({fase: req.body.old},
+          {
+            $set: {
+              descricao: desc,
+              fase: newTurma, //nao precisaria
+              oferta: req.body.oferta,
+              demanda: req.body.demanda,
+              dia: jsondia,
+              start: jsonstart,
+              tipoSalaTurma : jsontipoSalaTurma,
+              creditos: jsoncreditos
+            }
+          },{
+            new: true
+          }, (err, result) => {
+            if (err) throw new Error
+            else {
+              console.log('Update feito');
+              res.send('sucesso');
+              res.end();
+            }
+          });
+        } else {
+          //Caso já exista uma turma, troca tudo menos ela
+          classModel.findOneAndUpdate({
+            fase: req.body.old
+          }, {
+            $set: {
+              descricao: desc,
+              oferta: req.body.oferta,
+              demanda: req.body.demanda,
+              dia: req.body.dia,
+              start: jsonstart,
+              tipoSalaTurma : jsontipoSalaTurma,
+              creditos: jsoncreditos
+            }
+          }, {
+            new: true
+          }, (err, result) => {
+            if (err) throw new Error
+            else {
+              console.log('Update parcial feito');
+              res.send('partial');
+              res.end();
+            }
+          });
+        }
+      }
+    });
+  }
+  /* classModel.findOneAndUpdate({fase:turma}, {
+    $set: {
+      descricao: desc,
+      fase: turma, //nao precisaria
+      oferta: req.body.oferta,
+      demanda: req.body.demanda,
+      dia: req.body.dia,
+      start: req.body.start,
+      tipoSalaTurma : req.body.tipoSalaTurma,
+      creditos: req.body.creditos
+    }) */
+
+/* 
   classModel.findOne({
     fase: turma
   }, (err, result) => {
-    if (err){
+    if (err) {
       throw Error;
-        res.send('erro');
-        res.end();
-    }else{
+      res.send('erro');
+      res.end();
+    } else {
       if (!result) {
         //Caso a sala NÃO EXISTA, é permitido a troca de ID
         classModel.findOneAndUpdate({
@@ -801,7 +916,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req,res) => {
           if (err) throw new Error
           else {
             console.log('Update feito');
-            
+
             res.send('sucesso')
             res.end();
           }
@@ -829,9 +944,10 @@ router.post('/classUpdate', authenticationMiddleware(), (req,res) => {
         });
       }
     }
-  })
-  console.log('UPDATE ENVIADO: \n')
-  console.log(req.body)
+  }) 
+*/
+  console.log('UPDATE ENVIADO: \n');
+  console.log(req.body);
 });
 
 //Verifica autenticação para ver páginas
