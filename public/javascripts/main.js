@@ -299,8 +299,12 @@ function sendDisciplina(trID){
         }
         n = n+1
     });
-    console.log(old)
-    console.log(array)
+    let jso = JSON.stringify(array[4])
+    console.log(jso)
+    console.log(typeof(jso))
+    console.log(array[4])
+    console.log(typeof(array[4]))
+    //console.log(typeof(array[4][0]))
     dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
     $.ajax({
         type: 'POST',
@@ -320,11 +324,28 @@ function sendDisciplina(trID){
             }
         }
     });
-    console.log(dadojson)
     
 }
 
 function removeDisciplina(trID){
-
+    console.log(trID);
+    let dadosjson = {}
+    dadosjson = {descricao : trID}
+    console.log(dadosjson)
+    $.ajax({
+        type: 'POST',
+        url: '/classRemove',
+        data: dadosjson,
+        async: false,
+        success: function(msg){
+            if(msg == 'sucesso'){
+                alert('Disciplina ' + trID + ' deletada com sucesso.');
+                location.reload();
+            }else{
+                alert('Erro ao deletar ' + trID);
+                location.reload();
+            }
+        }
+    });
 }
 
