@@ -27,7 +27,7 @@
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
             <div class="card-body">
                 <form action="/cadastro-sala" method="post">
-                    <p class="mb-5"> Para realizar o cadastro de salas é necessário possuir ao menos três informações sobre ela, o NOME representado pelo campo descrição que não possui restrição, a CAPACIDADE deverá ser um numeral positivo e o TIPO DE SALA a característica da mesma. Mais opções de cadastro são disponibilizadas caso seja necessário alterar os fatores da sala, deixe em branco se estiver em dúvida qual seria o fator. Caso contrário preencha com números referentes ao fator do horário sobre a sala.<br><br>Após realizar todo o preenchimento dos dados, <b>DEVE-SE</b> clicar no botão <b>GERAR ARQUIVO</b> pois ele é necessário na hora de montar a solução, sempre que houver alterações nas salas ou na quantidade é preciso refazer o arquivo.</p>
+                    <p class="mb-5"> Para realizar o cadastro de salas é necessário possuir ao menos três informações sobre ela, o NOME representado pelo campo descrição que não possui restrição, a CAPACIDADE deverá ser um numeral positivo e o TIPO DE SALA a característica da mesma. Mais opções de cadastro são disponibilizadas caso seja necessário alterar os fatores da sala, deixe em branco se estiver em dúvida qual seria o fator. Caso contrário preencha com números referentes ao fator do horário sobre a sala.</p>
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label for="input-sala-id">Descrição</label>
@@ -73,14 +73,12 @@
                     </div>
                     <button type="submit" class="btn btn-success">Cadastrar Sala</button>
                     <a href="/attRoom" class="btn btn-warning" >Atualizar Salas</a>
-                    <!--<a href="/verSalas" class="btn btn-primary">Montar Arquivo</a>-->
                     {{#if msg_sala}}
                         <div class="alert alert-success" id="alert" role="alert">
                             {{msg_sala}}
                         </div>
                     {{/if}}
                 </form>
-                {{!-- <form action="/verSalas" method="get"><button type="submit" class="btn btn-primary">Montar Arquivo</button></form> --}}
                 {{#if msg_erro}}
                     <div class="alert alert-danger" id="alert" role="alert">
                         {{msg_erro}}
@@ -106,7 +104,7 @@
             </div>
             <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
             <div class="card-body">
-                 <p class="mb-5"> Para realizar o cadastro de matérias todas as opções abaixo devem serem preenchidas. O campo DISCIPLINA não possui restrição e deverá conter o nome da mesma, a TURMA deve conter um identificador único, OFERTA e DEMANDA devem ser números inteiros e positivos, as opções de dias podem ser uma ou mais de uma clicando no botão novo campo e preenchendo DIA, HORÁRIO, CRÉDITOS (número inteiro e positivo) e ESTILO DE SALA. Caso não precise de todos os campos de horário basta removê-los no botão ao lado, por fim GERE O ARQUIVO antes de solicitar o ensalamento<br><br><b>ATENÇÃO!! SE PRECISAR REMOVER UM HORÁRIO, REMOVA TODA A LINHA DE HORÁRIO ANTES DE CADASTRAR CASO CONTRÁRIO IRÁ GERAR ERRO EM SUA SOLUÇÃO DE ENSALAMENTO!!</b></p>
+                 <p class="mb-5"> Para realizar o cadastro de matérias todas as opções abaixo devem serem preenchidas. O campo DISCIPLINA não possui restrição e deverá conter o nome da mesma, a TURMA deve conter um identificador único, OFERTA e DEMANDA devem ser números inteiros e positivos, as opções de dias podem ser uma ou mais de uma clicando no botão novo campo e preenchendo DIA, HORÁRIO, CRÉDITOS (número inteiro e positivo) e ESTILO DE SALA. Caso não precise de todos os campos de horário basta removê-los no botão ao lado.<br><br><b>ATENÇÃO!! SE PRECISAR REMOVER UM HORÁRIO, REMOVA TODA A LINHA DE HORÁRIO ANTES DE CADASTRAR CASO CONTRÁRIO IRÁ GERAR ERRO EM SUA SOLUÇÃO DE ENSALAMENTO!!</b></p>
                 <form action="/cadastro-turma" method="post">
                     <div class="form-row" id="wrapper-turma">
                         <div class="form-group col-md-4">
@@ -184,14 +182,11 @@
                         <div class="form-group">
                             <input type="button" class="btn btn-primary" value="Novo campo de horário" onclick="createNewSchedule()">
                             <input type="button" class="btn btn-primary" value="Remover campo" onclick="remove()">
-                            {{!-- <input type="submit" class="btn btn-primary" value="Cadastrar turma"> --}}
                             <button type="submit" class="btn btn-success">Cadastrar turma</button>
                             <a href="/attClass" class="btn btn-warning">Atualizar Turmas</a>
-                            <!--<a href="/verTurmas" class="btn btn-primary">Montar Arquivo</a>-->
                         </div>
                     </div>
                 </form>
-                {{!-- <form action="/verTurmas" method="get"><button type="submit" class="btn btn-primary">Montar arquivo</button></form> --}}
                 {{#if msg_erroT}}
                     <div class="alert alert-danger" id="alert" role="alert">
                         {{msg_erroT}}
@@ -217,7 +212,7 @@
             </div>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
             <div class="card-body">
-                <p><b>ATENÇÃO!!</b><br><br>Se você preencheu todas as salas e disciplinas desejadas você está bem próximo de terminar o ensalamento, lembre-se de solicitar somente depois de ter gerado os arquivos mencionados anteriormente para não ocorrer erros na alocação.<br><br>Todo processamento será feito e enviaremos por email o resultado final, como cada solução depende da quantidade de dados a ser manipulado a resposta não será imediato porém logo que for encontrada será enviada ao email cadastrado com o usuário.</p>
+                <p><b>ATENÇÃO!!</b><br><br>Se você preencheu todas as salas e disciplinas desejadas você está bem próximo de terminar o ensalamento, lembre-se que o sistema espera uma formatação padrão, caso ocorra algum erro entre em contato.<br><br>Todo processamento será feito e enviaremos por email o resultado final, como cada solução depende da quantidade de dados a ser manipulado a resposta não será imediato porém logo que for encontrada será enviada ao email cadastrado com o usuário.</p>
                 <a href="/solucao" class="btn btn-success">Solicitar o ensalamento</a>
             </div>
             </div>
