@@ -299,12 +299,7 @@ function sendDisciplina(trID){
         }
         n = n+1
     });
-    let jso = JSON.stringify(array[4])
-    console.log(jso)
-    console.log(typeof(jso))
-    console.log(array[4])
-    console.log(typeof(array[4]))
-    //console.log(typeof(array[4][0]))
+    //array = JSON.parse(array)
     dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
     $.ajax({
         type: 'POST',
