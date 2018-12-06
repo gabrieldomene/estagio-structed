@@ -112,6 +112,7 @@ passport.deserializeUser(function (user_id, done) {
 
 
 //https://www.youtube.com/watch?v=onPlF3gC0T4
+/*
 router.post('/cadastrar',
   //Validação
   check('username', 'Insira um usuário').isLength({
@@ -178,7 +179,7 @@ router.post('/cadastrar',
       });
     }
   });
-
+*/
 
 
 router.post('/cadastro-sala', function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
