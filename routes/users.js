@@ -668,10 +668,10 @@ router.get('/attClass', authenticationMiddleware(), (req, res) => {
     __v: 0
   }, (err, result) => {
     if (err) throw err;
-    //console.log(result);
+    
     res.render('updateClass', {
       title: 'Alterar',
-      objeto: result
+      objeto: JSON.parse(JSON.stringify(result))
     });
   }).sort({//Ordenação da lista
     descricao: 1
