@@ -308,7 +308,7 @@ function sendDisciplina(trID){
     //console.log(dadojson['fase'])
 
     //array = JSON.parse(array)
-    dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
+    //dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
 
     $.ajax({
         type: 'POST',
