@@ -112,6 +112,7 @@ passport.deserializeUser(function (user_id, done) {
 
 
 //https://www.youtube.com/watch?v=onPlF3gC0T4
+/*
 router.post('/cadastrar',
   //Validação
   check('username', 'Insira um usuário').isLength({
@@ -177,8 +178,11 @@ router.post('/cadastrar',
         }
       });
     }
+
 });
 
+  });
+*/
 
 
 
@@ -668,10 +672,10 @@ router.get('/attClass', authenticationMiddleware(), (req, res) => {
     __v: 0
   }, (err, result) => {
     if (err) throw err;
-    //console.log(result);
+    
     res.render('updateClass', {
       title: 'Alterar',
-      objeto: result
+      objeto: JSON.parse(JSON.stringify(result))
     });
   }).sort({//Ordenação da lista
     descricao: 1
