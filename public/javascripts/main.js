@@ -274,7 +274,7 @@ function sendDisciplina(trID){
     let array = []
     let dadojson = {}
     let n = 0
-    let old = ''
+    let old = trID
 
     // Percorre primeiro a linha da tabela achando seus respectivos TD associado no ID
     $.each(element.find('td:not(:last-child)'), function(){
@@ -294,18 +294,17 @@ function sendDisciplina(trID){
 
             
         }else{
-            if(n == 1) old = dado.val() //Guarda valor do id disciplina para não ser igual
+            //if(n == 1) //old = dado.val() //Guarda valor do id disciplina para não ser igual
             array.push(dado.val())
         }
         n = n+1
     });
-    let jso = JSON.stringify(array[4])
-    console.log(jso)
-    console.log(typeof(jso))
-    console.log(array[4])
-    console.log(typeof(array[4]))
+    //console.log(old)
+    //console.log(array[1])
     //console.log(typeof(array[4][0]))
-    dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
+    dadojson = {'old':old, 'descricao':array[0], 'fase':array[1], 'oferta':array[2], 'demanda':array[3], 'dia':JSON.stringify(array[4]), 'start':JSON.stringify(array[5]), 'creditos':JSON.stringify(array[6]), 'tipoSalaTurma':JSON.stringify(array[7])}
+    //console.log(dadojson['old'])
+    //console.log(dadojson['fase'])
     $.ajax({
         type: 'POST',
         url: '/classUpdate',
