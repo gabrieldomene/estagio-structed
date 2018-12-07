@@ -805,29 +805,21 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
   let turma = req.body.old.toUpperCase();
   let desc = req.body.descricao.toUpperCase();
   let newTurma = req.body.fase.toUpperCase();
-  let jsondia = req.body.dia;
-  let jsonstart = req.body.start;
-  let jsontipoSalaTurma  = req.body.tipoSalaTurma;
-  let jsoncreditos = req.body.creditos;
+  let jsondia = JSON.parse(req.body.dia);
+  let jsonstart = JSON.parse(req.body.start);
+  let jsontipoSalaTurma  = JSON.parse(req.body.tipoSalaTurma);
+  let jsoncreditos = JSON.parse(req.body.creditos);
 
-  console.log('REQ BODY ---- \n\n')
+
+  console.log(turma)
+  console.log(newTurma)
+  //console.log('REQ BODY ---- \n\n')
   //console.log(typeof(req.body))
-  console.log(req.body)
-  console.log('\n\n')
+  //console.log(req.body['dia'])
+  //console.log('\n\n')
 
-  classModel.findOne({fase:req.body.old}, (err, result) =>{
-    if (err)
-    {
-      throw Error;
-      res.end();  
-    }else{
-      console.log('BD RETURN ---- \n\n')
-      console.log(JSON.stringify(result))
-      console.log(typeof(result.start))
-      res.end();
-    }
-  })
-  /* if (newTurma == '')
+  
+  if (newTurma == '')
   {
     res.send('erro');
     res.end();
@@ -847,7 +839,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
           {
             $set: {
               descricao: desc,
-              fase: newTurma, //nao precisaria
+              fase: newTurma,
               oferta: req.body.oferta,
               demanda: req.body.demanda,
               dia: jsondia,
@@ -873,7 +865,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
               descricao: desc,
               oferta: req.body.oferta,
               demanda: req.body.demanda,
-              dia: req.body.dia,
+              dia: jsondia,
               start: jsonstart,
               tipoSalaTurma : jsontipoSalaTurma,
               creditos: jsoncreditos
@@ -891,7 +883,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
         }
       }
     });
-  } */
+  }
 
   //console.log('UPDATE ENVIADO: \n');
   //console.log(req.body);
