@@ -7,7 +7,7 @@ var classProfile = new Schema({
     fase: String,
     oferta: String,
     demanda: String,
-    dia: String,
+    dia: Array,
     start: Array,
     tipoSalaTurma: Array,
     creditos: Array,
