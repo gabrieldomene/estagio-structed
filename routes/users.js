@@ -177,7 +177,8 @@ router.post('/cadastrar',
         }
       });
     }
-  });
+});
+
 
 
 
@@ -543,7 +544,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
 
                           let mailOptions = {
                             from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
-                            to: 'domenee.g@gmail.com', // list of receivers
+                            to: user.email, // list of receivers
                             subject: 'Resultado do ensalamento',
                             text: msg_corpo,
                             attachments: [{
@@ -804,19 +805,34 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
   let turma = req.body.old.toUpperCase();
   let desc = req.body.descricao.toUpperCase();
   let newTurma = req.body.fase.toUpperCase();
-  let jsondia = JSON.stringify(req.body.dia);
-  let jsonstart = JSON.stringify(req.body.start);
-  let jsontipoSalaTurma  = JSON.stringify(req.body.tipoSalaTurma);
-  let jsoncreditos = JSON.stringify(req.body.creditos);
+  let jsondia = req.body.dia;
+  let jsonstart = req.body.start;
+  let jsontipoSalaTurma  = req.body.tipoSalaTurma;
+  let jsoncreditos = req.body.creditos;
 
-  console.log(turma)
-  console.log(newTurma)
-  if (newTurma == '')
+  console.log('REQ BODY ---- \n\n')
+  //console.log(typeof(req.body))
+  console.log(req.body)
+  console.log('\n\n')
+
+  classModel.findOne({fase:req.body.old}, (err, result) =>{
+    if (err)
+    {
+      throw Error;
+      res.end();  
+    }else{
+      console.log('BD RETURN ---- \n\n')
+      console.log(JSON.stringify(result))
+      console.log(typeof(result.start))
+      res.end();
+    }
+  })
+  /* if (newTurma == '')
   {
     res.send('erro');
     res.end();
   } else {
-    classModel.findOne({
+    classModel.findOne({//Busca se o valor inserido já existe no bd
       fase: newTurma
     }, (err, result) => {
       if (err)
@@ -826,7 +842,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
         res.end();
       } else {
         if (!result)
-        {//Caso a disciplina nao exista com essa turma, é permitido uma nova
+        {//Caso a disciplina nao exista com essa turma, é permitido alterar a antiga para a nova
           classModel.findOneAndUpdate({fase: req.body.old},
           {
             $set: {
@@ -849,8 +865,7 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
               res.end();
             }
           });
-        } else {
-          //Caso já exista uma turma, troca tudo menos ela
+        } else {//Caso já exista uma turma, troca toda informação da antiga, menos o valor novo da turma
           classModel.findOneAndUpdate({
             fase: req.body.old
           }, {
@@ -876,78 +891,10 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
         }
       }
     });
-  }
-  /* classModel.findOneAndUpdate({fase:turma}, {
-    $set: {
-      descricao: desc,
-      fase: turma, //nao precisaria
-      oferta: req.body.oferta,
-      demanda: req.body.demanda,
-      dia: req.body.dia,
-      start: req.body.start,
-      tipoSalaTurma : req.body.tipoSalaTurma,
-      creditos: req.body.creditos
-    }) */
+  } */
 
-/* 
-  classModel.findOne({
-    fase: turma
-  }, (err, result) => {
-    if (err) {
-      throw Error;
-      res.send('erro');
-      res.end();
-    } else {
-      if (!result) {
-        //Caso a sala NÃO EXISTA, é permitido a troca de ID
-        classModel.findOneAndUpdate({
-          fase: turma
-        }, {
-          $set: {
-            //ALTERAR TODOS OS DADOS
-            descricao: req.body.descricao,
-            fase: req.body.fase,
-            oferta: req.body.oferta,
-            demanda: req.body.demanda
-          }
-        }, {
-          new: true
-        }, (err, result) => {
-          if (err) throw new Error
-          else {
-            console.log('Update feito');
-
-            res.send('sucesso')
-            res.end();
-          }
-        });
-      } else {
-        //Caso a sala JÁ EXISTA, só é permitido a troca dos outros campos menos o ID!!
-        classModel.findOneAndUpdate({
-          fase: turma
-        }, {
-          $set: {
-            //ALTERAR TUDO MENOS A TURMA
-            descricao: req.body.descricao,
-            oferta: req.body.oferta,
-            demanda: req.body.demanda
-          }
-        }, {
-          new: true
-        }, (err, result) => {
-          if (err) throw new Error
-          else {
-            console.log('Update parcial feito');
-            res.send('partial')
-            res.end();
-          }
-        });
-      }
-    }
-  }) 
-*/
-  console.log('UPDATE ENVIADO: \n');
-  console.log(req.body);
+  //console.log('UPDATE ENVIADO: \n');
+  //console.log(req.body);
 });
 
 //Verifica autenticação para ver páginas
