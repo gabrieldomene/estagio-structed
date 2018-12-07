@@ -815,8 +815,8 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
   let jsoncreditos = JSON.parse(req.body.creditos);
 
 
-  console.log(turma)
-  console.log(newTurma)
+  console.log('Old '+turma)
+  console.log('New '+newTurma)
   //console.log('REQ BODY ---- \n\n')
   //console.log(typeof(req.body))
   //console.log(req.body['dia'])
