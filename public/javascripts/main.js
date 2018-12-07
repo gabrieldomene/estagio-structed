@@ -299,12 +299,17 @@ function sendDisciplina(trID){
         }
         n = n+1
     });
+
     //console.log(old)
     //console.log(array[1])
     //console.log(typeof(array[4][0]))
     dadojson = {'old':old, 'descricao':array[0], 'fase':array[1], 'oferta':array[2], 'demanda':array[3], 'dia':JSON.stringify(array[4]), 'start':JSON.stringify(array[5]), 'creditos':JSON.stringify(array[6]), 'tipoSalaTurma':JSON.stringify(array[7])}
     //console.log(dadojson['old'])
     //console.log(dadojson['fase'])
+
+    //array = JSON.parse(array)
+    dadojson = {old:old, descricao:array[0], fase:array[1], oferta:array[2], demanda:array[3], dia:array[4], start:array[5], creditos:array[6], tipoSalaTurma:array[7]}
+
     $.ajax({
         type: 'POST',
         url: '/classUpdate',
