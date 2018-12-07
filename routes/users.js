@@ -817,10 +817,6 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
 
   console.log('Old '+turma)
   console.log('New '+newTurma)
-  //console.log('REQ BODY ---- \n\n')
-  //console.log(typeof(req.body))
-  //console.log(req.body['dia'])
-  //console.log('\n\n')
 
   
   if (newTurma == '')
