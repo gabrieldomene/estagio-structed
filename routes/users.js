@@ -112,7 +112,7 @@ passport.deserializeUser(function (user_id, done) {
 
 
 //https://www.youtube.com/watch?v=onPlF3gC0T4
-/*
+/* COMENTARIO ALL */
 router.post('/cadastrar',
   //Validação
   check('username', 'Insira um usuário').isLength({
@@ -123,7 +123,7 @@ router.post('/cadastrar',
   }),
   check('email', 'Insira um email válido').isEmail(),
 
-  function (req, res) { // FALTA ATRELAR O LOGIN A CADA ID CENTRO (SESSAO)
+  function (req, res) {
     let userInput = req.body.username;
     let passInput = req.body.password;
     let centroInput = req.body.centroID;
@@ -180,9 +180,7 @@ router.post('/cadastrar',
     }
 
 });
-
-  });
-*/
+/* COMENTARIO ALL*/
 
 
 
@@ -888,6 +886,55 @@ router.post('/classUpdate', authenticationMiddleware(), (req, res) => {
   //console.log('UPDATE ENVIADO: \n');
   //console.log(req.body);
 });
+
+router.get('/recover', (req, res) => {
+  res.render('recover');
+});
+
+router.post('/sendReset', (req, res) => {
+  console.log(req.body.email);
+  userModel.findOne({email:req.body.email}, function (err, match){
+    if (err) throw err;
+    else{
+      if (!match){//SEM EMAIL, RENDERIZAR AVISO
+        console.log('Não tem email no banco');
+        res.end();
+      }else{
+        console.log('Email encontrado: '+ match.email);
+        res.end();
+      }
+    }
+  })
+    /*let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: 'lcc.ufsc@gmail.com', // generated ethereal user
+        pass: 'lccufsc2018' // generated ethereal password
+      }
+    });
+
+    let msg_corpo = 'Para redefinir sua senha acesse o link abaixo e defina uma nova senha de acesso.'
+    // setup email data with unicode symbols
+    let mailOptions = {
+      from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+      to: req.body.email, // list of receivers
+      subject: 'Redefinição de senha',
+      text: msg_corpo,
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log('Message sent: %s', info.messageId);
+
+      console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+      res.end();
+    });*/
+})
 
 //Verifica autenticação para ver páginas
 function authenticationMiddleware() {
