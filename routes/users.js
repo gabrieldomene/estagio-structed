@@ -254,6 +254,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
   let descricaoInput = req.body.disciplina;
   descricaoInput = descricaoInput.toUpperCase();
   let faseInput = req.body.fase;
+  faseInput = faseInput.toUpperCase();
   let ofertaInput = req.body.oferta;
   let demandaInput = req.body.demanda;
   let diaInput = req.body.dia;
@@ -277,7 +278,7 @@ router.post('/cadastro-turma', function (req, res) { //FALTA CADASTRAR O ID DA S
           return 0
         } else {
           classModel.findOne({
-            descricao: desc
+            fase: faseInput
           }, function (err, classdb) {
             if (err) throw err;
             else {
