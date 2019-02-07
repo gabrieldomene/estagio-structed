@@ -1,0 +1,7 @@
+id CTS20182
+gapCutting 0.01
+offDemand 1
+priorityFactors 1
+maximizeRoomsEmpty 1
+minimizeStageAssignmentRooms 1
+uniqueRoomClassType 1
