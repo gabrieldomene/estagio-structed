@@ -531,6 +531,9 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                             auth: {
                               user: 'lcc.ufsc@gmail.com', // generated ethereal user
                               pass: 'lccufsc2018' // generated ethereal password
+                            },
+                            tls: {
+                            	rejectUnauthorized: false
                             }
                           });
 
@@ -906,7 +909,7 @@ router.post('/sendReset', (req, res) => {
       }
     }
   })
-    /*let transporter = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 587,
       secure: false, // true for 465, false for other ports
@@ -934,7 +937,7 @@ router.post('/sendReset', (req, res) => {
 
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
       res.end();
-    });*/
+    });
 })
 
 //Verifica autenticação para ver páginas
