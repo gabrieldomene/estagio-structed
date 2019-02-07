@@ -1,6 +1,6 @@
 #Git ignore
 ##Output texto
-*.txt
+out*.txt
 .vscode/
 node_modules
 *.gitingore
