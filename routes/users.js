@@ -515,7 +515,6 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
             if (err) {
               throw new Error(err)
             } else {
-
               console.log('----------- ESCRITO ARQUIVO DE SALA -------------');
               console.log(user)
               classModel.find({
@@ -559,8 +558,8 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                     }
                     //Linha caso for separar os txt do script
                     //let file_name = "./outputs/outTurma"+user.idcentro+".txt"
-                    let file_name = "./algoritmo/outTurma" + user.idcentro + ".txt"
-                    fs.writeFile(file_name, final, function (err) {
+                    let file_turma = "./algoritmo/outTurma" + user.idcentro + ".txt"
+                    fs.writeFile(file_turma, final, function (err) {
                       if (err) throw new Error(err)
                       else {
                         console.log(' -------------- ARQ DE CLAS ESCRITO ----------------');
