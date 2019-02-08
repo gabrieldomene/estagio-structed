@@ -111,8 +111,8 @@ passport.deserializeUser(function (user_id, done) {
 
 
 
-//https://www.youtube.com/watch?v=onPlF3gC0T4
-/* COMENTARIO ALL */
+
+/* COMENTARIO ALL DESATIVADO CADASTRO
 router.post('/cadastrar',
   //Validação
   check('username', 'Insira um usuário').isLength({
@@ -180,7 +180,7 @@ router.post('/cadastrar',
     }
 
 });
-/* COMENTARIO ALL*/
+COMENTARIO ALL*/
 
 
 
@@ -461,6 +461,49 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
           console.log('SEM DADOS');
           res.end();
         } else {
+          //Envia email avisando requerimento de ensalamento ------------------------------------------
+
+          let transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+              user: 'lcc.ufsc@gmail.com', // generated ethereal user
+              pass: 'lccufsc2018' // generated ethereal password
+            },
+            tls: {
+              rejectUnauthorized: false
+            }
+          });
+
+          let msg_corpo = 'Solicitante: ' + req.user + '\n\nEmail: ' + user.email + '\n\nCentro: ' + user.idcentro
+
+          // setup email data with unicode symbols
+          /*let attachments_out = 'outCentro' + req.session.userId + '.txt'
+          let path_out = './algoritmo/' + attachments_out
+          console.log(path_out)
+
+          let attachments_stats = 'statisticsCentro' + req.session.userId + '.txt'
+          let path_stats = './algoritmo/' + attachments_stats
+          console.log(path_stats)*/
+
+          let mailOptions = {
+            from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+            to: 'lcc.ufsc@gmail.com', // list of receivers
+            subject: 'Requisição de ensalamento '+ req.user,
+            text: msg_corpo
+          };
+          // send mail with defined transport object
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+          });
+
+          //FIM DO ENVIO DO EMAIL ---------------------------------------------------------------------
+
           let conc = ''
           for (let i = 0; i < result.length; i++) {
             conc += result[i].descricao + ' ' + result[i].capacidade + ' ' + result[i].tipoSala + ' ' + result[i].fator1 + ' ' + result[i].fator2 + ' ' + result[i].fator3 + '\n';
@@ -521,62 +564,14 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                       if (err) throw new Error(err)
                       else {
                         console.log(' -------------- ARQ DE CLAS ESCRITO ----------------');
-                        // CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
-                        exec(comando, (err, stdout, stderr) => {
-
-                          let transporter = nodemailer.createTransport({
-                            host: 'smtp.gmail.com',
-                            port: 587,
-                            secure: false, // true for 465, false for other ports
-                            auth: {
-                              user: 'lcc.ufsc@gmail.com', // generated ethereal user
-                              pass: 'lccufsc2018' // generated ethereal password
-                            },
-                            tls: {
-                            	rejectUnauthorized: false
-                            }
-                          });
-
-                          let msg_corpo = 'Olá ' + req.user + '. \n\nA solução encontrada pelo algoritmo de ensalamento está anexada em formato de texto junto a este email. Possíveis salas não alocadas estão anexadas no arquivo statistics e descrevem quais não foram possíveis.\n\nCaso este email não possua 2 (dois) arquivos txt sendo eles o outCentro e statisticsCentro por favor entre em contato.'
-                          // setup email data with unicode symbols
-
-                          let attachments_out = 'outCentro' + req.session.userId + '.txt'
-                          let path_out = './algoritmo/' + attachments_out
-                          console.log(path_out)
-
-                          let attachments_stats = 'statisticsCentro' + req.session.userId + '.txt'
-                          let path_stats = './algoritmo/' + attachments_stats
-                          console.log(path_stats)
-
-                          let mailOptions = {
-                            from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
-                            to: user.email, // list of receivers
-                            subject: 'Resultado do ensalamento',
-                            text: msg_corpo,
-                            attachments: [{
-                                filename: attachments_out,
-                                path: path_out // stream this file
-                              },
-                              {
-                                filename: attachments_stats,
-                                path: path_stats // stream this file
-                              }
-                            ]
-
-                          };
-
-                          // send mail with defined transport object
-                          transporter.sendMail(mailOptions, (error, info) => {
-                            if (error) {
-                              return console.log(error);
-                            }
-                            console.log('Message sent: %s', info.messageId);
-
-                            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                          });
+                        // EX-CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
+                        /*exec(comando, (err, stdout, stderr) => {
                           res.render('success', {
                             title: 'Sucesso'
                           });
+                        });*/
+                        res.render('success', {
+                          title: 'Sucesso'
                         });
                       }
                     });
@@ -915,7 +910,7 @@ router.post('/sendReset', (req, res) => {
       secure: false, // true for 465, false for other ports
       auth: {
         user: 'lcc.ufsc@gmail.com', // generated ethereal user
-        pass: 'lccufsc2018' // generated ethereal password
+        pass: '*' // generated ethereal password
       }
     });
 
