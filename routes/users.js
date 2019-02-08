@@ -528,7 +528,8 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                     var final = ""
                     for (let i = 0; i < result.length; i++) {
                       let base = '';
-                      base = result[i].descricao + ' ' + result[i].fase + ' ' + result[i].oferta + ' ' + result[i].demanda;
+                      let faseClean = result[i].fase.split('-') //Separa o dash na string e retorna a segunda parte
+                      base = result[i].descricao + ' ' + faseClean[1] + ' ' + result[i].oferta + ' ' + result[i].demanda;
                       let temp = []
                       if (result[i].dia.length > 1) {
                         for (let j = 0; j < result[i].dia.length; j++) {
