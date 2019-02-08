@@ -10,7 +10,32 @@
         <p class="">Este é um portal dedicado a utilização do software de Alocação de Salas, desenvolvido pelo LCC. Através desta página web você poderá fazer o cadastramento das salas e das turmas, de acordo com os campos propostos nessa página e posteriormente solicitar a solução do problema de alocação feita por um software em nossos servidores, como a alocação pode variar com o tamanho do arquivo a resposta não é disponibilizada na hora, mas enviaremos por email assim que o resultado for definido.</p>
         <hr class="">
         <p>Para encerrar a sessão clique no botão abaixo</p>
+        <!--<a href="" class="btn btn-primary"> Configuração</a>
+        <a href="" class="btn btn-primary"> Contato</a>-->
         <a href="/logout" class="btn btn-danger">Logout</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalContact">Contato
+        </button>
+    </div>
+
+    <div class="modal fade" id="modalContact" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Laboratório de Computação Científica</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Este projeto foi desenvolvido pela equipe do Laboratório de Computação Científica do Centro de Ciências, Tecnologias e Saúde com sede em Araranguá - Santa Catarina;<br><br>
+            Para entrar em contato envie sua dúvida para: <b>lcc.ufsc@gmail.com</b>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            <!--<button type="button" class="btn btn-primary">Visitar</button>-->
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="accordion" id="accordionExample">
@@ -213,7 +238,7 @@
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
             <div class="card-body">
                 <p><b>ATENÇÃO!!</b><br><br>Se você preencheu todas as salas e disciplinas desejadas você está bem próximo de terminar o ensalamento, lembre-se que o sistema espera uma formatação padrão, caso ocorra algum erro entre em contato.<br><br>Todo processamento será feito e enviaremos por email o resultado final, como cada solução depende da quantidade de dados a ser manipulado a resposta não será imediato porém logo que for encontrada será enviada ao email cadastrado com o usuário.</p>
-                <a href="/solucao" class="btn btn-success">Solicitar o ensalamento</a>
+                <a href="/solucao" class="btn btn-success">Requisitar o ensalamento</a>
             </div>
             </div>
         </div>
