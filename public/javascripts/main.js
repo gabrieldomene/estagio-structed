@@ -150,7 +150,7 @@ function editField(trID)
             input.attr('name', 'tipoSala');
             input.attr('type', 'number');
             input.attr('min', '1');
-            input.attr('max', '3')
+            input.attr('max', '100')
             input.attr('oninput', 'this.value = Math.abs(this.value)')
         }
         //console.log("ELEMENTOS CONSOLE LOG")
