@@ -1,3 +1,16 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        var select = $("#tipo-sala");
+        var selectTurma = $("#tipo-sala-turma");
+        for (i=1;i<=100;i++){
+            select.append($('<option></option>').val(i).html(i))
+        }
+        for (i=1;i<=100;i++){
+            selectTurma.append($('<option></option>').val(i).html(i))
+            console.log(i)
+        }   
+    });
+</script>
 <div class="container">
 
     <div class="jumbotron">
@@ -66,7 +79,7 @@
                             <label for="tipo-sala">Tipo de sala</label>
                             <select id="tipo-sala" class="form-control" name="tipoSala" required>
                                 <option value="" selected disabled hidden>Escolha um tipo</option>
-                                <option value="1">Mesas e Cadeiras 1</option>
+                                <!--<option value="1">Mesas e Cadeiras 1</option>
                                 <option value="2">Bancadas 1</option>
                                 <option value="3">Laboratório 1</option>
                                 <option value="4">Mesas e Cadeiras 2</option>
@@ -74,7 +87,7 @@
                                 <option value="6">Laboratório 2</option>
                                 <option value="7">Mesas e Cadeiras 3</option>
                                 <option value="8">Bancadas 3</option>
-                                <option value="9">Laboratório 3</option>
+                                <option value="9">Laboratório 3</option>-->
                             </select>
                         </div>
 
@@ -196,15 +209,7 @@
                             <label for="salaTurma">Tipo de sala</label>
                             <select class="form-control" id="tipo-sala-turma" name="salaTurma" required>
                                 <option value="" selected disabled hidden>Escolha um tipo</option>
-                                <option value="1">Mesas e Cadeiras 1</option>
-                                <option value="2">Bancadas 1</option>
-                                <option value="3">Laboratório 1</option>
-                                <option value="4">Mesas e Cadeiras 2</option>
-                                <option value="5">Bancadas 2</option>
-                                <option value="6">Laboratório 2</option>
-                                <option value="7">Mesas e Cadeiras 3</option>
-                                <option value="8">Bancadas 3</option>
-                                <option value="9">Laboratório 3</option>
+                                
                             </select>
                         </div>
 
