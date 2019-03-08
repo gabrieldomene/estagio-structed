@@ -513,8 +513,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
             if (err) {
               throw new Error(err)
             } else {
-              console.log('----------- ESCRITO ARQUIVO DE SALA -------------');
-              console.log(user)
+              console.log('----------- ESCRITO SALA ESCRITO -------------');
               classModel.find({
                 idcentro: user.idcentro
               }, function (err, result) {
@@ -561,7 +560,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
                     fs.writeFile(file_turma, final, function (err) {
                       if (err) throw new Error(err)
                       else {
-                        console.log(' -------------- ARQ DE CLAS ESCRITO ----------------');
+                        console.log(' -------------- ARQUIVO DE TURMA ESCRITO ----------------');
                         // EX-CÓDIGO FUNCIONAL PRA BAIXO ------------------------------------------------------
                         /*exec(comando, (err, stdout, stderr) => {
                           res.render('success', {
