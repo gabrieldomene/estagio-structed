@@ -474,7 +474,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
               rejectUnauthorized: false
             }
           });
-          //let msg_corpo = 'Solicitante: ' + req.user + '\n\nEmail: ' + user.email + '\n\nCentro: ' + user.idcentro
+          let msg_corpo = 'Solicitante: ' + req.user + '\n\nEmail: ' + user.email + '\n\nCentro: ' + user.idcentro
 
           // setup email data with unicode symbols
           /*let attachments_out = 'outCentro' + req.session.userId + '.txt'
