@@ -462,8 +462,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
           res.end();
         } else {
           //Envia email avisando requerimento de ensalamento ------------------------------------------
-          //Comentário temporário para verificar utilização no server da ufsc
-          /*let transporter = nodemailer.createTransport({
+          let transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
             secure: false, // true for 465, false for other ports
@@ -475,9 +474,7 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
               rejectUnauthorized: false
             }
           });
-          */
           //let msg_corpo = 'Solicitante: ' + req.user + '\n\nEmail: ' + user.email + '\n\nCentro: ' + user.idcentro
-          // FIM COMENTÁRIO TEMPORARIO 1
 
           // setup email data with unicode symbols
           /*let attachments_out = 'outCentro' + req.session.userId + '.txt'
@@ -488,7 +485,6 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
           let path_stats = './algoritmo/' + attachments_stats
           console.log(path_stats)*/
 
-          /* Comentário temporário 2
           let mailOptions = {
             from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
             to: 'lcc.ufsc@gmail.com', // list of receivers
@@ -504,7 +500,6 @@ router.get('/solucao', authenticationMiddleware(), (req, res) => {
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
           });
           
-          FIM DO COMENTÁRIO TEMPORÁRIO 2*/
           //FIM DO ENVIO DO EMAIL ---------------------------------------------------------------------
 
           let conc = ''
