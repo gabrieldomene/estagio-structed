@@ -15,8 +15,8 @@ mongoose.connect(options, {useNewUrlParser:true});
 var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var routers = require('./routes/routes')
 
 var app = express();
 // view engine setup
@@ -48,8 +48,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/', usersRouter);
+// app.use('/', indexRouter);
+app.use('/', routers);
 
 
 module.exports = app;
