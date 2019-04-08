@@ -1,6 +1,7 @@
 const userModel = require('../models/user-model');
 const bcrypt = require('bcryptjs');
 const BCRYPT_SALT_ROUNDS = 12;
+const nodemailer = require('nodemailer');
 
 exports.registerUser = function (req, res) {
     let userInput = req.body.username;
@@ -58,4 +59,55 @@ exports.registerUser = function (req, res) {
         });
     }
 
+}
+
+exports.recoverPass = function (req, res) {
+    console.log(req.body.email);
+    userModel.findOne({
+        email: req.body.email
+    }, function (err, match) {
+        if (err) throw err;
+        else {
+            if (!match) { //SEM EMAIL, RENDERIZAR AVISO
+                console.log('Não tem email no banco');
+                res.end();
+            } else {
+                console.log('Email encontrado: ' + match.email);
+                res.end();
+            }
+        }
+    })
+    let transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: 'lcc.ufsc@gmail.com', // generated ethereal user
+            pass: 'lccufsc2018' // generated ethereal password
+        }
+    });
+
+    let msg_corpo = 'Para redefinir sua senha acesse o link abaixo e defina uma nova senha de acesso.'
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: '"LCC Araranguá" <lcc.ufsc@gmail.com>', // sender address
+        to: req.body.email, // list of receivers
+        subject: 'Redefinição de senha',
+        text: msg_corpo,
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent: %s', info.messageId);
+
+        console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+        res.end();
+    });
+}
+
+exports.recover = function (req, res) {
+    res.render('recover');
 }
