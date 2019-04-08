@@ -1,9 +1,9 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var hbs = require('express-handlebars');
-var passport = require('passport');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const hbs = require('express-handlebars');
+const passport = require('passport');
 const mongoose = require('mongoose');
 
 var options = require("./config/keys").mongoURI;
@@ -49,6 +49,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // app.use('/', indexRouter);
+
+app.use(function(req, res, next) {
+    if(!req.secure) {
+        return res.redirect(300, 'https://localhost:8443');
+    }
+    next();
+  });
+
 app.use('/', routers);
 
 
