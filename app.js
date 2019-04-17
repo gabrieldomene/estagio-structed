@@ -48,7 +48,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use('/', indexRouter);
 
 app.use(function(req, res, next) {
     if(!req.secure) {
