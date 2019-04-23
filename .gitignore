@@ -1,6 +1,9 @@
 #Git ignore
 ##Output texto
 out*.txt
+*.txt
+*cert
+*key
 .vscode/
 node_modules
 *.gitingore
