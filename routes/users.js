@@ -23,12 +23,12 @@ mongoose.set('useFindAndModify', false);
 //Connection to mlab
 var db = require("../config/keys").mongoURI;
 
-mongoose
-  .connect(db, {
-    useNewUrlParser: true
-  })
-  .then(() => console.log('Mongo connected'))
-  .catch(err => console.log(err));
+// mongoose
+//   .connect(db, {
+//     useNewUrlParser: true
+//   })
+//   .then(() => console.log('Mongo connected'))
+//   .catch(err => console.log(err));
 
 //Bring models
 let userModel = require('../models/user-model');
