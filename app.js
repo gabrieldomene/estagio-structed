@@ -51,7 +51,7 @@ app.use(passport.session());
 
 app.use(function(req, res, next) {
     if(!req.secure) {
-        return res.redirect(300, 'https://localhost:8443');
+        return res.redirect(300, 'https://150.162.232.71:8443');
     }
     next();
   });
