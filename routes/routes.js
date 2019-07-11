@@ -30,12 +30,12 @@ const db = require("../config/keys").mongoURI;
 mongoose.set('useFindAndModify', false);
 
 
-mongoose
-  .connect(db, {
-    useNewUrlParser: true
-  })
-  .then(() => console.log('Mongo connected'))
-  .catch(err => console.log(err));
+// mongoose
+//   .connect(db, {
+//     useNewUrlParser: true
+//   })
+//   .then(() => console.log('Mongo connected'))
+//   .catch(err => console.log(err));
 
 router.get('/', loginControllers.check_login);
 
