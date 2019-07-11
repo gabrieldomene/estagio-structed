@@ -2,6 +2,7 @@ const userModel = require('../models/user-model');
 const bcrypt = require('bcryptjs');
 const BCRYPT_SALT_ROUNDS = 12;
 const nodemailer = require('nodemailer');
+const { validationResult } = require('express-validator');
 
 exports.registerUser = function (req, res) {
     let userInput = req.body.username;
@@ -9,19 +10,19 @@ exports.registerUser = function (req, res) {
     let centroInput = req.body.centroID;
     let emailInput = req.body.email;
 
-    let errors = validationResult(req);
-    console.log(errors);
-    if (!errors.isEmpty()) {
-        let arrayErrors = errors.mapped()
+    // let errors = validationResult(req);
+    // console.log(errors);
+    // if (!errors.isEmpty()) {
+    //     let arrayErrors = errors.mapped()
 
-        let mensagens = arrayErrors
+    //     let mensagens = arrayErrors
 
-        console.log(arrayErrors)
+    //     console.log(arrayErrors)
 
-        return res.render('index', {
-            errors: mensagens
-        })
-    } else {
+    //     return res.render('index', {
+    //         errors: mensagens
+    //     })
+    // } else {
         userModel.findOne({
             username: userInput
         }, function (err, userdb) {
@@ -59,7 +60,7 @@ exports.registerUser = function (req, res) {
         });
     }
 
-}
+// }
 
 exports.recoverPass = function (req, res) {
     console.log(req.body.email);
