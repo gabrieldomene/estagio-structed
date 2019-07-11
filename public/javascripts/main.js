@@ -24,16 +24,16 @@ function remove() {
 
 function createNewSchedule() {
     let div = document.getElementById('wrapper-turma');
-    var initialoptions = ["HORA INICIAL", "07:30", "08:20", "09:10", "10:10", "11:00", "13:30", "14:20", "15:10", "16:20", "17:10", "18:30", "19:20", "20:20", "21:10"];
-    var initialvalues = ["", "0730", "0820", "0910", "1010", "1100", "1330", "1420", "1510", "1620", "1710", "1830", "1920", "2020", "2110"];
-    var daysoptions = ["DIA", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
-    var daysvalues = ["", "2", "3", "4", "5", "6", "7"];
-    var classoptions = ["Escolha um tipo", "Mesas e Cadeiras", "Bancadas", "Laboratórios"];
-    var classvalues = ["", "1", "2", "3"];
-    var selectHour = document.createElement('select');
-    var selectDays = document.createElement('select');
+    var initial_options = ["HORA INICIAL", "07:30", "08:20", "09:10", "10:10", "11:00", "13:30", "14:20", "15:10", "16:20", "17:10", "18:30", "19:20", "20:20", "21:10"];
+    var initial_values = ["", "0730", "0820", "0910", "1010", "1100", "1330", "1420", "1510", "1620", "1710", "1830", "1920", "2020", "2110"];
+    var days_options = ["DIA", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
+    var days_value = ["", "2", "3", "4", "5", "6", "7"];
+    var class_options = ["Escolha um tipo"];
+    var class_value = [""];
+    var select_hour = document.createElement('select');
+    var select_days = document.createElement('select');
     var credit = document.createElement('input');
-    var selectSala = document.createElement('select');
+    var select_sala = document.createElement('select');
 
     //AS 4 DIV
     var diadiv = document.createElement('div');
@@ -42,73 +42,80 @@ function createNewSchedule() {
     var tipodiv = document.createElement('div');
 
     diadiv.className = horadiv.className = creditdiv.className = tipodiv.className = "form-group col-md-3";
-    selectSala.name = 'salaTurma';
-    selectSala.className = credit.className = selectDays.className = selectHour.className = "form-control";
-    selectSala.required = true;
-    selectSala.placeholder = "Escolha um tipo";
+    select_sala.name = 'salaTurma';
+    select_sala.className = credit.className = select_days.className = select_hour.className = "form-control";
+    select_sala.required = true;
+    select_sala.placeholder = "Escolha um tipo";
     credit.type = 'number';
     credit.placeholder = "Ex: 4";
     credit.name = 'creditos';
     credit.required = true;
-    selectDays.name = 'dia';
-    selectDays.required = true;
-    selectHour.name = 'startTimer';
-    selectHour.required = true;
+    select_days.name = 'dia';
+    select_days.required = true;
+    select_hour.name = 'startTimer';
+    select_hour.required = true;
 
-    diadiv.appendChild(selectDays);
-    horadiv.appendChild(selectHour);
+    diadiv.appendChild(select_days);
+    horadiv.appendChild(select_hour);
     creditdiv.appendChild(credit);
-    tipodiv.appendChild(selectSala);
+    tipodiv.appendChild(select_sala);
 
     div.appendChild(diadiv);
     div.appendChild(horadiv);
     div.appendChild(creditdiv);
     div.appendChild(tipodiv);
+    // Opções de sala números até 100
+    for (let i = 1; i <= 100; i++){
+        class_options.push(i.toString());
+        class_value.push(i.toString())
+    }
+    console.log(class_options);
 
     //cria as opções de horários
-    for (let i = 0; i < initialoptions.length; i++) {
+    for (let i = 0; i < initial_options.length; i++) {
         var option = document.createElement('option');
         if (i == 0) {
             option.selected = true;
             option.disabled = true;
             option.hidden = true;
-            option.text = initialoptions[i];
-            option.value = initialvalues[i];
+            option.text = initial_options[i];
+            option.value = initial_values[i];
         } else {
-            option.text = initialoptions[i];
-            option.value = initialvalues[i];
+            option.text = initial_options[i];
+            option.value = initial_values[i];
         }
-        selectHour.appendChild(option);
+        select_hour.appendChild(option);
     }
     //cria as opções de dias
-    for (let i = 0; i < daysoptions.length; i++) {
+    for (let i = 0; i < days_options.length; i++) {
         var option = document.createElement('option');
         if (i == 0) {
             option.selected = true;
             option.disabled = true;
             option.hidden = true;
-            option.text = daysoptions[i];
-            option.value = daysvalues[i];
+            option.text = days_options[i];
+            option.value = days_value[i];
         } else {
-            option.text = daysoptions[i];
-            option.value = daysvalues[i];
+            option.text = days_options[i];
+            option.value = days_value[i];
         }
-        selectDays.appendChild(option);
+        select_days.appendChild(option);
     }
-    for (let i = 0; i < classvalues.length; i++) {
+    for (let i = 0; i < class_value.length; i++) {
         var option = document.createElement('option');
         if (i == 0) {
             option.selected = true;
             option.disabled = true;
             option.hidden = true;
-            option.text = classoptions[i];
-            option.value = classvalues[i];
+            option.text = class_options[i];
+            option.value = class_value[i];
         } else {
-            option.text = classoptions[i];
-            option.value = classvalues[i];
+            option.text = class_options[i];
+            option.value = class_value[i];
         }
-        selectSala.appendChild(option);
+        select_sala.appendChild(option);
     }
+    
 }
 
 
