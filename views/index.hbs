@@ -1,18 +1,18 @@
 <div class="container-fluid">
 
-        <h1 class="display-3 row justify-content-center mb-5">CADASTRO ENSALAMENTO UFSC</h1>     
+    <h3 class="display-5 row justify-content-center mb-5">ENSALAMENTO - UFSC</h3>     
     
     <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-4">
-            <h3>LOGIN</h3>
+            {{!-- <h3>LOGIN</h3> --}}
             <form action="/login" method="post" id="form-login">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Username" name="username">
+                    <label for="username">Nome do usuário</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Nome do usuário" name="username">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Senha</label>
                     <input type="password" class="form-control" id="loginpassword" aria-describedby="username" placeholder="Digite senha" name="password">
                 </div>
                 {{#if msg_login}}
@@ -21,8 +21,8 @@
                     </div>
                 {{/if}}
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block" id="btnLogin" form="form-login">LOGIN</button>
-                    <a href="#" onclick="alert('Em desenvolvimento')">Esqueci minha senha</a>
+                    <button type="submit" class="btn btn-primary btn-block" id="btnLogin" form="form-login">ENTRAR</button>
+                    {{!-- <a href="#" onclick="alert('Em desenvolvimento')">Esqueci minha senha</a> --}}
                 </div>
             </form>
         </div>
@@ -95,7 +95,7 @@
                     <button type="submit" class="btn btn-primary btn-block" id="btnCadastro" for="form-cadastro" disable>CADASTRAR</button>
                 </div>
             </form>
-        </div> -->
+        </div>-->
         <div class="col-lg-4"></div>
     </div>
 </div>
