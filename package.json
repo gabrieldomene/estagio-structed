@@ -8,7 +8,8 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "connect-mongo": "^2.0.1",
+    "cheerio": "^1.0.0-rc.3",
+    "connect-mongo": "^3.1.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^6.1.0",
@@ -23,6 +24,7 @@
     "nodemailer": "^4.6.8",
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
+    "request": "^2.88.0",
     "validator": "^10.8.0"
   }
 }
