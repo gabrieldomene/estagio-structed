@@ -360,3 +360,36 @@ function removeDisciplina(trID){
     });
 }
 
+function populateYear(array){
+    let select_year = document.createElement('select');
+    let element_year = document.getElementById('target-year');
+    select_year.name = 'selectYear';
+    select_year.id = 'selectYear';
+    select_year.className = 'col-sm-2 form-control';
+    select_year.setAttribute('required', 'required')
+    for (let i = 0; i < array.length; i++) {
+        let option = document.createElement('option');
+        option.text = array[i];
+        option.value = array[i];
+        select_year.appendChild(option);
+    }
+    element_year.after(select_year)
+}
+
+function populateCampus(){
+    let array = ['UFSC/EaD', 'UFSC/FLO', 'UFSC/JOI', 'UFSC/CBS', 'UFSC/ARA', 'UFSC/BLN'];
+    let select_campus = document.createElement('select');
+    let element_campus = document.getElementById('target-campus');
+    select_campus.name = 'selectCampus';
+    select_campus.id = 'selectCampus';
+    select_campus.className = 'col-sm-2 form-control';
+    select_campus.setAttribute('required', 'required')
+    console.log(array);
+    for (let i = 0; i < array.length; i++) {
+        let option = document.createElement('option');
+        option.text = array[i];
+        option.value = array[i];
+        select_campus.appendChild(option);
+    }
+    element_campus.after(select_campus);
+}
