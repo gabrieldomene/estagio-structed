@@ -55,7 +55,7 @@
         <div class="card" autofocus>
             <div class="card-header" id="headingOne">
             <h5 class="mb-0">
-                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                <button class="btn btn-link" id="btnOne" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 <h4 class="myColorHeader">Cadastro de salas</h4>
                 </button>
             </h5>
@@ -140,7 +140,7 @@
         <div class="card">
             <div class="card-header" id="headingTwo">
             <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                <button class="btn btn-link collapsed" id="btnTwo" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                 <h4 class="myColorHeader">Cadastro de disciplinas</h4>
                 </button>
             </h5>
@@ -238,6 +238,38 @@
                         {{msg_successT}}
                     </div>
                 {{/if}}
+            </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header" id="headingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="btnFour">
+                <h4 class="myColorHeader">Atualizar disciplinas CAGR</h4>
+                </button>
+                
+            </h5>
+            </div>
+            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+            <div class="card-body" id="card-select">
+                <p>Esta seção tem por objetivo realizar a busca e atualização de disciplinas para X semestre e X campus, a alteração não será imediata e poderá levar alguns minutos para aparecer na aba de atualização correspondente.</p>
+                <form action="/updateCAGR" method="post">
+                    <div class="form-group">
+                        <label for="selectYear" id="target-year" class="label">Selecione o semestre</label>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="selectCampus" id="target-campus" class="label">Selecione o campus</label>
+                        
+                    </div>
+                    <button type="submit" class="btn btn-success" id="target-dropdown">Atualizar</button>
+                    {{#if successCAGR}}
+                        <div class="alert alert-success" role="alert">
+                            {{successCAGR}}
+                        </div>
+                    {{/if}}
+                </form>
             </div>
             </div>
         </div>
