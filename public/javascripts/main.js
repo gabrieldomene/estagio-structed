@@ -393,3 +393,15 @@ function populateCampus(){
     }
     element_campus.after(select_campus);
 }
+
+$(document).ready(function(){
+    if (window.location.pathname == '/updateCAGR'){
+        document.getElementById('btnFour').click();
+        document.getElementById('btnFour').scrollIntoView(true);
+    }else if(window.location.pathname == '/cadastro-sala'){
+        document.getElementById('btnOne').scrollIntoView(true);
+    }else if (window.location.pathname == "/cadastro-turma"){
+        document.getElementById('btnTwo').click();
+        document.getElementById('btnTwo').scrollIntoView(true);
+    }
+});
