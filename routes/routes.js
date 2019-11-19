@@ -1,11 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var fs = require('fs');
-var path = require('path');
-var bcrypt = require('bcryptjs');
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 const {
   check,
   validationResult
@@ -18,24 +14,6 @@ const roomControllers = require('../controllers/roomControllers');
 const classControllers = require('../controllers/classControllers');
 const solutionControllers = require('../controllers/solutionControllers');
 
-//Bring models
-const userModel = require('../models/user-model');
-const roomModel = require('../models/room-model');
-const classModel = require('../models/class-model');
-
-const mongoose = require('mongoose');
-//Connection to mlab
-const db = require("../config/keys").mongoURI;
-
-mongoose.set('useFindAndModify', false);
-
-
-// mongoose
-//   .connect(db, {
-//     useNewUrlParser: true
-//   })
-//   .then(() => console.log('Mongo connected'))
-//   .catch(err => console.log(err));
 
 router.get('/', loginControllers.check_login);
 
@@ -80,6 +58,10 @@ router.post('/roomUpdate', authenticationMiddleware(), roomControllers.updateRoo
 router.get('/recover', userControllers.recover);
 
 router.post('/sendReset', userControllers.recoverPass);
+
+router.get('/checkYear', authenticationMiddleware(), solutionControllers.populateYear);
+
+router.post('/updateCAGR', authenticationMiddleware(), classControllers.updateCAGR);
 
 //Verifica autenticação para ver páginas
 function authenticationMiddleware() {
