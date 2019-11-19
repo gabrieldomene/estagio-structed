@@ -5,6 +5,7 @@ const logger = require('morgan');
 const hbs = require('express-handlebars');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const flash = require('connect-flash');
 
 var options = require("./config/keys").mongoURI;
 
@@ -47,6 +48,8 @@ app.use(session({
 //Passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+
 
 
 // app.use(function(req, res, next) {
