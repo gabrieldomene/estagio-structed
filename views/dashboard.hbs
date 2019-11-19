@@ -254,7 +254,7 @@
         <div class="card">
             <div class="card-header" id="headingFour">
             <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="btnFour">
                 <h4 class="myColorHeader">Atualizar disciplinas CAGR</h4>
                 </button>
                 
@@ -273,6 +273,11 @@
                         
                     </div>
                     <button type="submit" class="btn btn-success" id="target-dropdown">Atualizar</button>
+                    {{#if successCAGR}}
+                        <div class="alert alert-success" role="alert">
+                            {{successCAGR}}
+                        </div>
+                    {{/if}}
                 </form>
             </div>
             </div>
