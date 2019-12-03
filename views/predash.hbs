@@ -1,0 +1,117 @@
+<script type="text/javascript">
+    $(document).ready(function() {
+        var select = $("#tipo-sala");
+        var selectTurma = $("#tipo-sala-turma");
+        for (i=1;i<=100;i++){
+            select.append($('<option></option>').val(i).html(i))
+        }
+        for (i=1;i<=100;i++){
+            selectTurma.append($('<option></option>').val(i).html(i))
+        }
+        $.ajax({
+            type: 'GET',
+            url: '/checkYear',
+            async: false,
+            success: function (response) {
+                populateYear(response);
+            }
+        });
+        populateCampus();
+    });
+</script>
+<div class="container">
+    <!--
+    <div class="jumbotron">
+        <h4>Bem vindo {{ name }},</h1>
+        <p class="">Esta página tem por objetivo realizar a busca de disciplinas por semestre e por Campus, da forma como são buscadas no sistema CAGR. Você será redirecionado para outra página. No entanto, a busca poderá levar alguns minutos.</p>
+        <hr class="">
+        <p class="">Para encerrar a sessão clique no botão de logout.</p>
+        <a href="" class="btn btn-primary"> Configuração</a>
+        <a href="" class="btn btn-primary"> Contato</a>
+        <a href="/logout" class="btn btn-danger float-right">Logout</a>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalContact">Contato
+        </button>
+    </div> -->
+
+    <div class="jumbotron">
+        <h4>Recuperar disciplinas do sistema CAGR</h4>
+        <p>Esta página tem por objetivo realizar a busca de disciplinas por semestre e por Campus, da forma como são buscadas no sistema CAGR. Você será redirecionado para outra página. No entanto, a busca poderá levar alguns minutos.</p>
+
+        <form action="/updateCAGR" method="post">
+            <div class="form-group">
+                <label for="selectYear" id="target-year" class="label">Selecione o semestre</label>
+                
+            </div>
+            <div class="form-group">
+                <label for="selectCampus" id="target-campus" class="label">Selecione o campus</label>     
+            </div>
+            <button type="submit" class="btn btn-success" id="target-dropdown">Buscar</button>
+            <a href="/logout" class="btn btn-danger float-right">Logout</a>
+        </form>
+    </div>
+
+    <!-- Button trigger modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalContact" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Laboratório de Computação Científica</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Este projeto foi desenvolvido pela equipe do Laboratório de Computação Científica do Centro de Ciências, Tecnologias e Saúde e com o apoio do Centro de Filosofia e Ciências Humanas.<br><br>
+            Para entrar em contato envie sua dúvida para: <b>lcc.ufsc@gmail.com</b>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            <!--<button type="button" class="btn btn-primary">Visitar</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="accordion" id="accordionExample">
+        {{!-- Card das salas --}}
+
+        {{!-- Card atualizar CAGR --}}
+        <div class="card" autofocus>
+            <div class="card-header" id="headingFour">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="btnFour">
+                <h4 class="myColorHeader">Recuperar disciplinas do sistema CAGR</h4>
+                </button>
+                
+            </h5>
+            </div>
+            <div id="collapseFour" class="collapse show" aria-labelledby="headingFour" data-parent="#accordionExample">
+            <div class="card-body" id="card-select">
+                <p>Esta seção tem por objetivo realizar a busca e atualização de disciplinas para X semestre e X campus, a alteração não será imediata e poderá levar alguns minutos para aparecer na aba de atualização correspondente.</p>
+                <form action="/updateCAGR" method="post">
+                    <div class="form-group">
+                        <label for="selectYear" id="target-year" class="label">Selecione o semestre</label>
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="selectCampus" id="target-campus" class="label">Selecione o campus</label>
+                        
+                    </div>
+                    <button type="submit" class="btn btn-success" id="target-dropdown">Atualizar</button>
+                    {{#if successCAGR}}
+                        <div class="alert alert-success" role="alert">
+                            {{successCAGR}}
+                        </div>
+                    {{/if}}
+                </form>
+            </div>
+            </div>
+        </div>
+
+        {{!-- Card da solução --}}
+
+    </div> -->
+</div>
