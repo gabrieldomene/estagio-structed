@@ -8,19 +8,10 @@
         for (i=1;i<=100;i++){
             selectTurma.append($('<option></option>').val(i).html(i))
         }
-        $.ajax({
-            type: 'GET',
-            url: '/checkYear',
-            async: false,
-            success: function (response) {
-                populateYear(response);
-            }
-        });
-        populateCampus();
     });
 </script>
 <div class="container">
-
+    
     <div class="jumbotron">
         <h4>Bem vindo {{ name }},</h1>
         <p class="">Este é um portal para utilização de um programa que faz alocação de salas de aulas para disciplinas da UFSC. Nesta página, você poderá realizar o cadastro das salas e das disciplinas. Posteriormente, você poderá solicitar uma sugestão de ensalamento. Uma mensagem direcionada ao seu e-mail será enviada. A mensagem é uma resposta a sua solicitação.</p>
@@ -34,7 +25,11 @@
     </div>
 
     <!-- Button trigger modal -->
-
+    {{#if successCAGR}}
+        <div class="alert alert-success" role="alert" id="alertatt">
+            {{successCAGR}} para {{campus}} - {{year}}
+        </div>
+    {{/if}}
 
     <!-- Modal -->
     <div class="modal fade" id="modalContact" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -246,39 +241,6 @@
                         {{msg_successT}}
                     </div>
                 {{/if}}
-            </div>
-            </div>
-        </div>
-        
-        {{!-- Card atualizar CAGR --}}
-        <div class="card">
-            <div class="card-header" id="headingFour">
-            <h5 class="mb-0">
-                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" id="btnFour">
-                <h4 class="myColorHeader">Atualizar disciplinas CAGR</h4>
-                </button>
-                
-            </h5>
-            </div>
-            <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
-            <div class="card-body" id="card-select">
-                <p>Esta seção tem por objetivo realizar a busca e atualização de disciplinas para X semestre e X campus, a alteração não será imediata e poderá levar alguns minutos para aparecer na aba de atualização correspondente.</p>
-                <form action="/updateCAGR" method="post">
-                    <div class="form-group">
-                        <label for="selectYear" id="target-year" class="label">Selecione o semestre</label>
-                        
-                    </div>
-                    <div class="form-group">
-                        <label for="selectCampus" id="target-campus" class="label">Selecione o campus</label>
-                        
-                    </div>
-                    <button type="submit" class="btn btn-success" id="target-dropdown">Atualizar</button>
-                    {{#if successCAGR}}
-                        <div class="alert alert-success" role="alert">
-                            {{successCAGR}}
-                        </div>
-                    {{/if}}
-                </form>
             </div>
             </div>
         </div>
