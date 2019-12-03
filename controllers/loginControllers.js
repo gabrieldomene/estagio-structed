@@ -54,8 +54,8 @@ async function getUser(req, res) {
             const user_id = user[0].username;
             req.session.userId = user[0].idcentro
             req.login(user_id, function (err) {
-                res.render('dashboard', {
-                    title: 'BEM VINDO',
+                res.render('predash', {
+                    title: 'Seleção semestre',
                     name: user_id
                 });
             });

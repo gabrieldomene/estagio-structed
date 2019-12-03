@@ -10,19 +10,6 @@ exports.registerUser = function (req, res) {
     let centroInput = req.body.centroID;
     let emailInput = req.body.email;
 
-    // let errors = validationResult(req);
-    // console.log(errors);
-    // if (!errors.isEmpty()) {
-    //     let arrayErrors = errors.mapped()
-
-    //     let mensagens = arrayErrors
-
-    //     console.log(arrayErrors)
-
-    //     return res.render('index', {
-    //         errors: mensagens
-    //     })
-    // } else {
         userModel.findOne({
             username: userInput
         }, function (err, userdb) {

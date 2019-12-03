@@ -1,12 +1,42 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+const cheerio = require('cheerio');
+const request = require('request');
 
 const userModel = require('../models/user-model');
 const roomModel = require('../models/room-model');
 const classModel = require('../models/class-model');
 
+var getUrl = 'http://cagr.sistemas.ufsc.br/modules/comunidade/cadastroTurmas/';
+
+async function checkFields(req, res){
+    
+    function getArray() {
+        return new Promise((resolve, reject) => {
+            request(getUrl, function(err, res, body){
+                let option_array = []
+                if (err) reject('Error: ' + err);
+                var $ = cheerio.load(body);
+                $(".esquerda").find("option").each((i, op) => {
+                    // console.log($(op).val());
+                    option_array.push($(op).val());
+                });
+               resolve(option_array)
+            });
+        })
+    }
+    const array = await getArray();
+    return array
+}
+
 exports.generateSolution = function(req, res) {
     createFile(req, res);
+}
+
+exports.populateYear = async function(req, res) {
+    let array_obj = await checkFields(req, res);
+    res.send(array_obj);
+    res.end();
 }
 // 143 linhas antes 
 async function createFile(req, res) {
@@ -138,3 +168,4 @@ async function createFile(req, res) {
     
 
 }
+
