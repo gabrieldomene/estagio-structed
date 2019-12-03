@@ -384,7 +384,6 @@ function populateCampus(){
     select_campus.id = 'selectCampus';
     select_campus.className = 'col-sm-2 form-control';
     select_campus.setAttribute('required', 'required')
-    console.log(array);
     for (let i = 0; i < array.length; i++) {
         let option = document.createElement('option');
         option.text = array[i];
@@ -395,13 +394,16 @@ function populateCampus(){
 }
 
 $(document).ready(function(){
-    if (window.location.pathname == '/updateCAGR'){
-        document.getElementById('btnFour').click();
-        document.getElementById('btnFour').scrollIntoView(true);
-    }else if(window.location.pathname == '/cadastro-sala'){
+    if(window.location.pathname == '/cadastro-sala'){
         document.getElementById('btnOne').scrollIntoView(true);
     }else if (window.location.pathname == "/cadastro-turma"){
         document.getElementById('btnTwo').click();
         document.getElementById('btnTwo').scrollIntoView(true);
+    }
+
+    if(window.location.pathname == '/updateCAGR'){
+        setTimeout(function(){
+            document.getElementById('alertatt').style.display = 'none'
+        }, 5000);
     }
 });
