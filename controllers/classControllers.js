@@ -1,10 +1,33 @@
 const flash = require('connect-flash');
 const userModel = require('../models/user-model');
-const classModel = require('../models/class-model.js');
+// const classModel = require('../models/class-model.js');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+//Class Schema
+var classSchema = new Schema({
+    descricao: {type: String, required: true},
+    fase: {type: String},
+    semester: {type: Number},
+    oferta: {type: String},
+    demanda: {type: String},
+    dia: {type: Array},
+    start: {type: Array},
+    tipoSalaTurma: {type: Array},
+    creditos: {type: Array},
+    idcentro: {type: String}
+});
+
+const spawn = require("child_process").spawn;
 
 
-exports.insertClass = async function (req, res) { //FALTA CADASTRAR O ID DA SESSAO!!!!
+
+exports.insertClass = async function (req, res) {
+    // Rotina para realizar a inserção de disciplinas no banco de dados, usa-se os modelos
+    // class e room, sendo feita a verificação a partir dos campos chaves semestre e fase (turma)
     try {
+        let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
+
         let descricaoInput = req.body.disciplina;
         descricaoInput = descricaoInput.toUpperCase();
         let faseInput = req.body.fase;
@@ -19,16 +42,13 @@ exports.insertClass = async function (req, res) { //FALTA CADASTRAR O ID DA SESS
         const user = await userModel.find({
             username: userSession
         }).limit(1);
-
+        console.log(req.session.year);
         await classModel.findOne({
-            fase: faseInput
+            fase: faseInput, semester: user[0].year
         }, function (err, classdb) {
             if (err) throw err;
             else {
                 if (!classdb) { //Sala cadastrada avisar mensagem
-                    //  newClass.save(function (err) {
-                    //     if (err) throw err;
-                    // });
                     try {
                         let newClass = new classModel({
                             descricao: descricaoInput,
@@ -39,7 +59,8 @@ exports.insertClass = async function (req, res) { //FALTA CADASTRAR O ID DA SESS
                             start: startInput,
                             creditos: creditosInput,
                             tipoSalaTurma: salaTurmaInput,
-                            idcentro: user[0].idcentro
+                            semester: req.session.year,
+                            idcentro: req.session.userId
                         });
                         newClass.save().then(res.render('class', {
                             title: 'DASHBOARD',
@@ -72,8 +93,10 @@ exports.insertClass = async function (req, res) { //FALTA CADASTRAR O ID DA SESS
 }
 
 exports.attClass = function (req, res) {
+    // Atualização, utiliza o modelo montado e busca pelo id e ano associado na session do usuario
+    let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
     classModel.find({
-        idcentro: req.session.userId
+        idcentro: req.session.userId, semester: req.session.year
     }, {
         _id: 0,
         __v: 0
@@ -89,7 +112,9 @@ exports.attClass = function (req, res) {
 }
 
 exports.removeClass = async function (req, res) {
+    // Página dinâmica para remoção de salas, recebe o identificador usado para remover
     try {
+        let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
         let turma = req.body.descricao;
         turma = turma.toUpperCase();
         console.log(req.body)
@@ -99,7 +124,7 @@ exports.removeClass = async function (req, res) {
         } else {
             //Busca e deleta o primeiro match com id da descricao (id sala único)
             await classModel.deleteOne({
-                fase: turma
+                fase: turma, semester: req.session.year
             }, (err, result) => {
                 if (err) {
                     throw Error;
@@ -121,6 +146,8 @@ exports.removeClass = async function (req, res) {
 }
 
 exports.updateClass = async function (req, res) {
+    // Semelhante ao anterior, trabalha na mesma página para poder trocar os valores,
+    // apenas se respeitado as condições.
     try{
         let turma = req.body.old.toUpperCase();
         let desc = req.body.descricao.toUpperCase();
@@ -129,6 +156,7 @@ exports.updateClass = async function (req, res) {
         let jsonstart = JSON.parse(req.body.start);
         let jsontipoSalaTurma = JSON.parse(req.body.tipoSalaTurma);
         let jsoncreditos = JSON.parse(req.body.creditos);
+        let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
 
         console.log('Old ' + turma)
         console.log('New ' + newTurma)
@@ -205,8 +233,13 @@ exports.updateClass = async function (req, res) {
 }
 
 exports.updateCAGR = async function (req, res) {
-    console.log(req.body.selectYear);
-    console.log(req.body.selectCampus);
+    // Rota responsável para iniciar a aplicação após a seleção do campus e ano
+    req.session.year = req.body.selectYear;
+    req.session.campus = req.body.selectCampus;
+
+    // spawn('python3',["./main.py", req.session.year, req.session.campus]);
+    const comando = spawn('python3', ['./main.py', req.body.selectYear, req.body.campus]);
+    console.log(comando.pid)
     req.flash('successCAGR', 'Atualização em andamento');
     res.render('dashboard', {successCAGR: req.flash('successCAGR'), year:req.body.selectYear, campus:req.body.selectCampus});
 }
