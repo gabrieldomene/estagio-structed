@@ -19,6 +19,7 @@ exports.check_login = function (req, res) {
 }
 
 exports.logout = function (req, res) {
+    // Destrói a session criada e da logout
     req.session.destroy(function (err) {
         if (err) {
             console.log(err);
@@ -33,6 +34,7 @@ exports.loginUser = function (req, res) {
 }
 
 async function getUser(req, res) {
+    // Autenticação de usuário, ASYNC!
     try {
         const userinput = req.body.username;
         const passinput = req.body.password;
