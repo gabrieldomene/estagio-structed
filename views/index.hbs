@@ -1,0 +1,102 @@
+<div class="container-fluid">
+
+    <h3 class="display-5 row justify-content-center mb-5">ENSALAMENTO - UFSC</h3>     
+    
+    <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            {{!-- <h3>LOGIN</h3> --}}
+            <form action="/login" method="post" id="form-login">
+                <div class="form-group">
+                    <label for="username">Nome do usuário</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="username" placeholder="Nome do usuário" name="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" class="form-control" id="loginpassword" aria-describedby="username" placeholder="Digite senha" name="password">
+                </div>
+                {{#if msg_login}}
+                    <div class="alert alert-danger" role="alert">
+                        {{msg_login}}
+                    </div>
+                {{/if}}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block" id="btnLogin" form="form-login">ENTRAR</button>
+                    {{!-- <a href="#" onclick="alert('Em desenvolvimento')">Esqueci minha senha</a> --}}
+                </div>
+            </form>
+        </div>
+
+   	<!--
+        <div class="col-lg-3">
+            <h3>CADASTRO</h3>
+            <form action="/cadastrar" method="POST" id="form-cadastro">
+            
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="username" id="cad-username" aria-describedby="username" placeholder="Username"
+                        {{!-- required --}} oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="password" id="password" aria-describedby="username" placeholder="Digite uma senha"
+                        oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" name="email" id="email" aria-describedby="username" placeholder="exemplo@examplo.com"
+                        oninvalid="this.setCustomValidity('Campo obrigatório')" oninput="this.setCustomValidity('')" onchange="checkPass()">
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text centros" for="inputGroupSelect01">Centros</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01" name="centroID" id="centro-id" required oninvalid="this.setCustomValidity('Campo Obrigatório'"
+                            oninput="this.setCustomValidity('')">
+                            <option value="" selected disabled hidden>Listar centros...</option>
+                            <option value="ARA">Centro Araranguá</option>
+                            <option value="BLU">Centro Blumenau</option>
+                            <option value="CBS">Centro Curitibanos</option>
+                            <option value="CED">Centro de Ciência da Educação</option>
+                            <option value="CCS">Centro de Ciência da Saúde</option>
+                            <option value="CCA">Centro de Ciências Agrárias</option>
+                            <option value="CCB">Centro de Ciências Biológicas</option>
+                            <option value="CFM">Centro de Ciências Físicas e Matemáticas</option>
+                            <option value="CCJ">Centro de Ciências Jurídicas</option>
+                            <option value="CCE">Centro de Comunicação e Expressão</option>
+                            <option value="CDS">Centro de Desportos</option>
+                            <option value="CFH">Centro de Filosofia e Ciências Humanas</option>
+                            <option value="CTJ">Centro de Joinville</option>
+                            <option value="CSE">Centro Socioeconômico</option>
+                            <option value="CTC">Centro Tecnológico</option>
+                        </select>
+                    </div>
+                </div>
+                {{#if errors}}
+                    {{#each errors}}
+                        <div class="alert alert-danger" id="alert" role="alert">
+                            {{this.msg}}
+                        </div>
+                    {{/each}}
+                {{/if}}
+                {{#if cadastro}}
+                    <div class="alert alert-success" role="alert">
+                        {{cadastro}}
+                    </div>
+                {{/if}}
+                {{#if user_already}}
+                    <div class="alert alert-danger" role="alert">
+                        {{user_already}}
+                    </div>
+                {{/if}}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block" id="btnCadastro" for="form-cadastro" disable>CADASTRAR</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-4"></div>
+    </div>
+    -->
+</div>
