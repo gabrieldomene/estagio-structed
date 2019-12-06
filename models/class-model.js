@@ -16,3 +16,4 @@ var classSchema = new Schema({
 });
 
 module.exports = mongoose.model('Disciplinas', classSchema);
+
