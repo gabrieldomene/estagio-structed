@@ -7,11 +7,11 @@
         }
         for (i=1;i<=100;i++){
             selectTurma.append($('<option></option>').val(i).html(i))
-        }   
+        }
     });
 </script>
 <div class="container">
-
+    
     <div class="jumbotron">
         <h4>Bem vindo {{ name }},</h1>
         <p class="">Este é um portal para utilização de um programa que faz alocação de salas de aulas para disciplinas da UFSC. Nesta página, você poderá realizar o cadastro das salas e das disciplinas. Posteriormente, você poderá solicitar uma sugestão de ensalamento. Uma mensagem direcionada ao seu e-mail será enviada. A mensagem é uma resposta a sua solicitação.</p>
@@ -25,7 +25,11 @@
     </div>
 
     <!-- Button trigger modal -->
-
+    {{#if successCAGR}}
+        <div class="alert alert-success" role="alert" id="alertatt">
+            {{successCAGR}} para {{campus}} - {{year}}
+        </div>
+    {{/if}}
 
     <!-- Modal -->
     <div class="modal fade" id="modalContact" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
