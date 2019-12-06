@@ -19,6 +19,7 @@ exports.check_login = function (req, res) {
 }
 
 exports.logout = function (req, res) {
+    // Destrói a session criada e da logout
     req.session.destroy(function (err) {
         if (err) {
             console.log(err);
@@ -33,6 +34,7 @@ exports.loginUser = function (req, res) {
 }
 
 async function getUser(req, res) {
+    // Autenticação de usuário, ASYNC!
     try {
         const userinput = req.body.username;
         const passinput = req.body.password;
@@ -54,8 +56,8 @@ async function getUser(req, res) {
             const user_id = user[0].username;
             req.session.userId = user[0].idcentro
             req.login(user_id, function (err) {
-                res.render('dashboard', {
-                    title: 'BEM VINDO',
+                res.render('predash', {
+                    title: 'Seleção semestre',
                     name: user_id
                 });
             });

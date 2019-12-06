@@ -6,7 +6,7 @@ out*.txt
 *key
 .vscode/
 node_modules
-*.gitingore
 package-lock.json
+*.gitingore
 # Misc
 .env
