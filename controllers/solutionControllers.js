@@ -10,9 +10,10 @@ const classModel = require('../models/class-model');
 var getUrl = 'http://cagr.sistemas.ufsc.br/modules/comunidade/cadastroTurmas/';
 
 async function checkFields(req, res){
-    
+    // Montagem dos campus de opções retirados do site da ufsc
     function getArray() {
         return new Promise((resolve, reject) => {
+            // Rodando no CAGR
             request(getUrl, function(err, res, body){
                 let option_array = []
                 if (err) reject('Error: ' + err);
@@ -34,12 +35,14 @@ exports.generateSolution = function(req, res) {
 }
 
 exports.populateYear = async function(req, res) {
+    // Renderização dos valores do CAGR na nossa aplicação
     let array_obj = await checkFields(req, res);
     res.send(array_obj);
     res.end();
 }
 // 143 linhas antes 
 async function createFile(req, res) {
+    // Montagem do arquivo necessário ao gurobi
     try{
         const arq_config = "ConfigCentro" + req.session.userId + ".txt"
         const arq_rooms = 'outSala' + req.session.userId + '.txt';
@@ -67,7 +70,7 @@ async function createFile(req, res) {
                 }
             });
     
-            let msg_corpo = 'Solicitante: ' + user[0].username + '\nEmail: ' + user[0].email + '\nCentro: ' + user[0].idcentro +'\n\n' + Date();
+            let msg_corpo = 'Solicitante: ' + user[0].username + '\nEmail: ' + user[0].email + '\nCentro: ' + user[0].idcentro + '\nSemestre: '+ req.session.year + '\n\n' + Date();
     
             let mailOptions = {
                 from: '"LCC Araranguá" <lcc.ufsc@gmail.com>',
@@ -86,9 +89,9 @@ async function createFile(req, res) {
             });
         }
     
-        const roomList = await roomModel.find({idcentro: user[0].idcentro});
+        const roomList = await roomModel.find({idcentro: user[0].idcentro, semester: req.session.year});
     
-        const classList = await classModel.find({idcentro: user[0].idcentro});
+        const classList = await classModel.find({idcentro: user[0].idcentro, semester: req.session.year});
     
         console.log(roomList.length);
         console.log(classList.length);
@@ -114,8 +117,7 @@ async function createFile(req, res) {
             for (let i = 0; i < classList.length; i++)
             {
                 let base = '';
-                let faseClean = classList[i].fase.split('-') //Separar o dash na string retornando a segunda parte
-                base = classList[i].descricao + ' ' + faseClean[1] + ' ' + classList[i].oferta + ' ' + classList[i].demanda;
+                base = classList[i].descricao + ' ' + classList[i].fase + ' ' + classList[i].oferta + ' ' + classList[i].demanda;
     
                 let temp = [];
                 if (classList[i].dia.length > 1)
@@ -156,7 +158,9 @@ async function createFile(req, res) {
                 console.log('Class file successfully write!')
             });
         }
-    
+        
+        
+
         res.render('success', {
             title: 'Sucesso'
         });
