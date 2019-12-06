@@ -238,8 +238,8 @@ exports.updateCAGR = async function (req, res) {
     req.session.campus = req.body.selectCampus;
 
     // spawn('python3',["./main.py", req.session.year, req.session.campus]);
-    const comando = spawn('python3', ['./main.py', req.body.selectYear, req.body.campus]);
-    console.log(comando.pid)
+    // const comando = spawn('python3', ['./main.py', req.body.selectYear, req.body.campus]);
+    // console.log(comando.pid)
     req.flash('successCAGR', 'Atualização em andamento');
     res.render('dashboard', {successCAGR: req.flash('successCAGR'), year:req.body.selectYear, campus:req.body.selectCampus});
 }
