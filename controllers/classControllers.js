@@ -1,5 +1,6 @@
 const flash = require('connect-flash');
 const userModel = require('../models/user-model');
+const exec = require("child_process").exec;
 // const classModel = require('../models/class-model.js');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
@@ -18,7 +19,6 @@ var classSchema = new Schema({
     idcentro: {type: String}
 });
 
-const spawn = require("child_process").spawn;
 
 
 
@@ -236,7 +236,13 @@ exports.updateCAGR = async function (req, res) {
     // Rota responsável para iniciar a aplicação após a seleção do campus e ano
     req.session.year = req.body.selectYear;
     req.session.campus = req.body.selectCampus;
-
+    let comando = "python3 main.py " + req.session.year + " " + req.session.campus
+    exec(comando, (err) => {
+        if (err instanceof Error) {
+            console.error(err);
+            throw err;
+        }
+    });
     // spawn('python3',["./main.py", req.session.year, req.session.campus]);
     // const comando = spawn('python3', ['./main.py', req.body.selectYear, req.body.campus]);
     // console.log(comando.pid)
