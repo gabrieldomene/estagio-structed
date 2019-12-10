@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 var options = require("./config/keys").mongoURI;
 
 //Mongo connection
-mongoose.connect(options, {useNewUrlParser:true});
+mongoose.connect(options, {useNewUrlParser:true, useUnifiedTopology: true});
 
 //Auth package
 var session = require('express-session');
