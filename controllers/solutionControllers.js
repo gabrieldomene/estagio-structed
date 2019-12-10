@@ -2,10 +2,40 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const cheerio = require('cheerio');
 const request = require('request');
+const exec = require("child_process").exec;
 
 const userModel = require('../models/user-model');
-const roomModel = require('../models/room-model');
-const classModel = require('../models/class-model');
+// const roomModel = require('../models/room-model');
+// const classModel = require('../models/class-model');
+
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+//Class Schema
+var classSchema = new Schema({
+    descricao: {type: String, required: true},
+    fase: {type: String},
+    semester: {type: Number},
+    oferta: {type: String},
+    demanda: {type: String},
+    dia: {type: Array},
+    start: {type: Array},
+    tipoSalaTurma: {type: Array},
+    creditos: {type: Array},
+    idcentro: {type: String}
+});
+
+//Room Schema
+var roomProfile = new Schema({
+    descricao: String,
+    capacidade: String,
+    tipoSala: String,
+    fator1: String,
+    fator2: String,
+    fator3: String,
+    idcentro: String
+});
+
 
 var getUrl = 'http://cagr.sistemas.ufsc.br/modules/comunidade/cadastroTurmas/';
 
@@ -48,6 +78,10 @@ async function createFile(req, res) {
         const arq_rooms = 'outSala' + req.session.userId + '.txt';
         const arq_classes = 'outTurma' + req.session.userId + '.txt';
         const comando = "cd algoritmo/ && ./classroom.sh " + arq_config + " " + arq_rooms + " " + arq_classes
+        let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
+        let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
+        
+       
         console.log(arq_config)
         console.log(arq_rooms)
         console.log(arq_classes)
@@ -88,15 +122,15 @@ async function createFile(req, res) {
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
             });
         }
+    // Voltar com o semestre
+        const roomList = await roomModel.find({idcentro: user[0].idcentro, semester: user.session.year});
     
-        const roomList = await roomModel.find({idcentro: user[0].idcentro, semester: req.session.year});
-    
-        const classList = await classModel.find({idcentro: user[0].idcentro, semester: req.session.year});
+        const classList = await classModel.find({idcentro: user[0].idcentro, semester: user.session.year});
     
         console.log(roomList.length);
         console.log(classList.length);
-    
-        if (roomList){
+
+        const fileRoom = await function(err){
             let conc = ''
             for (let i = 0; i < roomList.length; i++)
             {
@@ -105,14 +139,15 @@ async function createFile(req, res) {
             let file_name = "./algoritmo/outSala" + user[0].idcentro + ".txt"
             fs.writeFile(file_name, conc, 'utf8', function (err) {
                 if (err) {
-                    throw new Error (err)
+                    throw err
                 } else {
-                    console.log('Room file successfully write!')
+                    console.log('success file room')
                 }
             });
         }
-    
-        if (classList){
+        fileRoom();
+   
+        const fileClass = await function(err){
             let final = '';
             for (let i = 0; i < classList.length; i++)
             {
@@ -153,23 +188,25 @@ async function createFile(req, res) {
             }
             let file_name = "./algoritmo/outTurma" + user[0].idcentro + ".txt"
             fs.writeFile(file_name, final, function (err){
-                if (err) throw new Error(err)
+                if (err) reject(err)
             else 
-                console.log('Class file successfully write!')
+                console.log('File success class');
             });
-        }
-        
-        
+        };
 
-        res.render('success', {
-            title: 'Sucesso'
+        fileClass();
+
+        await Promise.all([fileRoom, fileClass]).then((err) => {
+            console.log('promise all executada')
+            exec(comando, (err, stdout, stderr) => {
+                res.render('success', {title: 'Sucesso'});
+            });
         });
+        
     } catch(e) {
+        console.log(e)
         res.render('error', {
             title:'Error'
         })
     }
-    
-
 }
-
