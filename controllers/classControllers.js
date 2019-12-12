@@ -42,7 +42,7 @@ exports.insertClass = async function (req, res) {
         const user = await userModel.find({
             username: userSession
         }).limit(1);
-        console.log(req.session.year);
+        
         await classModel.findOne({
             fase: faseInput, semester: user[0].year
         }, function (err, classdb) {
@@ -96,7 +96,7 @@ exports.attClass = function (req, res) {
     // Atualização, utiliza o modelo montado e busca pelo id e ano associado na session do usuario
     let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
     classModel.find({
-        idcentro: req.session.userId, semester: req.session.year
+        idcentro: req.session.userId
     }, {
         _id: 0,
         __v: 0
