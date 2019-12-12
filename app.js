@@ -16,7 +16,7 @@ mongoose.connect(options, {useNewUrlParser:true, useUnifiedTopology: true});
 var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-var usersRouter = require('./routes/users');
+// var usersRouter = require('./routes/users');
 var routers = require('./routes/routes')
 
 var app = express();
