@@ -1,25 +1,10 @@
 const userModel = require('../models/user-model');
 const roomModel = require('../models/room-model');
 const mongoose = require('mongoose');
-// const roomModel = require('../models/room-model');
 
-// var Schema = mongoose.Schema;
-
-// //Room Schema
-// var roomProfile = new Schema({
-//     descricao: String,
-//     capacidade: String,
-//     tipoSala: String,
-//     fator1: String,
-//     fator2: String,
-//     fator3: String,
-//     idcentro: String
-// });
 exports.insertRoom = async function (req, res) {
     // Inserção de salas, semelhante ao classControllers
-
     try{
-        // let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
         let desc = req.body.descSala;
         desc = desc.toUpperCase();
         let capac = req.body.capcSala;
@@ -81,8 +66,6 @@ exports.insertRoom = async function (req, res) {
 
 exports.attRoom = function (req, res) {
     // Busca no banco a partir do modelo
-
-    // let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
     roomModel.find({
         idcentro: req.session.userId
     }, {
@@ -101,8 +84,6 @@ exports.attRoom = function (req, res) {
 
 exports.removeRoom = async function (req, res) {
     try{
-
-        // let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
         let desc = req.body.descricao;
         desc = desc.toUpperCase();
         console.log(req.body)
@@ -140,8 +121,6 @@ exports.removeRoom = async function (req, res) {
 exports.updateRoom = async function (req, res) {
     // Ver classControllers se precisar, semelhante.
     try{
-
-        // let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
         let desc = req.body.descricao;
         desc = desc.toUpperCase();
         if (desc == '') {
