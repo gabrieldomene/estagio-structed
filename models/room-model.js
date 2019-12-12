@@ -12,4 +12,4 @@ var roomProfile = new Schema({
     idcentro: String
 });
 
-module.exports = mongoose.model('Salas', roomProfile);
+module.exports = mongoose.model('Room', roomProfile, 'rooms');
