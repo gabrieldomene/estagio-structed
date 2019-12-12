@@ -1,5 +1,5 @@
 const userModel = require('../models/user-model');
-const roomModel = require('../model/room-model');
+const roomModel = require('../models/room-model');
 const mongoose = require('mongoose');
 // const roomModel = require('../models/room-model');
 
