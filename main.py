@@ -15,7 +15,7 @@ import pprint
 import keys
 
 
-client = MongoClient("mongodb://USER:PASS@ADDR.mlab.com:PORT/node-lcc-google?retryWrites=false&w=majority")
+client = MongoClient("mongodb://gdomenee:manaogod123@ds149682.mlab.com:49682/node-lcc-google?retryWrites=false&w=majority")
 db = client['node-lcc-google']
 collection_name = 'disc-'+sys.argv[1]
 db_collection = db[collection_name]
