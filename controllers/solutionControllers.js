@@ -5,7 +5,7 @@ const request = require('request');
 const exec = require("child_process").exec;
 
 const userModel = require('../models/user-model');
-// const roomModel = require('../models/room-model');
+const roomModel = require('../models/room-model');
 // const classModel = require('../models/class-model');
 
 const mongoose = require('mongoose');
@@ -23,17 +23,6 @@ var classSchema = new Schema({
     tipoSalaTurma: {type: Array},
     creditos: {type: Array},
     idcentro: {type: String}
-});
-
-//Room Schema
-var roomProfile = new Schema({
-    descricao: String,
-    capacidade: String,
-    tipoSala: String,
-    fator1: String,
-    fator2: String,
-    fator3: String,
-    idcentro: String
 });
 
 
@@ -79,8 +68,7 @@ async function createFile(req, res) {
         const arq_classes = 'outTurma' + req.session.userId + '.txt';
         const comando = "cd algoritmo/ && ./classroom.sh " + arq_config + " " + arq_rooms + " " + arq_classes
         let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
-        let roomModel = mongoose.model('Salas'+req.session.year, roomProfile, 'sala-'+req.session.year);
-        
+
        
         console.log(arq_config)
         console.log(arq_rooms)
@@ -104,7 +92,7 @@ async function createFile(req, res) {
                 }
             });
     
-            let msg_corpo = 'Solicitante: ' + user[0].username + '\nEmail: ' + user[0].email + '\nCentro: ' + user[0].idcentro + '\nSemestre: '+ req.session.year + '\n\n' + Date();
+            let msg_corpo = 'Solicitante: ' + user[0].username + '\nEmail: ' + user[0].email + '\nCentro: ' + user[0].idcentro + '\nSemestre: '+ req.session.year + '\nCampus: '+ req.session.campus + '\n\n' + Date();
     
             let mailOptions = {
                 from: '"LCC Araranguá" <lcc.ufsc@gmail.com>',
@@ -122,13 +110,13 @@ async function createFile(req, res) {
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
             });
         }
-    // Voltar com o semestre
-        const roomList = await roomModel.find({idcentro: user[0].idcentro, semester: user.session.year});
     
-        const classList = await classModel.find({idcentro: user[0].idcentro, semester: user.session.year});
+        // Se quiser filtrar o ano faça como no comentado
+        // const roomList = await roomModel.find({idcentro: user[0].idcentro, semester: req.session.year});
+        const roomList = await roomModel.find({idcentro: user[0].idcentro});
     
-        console.log(roomList.length);
-        console.log(classList.length);
+        const classList = await classModel.find({idcentro: user[0].idcentro});
+
 
         const fileRoom = await function(err){
             let conc = ''
@@ -145,7 +133,7 @@ async function createFile(req, res) {
                 }
             });
         }
-        fileRoom();
+        
    
         const fileClass = await function(err){
             let final = '';
@@ -194,13 +182,17 @@ async function createFile(req, res) {
             });
         };
 
-        fileClass();
+        
 
+        // Chamada do gurobi
         await Promise.all([fileRoom, fileClass]).then((err) => {
             console.log('promise all executada')
-            exec(comando, (err, stdout, stderr) => {
-                res.render('success', {title: 'Sucesso'});
-            });
+            fileRoom();
+            fileClass();
+            // exec(comando, (err, stdout, stderr) => {
+            //     res.render('success', {title: 'Sucesso'});
+            // });
+            res.render('success', {title: 'Sucesso'});
         });
         
     } catch(e) {
