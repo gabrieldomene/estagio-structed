@@ -12,7 +12,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 import sys
 import pprint
-import keys
+from selenium.webdriver.common.keys import Keys
 
 
 client = MongoClient("mongodb://gdomenee:manaogod123@ds149682.mlab.com:49682/node-lcc-google?retryWrites=false&w=majority")
@@ -62,7 +62,6 @@ class CrawelerCAGR():
             selected_campus = campi
             selected_id = idx
             semester = sys.argv[1]
-
             select_year = Select(self.driver.find_element_by_id('formBusca:selectSemestre'))
             select_year.select_by_visible_text(semester)
             select = Select(self.driver.find_element_by_id('formBusca:selectCampus'))
@@ -174,7 +173,6 @@ class CrawelerCAGR():
                     continue
 
         # print(len(disciplina), len(oferta), len(demanda), len(hora))
-        print(disciplina)
         
 
         for i in range(0, len(hora)):
