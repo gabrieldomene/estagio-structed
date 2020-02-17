@@ -93,7 +93,7 @@ exports.insertClass = async function (req, res) {
 }
 
 exports.attClass = function (req, res) {
-    // Atualização, utiliza o modelo montado e busca pelo id e ano associado na session do usuario
+    // Atualização, utiliza o modelo montado e busca pelo id e ano associado na session do usuario.
     let classModel = mongoose.model('Disciplinas'+req.session.year, classSchema, 'disc-'+req.session.year);
     classModel.find({
         idcentro: req.session.userId
