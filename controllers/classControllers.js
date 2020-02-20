@@ -236,16 +236,14 @@ exports.updateCAGR = async function (req, res) {
     // Rota responsável para iniciar a aplicação após a seleção do campus e ano
     req.session.year = req.body.selectYear;
     req.session.campus = req.body.selectCampus;
-    let comando = "python3 main.py " + req.session.year + " " + req.session.campus
-    exec(comando, (err) => {
-        if (err instanceof Error) {
-            console.error(err);
-            throw err;
-        }
-    });
-    // spawn('python3',["./main.py", req.session.year, req.session.campus]);
-    // const comando = spawn('python3', ['./main.py', req.body.selectYear, req.body.campus]);
-    // console.log(comando.pid)
+    // Chamada do main.py
+    // let comando = "python3 main.py " + req.session.year + " " + req.session.campus
+    // exec(comando, (err) => {
+    //     if (err instanceof Error) {
+    //         console.error(err);
+    //         throw err;
+    //     }
+    // });
     req.flash('successCAGR', 'Atualização em andamento');
     res.render('dashboard', {successCAGR: req.flash('successCAGR'), year:req.body.selectYear, campus:req.body.selectCampus});
 }
