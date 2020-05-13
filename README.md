@@ -18,8 +18,9 @@ MLab was used in this project for the easy setup, after inserting around 2 years
 
 ## Technology
 
-* NodeJS as a backend.
-* MongoDB as database aiming for an flexible storage.
-* Handlebars for providing the template engine.
+* [NodeJS](https://nodejs.org/en/) as a backend.
+* [MongoDB](https://www.mongodb.com/) as database aiming for an flexible storage.
+* [Handlebars](https://handlebarsjs.com/) for providing the template engine.
+* [MLab](https://mlab.com/) DbaaS
 
 
