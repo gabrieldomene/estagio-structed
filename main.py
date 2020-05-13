@@ -15,7 +15,7 @@ import pprint
 from selenium.webdriver.common.keys import Keys
 
 
-client = MongoClient("mongodb://gdomenee:manaogod123@ds149682.mlab.com:49682/node-lcc-google?retryWrites=false&w=majority")
+client = MongoClient("URI")
 db = client['node-lcc-google']
 collection_name = 'disc-'+sys.argv[1]
 db_collection = db[collection_name]
